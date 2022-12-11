@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "baseUrl": ".",
+        "paths": {
+            "@components/*": ["client/components/*"],
+            "@hooks/*": ["client/hooks/*"],
+            "@pages/*": ["pages/*"],
+            "@styles/*": ["styles/*"],
+            "@templates/*": ["client/templates/*"],
+            "@utils/*": ["client/utils/*"]
+        },
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "incremental": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false
+    },
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        ".eslintrc.js"
+    ],
+    "exclude": ["node_modules", "**/*.json"]
+}
