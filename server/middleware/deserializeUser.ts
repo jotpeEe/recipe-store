@@ -3,7 +3,7 @@ import { checkCookies, getCookie } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import errorHandler from '../controllers/error.controller';
-import UserModel from '../models/user.model';
+import UserModel from '../models/user';
 import { disconnectDB } from '../utils/connectDB';
 import redisClient from '../utils/connectRedis';
 import { verifyJwt } from '../utils/jwt';
