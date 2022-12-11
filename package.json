@@ -10,9 +10,11 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "mongoose": "^6.8.0",
         "next": "latest",
         "react": "18.2.0",
-        "react-dom": "18.2.0"
+        "react-dom": "18.2.0",
+        "redis": "^4.5.1"
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^13.0.5",
