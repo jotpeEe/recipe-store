@@ -7,7 +7,7 @@ import { LoginInput } from 'server/schemas/user';
 import { Context } from 'server/types/context';
 import { disconnectDB } from 'server/utils/connectDB';
 import redisClient from 'server/utils/connectRedis';
-import { signJwt } from 'server/utils/jwt';
+import { signJwt, verifyJwt } from 'server/utils/jwt';
 
 const accessTokenExpiresIn = 15;
 const refreshTokenExpiresIn = 60;
@@ -117,6 +117,112 @@ export default class UserService {
                 accessToken,
             };
         } catch (error: any) {
+            errorHandler(error);
+            return null;
+        }
+    };
+
+    // Get Authenticated User
+    getMe = async ({ req, res, deserializeUser }: Context) => {
+        try {
+            const user = await deserializeUser(req, res);
+            return {
+                status: 'success',
+                user: {
+                    ...user,
+                    id: user?._id,
+                },
+            };
+        } catch (error: any) {
+            errorHandler(error);
+            return null;
+        }
+    };
+
+    refreshAccessToken = async ({ req, res }: Context) => {
+        try {
+            // Get the refresh token
+            const { refreshToken } = req.cookies;
+
+            if (!refreshToken) {
+                throw new ForbiddenError('Could not refresh access token');
+            }
+
+            // Validate the RefreshToken
+            const decoded = verifyJwt<{ userId: string }>(
+                refreshToken as string,
+                'refreshTokenPublicKey'
+            );
+
+            if (!decoded) {
+                throw new ForbiddenError('Could not refresh access token');
+            }
+
+            // Check if user's session is valid
+            const session = await redisClient.get(decoded.userId);
+
+            if (!session) {
+                throw new ForbiddenError('User session has expired');
+            }
+
+            // Check if user exist and is verified
+            const user = await UserModel.findById(
+                JSON.parse(session)._id
+            ).select('+verified');
+            await disconnectDB();
+
+            if (!user || !user.verified) {
+                throw new ForbiddenError('Could not refresh access token');
+            }
+
+            // Sign new access token
+            const accessToken = signJwt(
+                {
+                    userId: user._id,
+                },
+                'accessTokenPrivateKey',
+                {
+                    expiresIn: `${accessTokenExpiresIn}m`,
+                }
+            );
+
+            // Send access token cookie
+            setCookies('access_token', accessToken, {
+                req,
+                res,
+                ...accessTokenCookieOptions,
+            });
+            setCookies('logged_in', 'true', {
+                req,
+                res,
+                ...accessTokenCookieOptions,
+                httpOnly: false,
+            });
+
+            return {
+                status: 'success',
+                accessToken,
+            };
+        } catch (error) {
+            errorHandler(error);
+            return null;
+        }
+    };
+
+    logoutUser = async ({ req, res, deserializeUser }: Context) => {
+        try {
+            const user = await deserializeUser(req, res);
+
+            // Delete the user's session
+            await redisClient.del(String(user?._id));
+
+            // Logout user
+            setCookies('access_token', '', { req, res, maxAge: -1 });
+            setCookies('refresh_token', '', { req, res, maxAge: -1 });
+            setCookies('logged_in', '', { req, res, maxAge: -1 });
+
+            return true;
+        } catch (error) {
             errorHandler(error);
             return null;
         }
