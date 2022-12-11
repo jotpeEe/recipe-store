@@ -24,10 +24,12 @@ module.exports = {
             'error',
             {
                 functions: false,
-                classes: true,
+                classes: false,
                 variables: true,
+                allowNamedExports: true,
             },
         ],
+        'max-classes-per-file': off,
         '@typescript-eslint/explicit-function-return-type': 'off',
         'import/order': [
             'error',

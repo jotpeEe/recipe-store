@@ -10,13 +10,15 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@typegoose/typegoose": "^9.13.2",
         "apollo-server-micro": "^3.11.1",
+        "bcryptjs": "^2.4.3",
         "class-validator": "^0.14.0",
         "cors": "^2.8.5",
         "dotenv-safe": "^8.2.0",
         "graphql": "15.x",
         "micro": "^9.3.4",
-        "mongoose": "^6.8.0",
+        "mongoose": "~6.7.2",
         "next": "latest",
         "react": "18.2.0",
         "react-dom": "18.2.0",
@@ -26,6 +28,7 @@
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^13.0.5",
+        "@types/bcryptjs": "^2.4.2",
         "@types/cors": "^2.8.12",
         "@types/dotenv-safe": "^8.1.2",
         "@types/node": "18.11.3",
