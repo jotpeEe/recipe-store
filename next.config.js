@@ -1,5 +1,12 @@
 /* eslint-disable no-param-reassign */
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
     reactStrictMode: true,
+    webpack: config => {
+        config.experiments = config.experiments || {};
+        config.experiments.topLevelAwait = true;
+        return config;
+    },
 };
+
+module.exports = nextConfig;
