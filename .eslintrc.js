@@ -31,6 +31,7 @@ module.exports = {
         ],
         'max-classes-per-file': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        'no-underscore-dangle': 'off',
         'import/order': [
             'error',
             {
