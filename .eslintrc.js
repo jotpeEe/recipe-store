@@ -48,6 +48,7 @@ module.exports = {
                 },
             },
         ],
+        'class-methods-use-this': 'off',
         '@typescript-eslint/no-use-before-define': [
             'error',
             {

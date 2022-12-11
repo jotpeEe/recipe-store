@@ -10,11 +10,18 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "apollo-server-micro": "^3.11.1",
+        "class-validator": "^0.14.0",
+        "cors": "^2.8.5",
+        "graphql": "15.x",
+        "micro": "^9.3.4",
         "mongoose": "^6.8.0",
         "next": "latest",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "redis": "^4.5.1"
+        "redis": "^4.5.1",
+        "reflect-metadata": "^0.1.13",
+        "type-graphql": "^1.1.1"
     },
     "devDependencies": {
         "@next/eslint-plugin-next": "^13.0.5",
