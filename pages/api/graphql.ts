@@ -1,11 +1,12 @@
 import 'reflect-metadata';
+import deserializeUser from '@middleware/deserializeUser';
+import resolvers from '@resolvers';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
-import deserializeUser from 'server/middleware/deserializeUser';
-import resolvers from 'server/resolvers';
-import { connectDB } from 'server/utils/connectDB';
 import { buildSchema } from 'type-graphql';
+
+import { connectDB } from '@utils';
 
 const cors = Cors({
     credentials: true,
@@ -26,6 +27,7 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) =>
 
 const schema = await buildSchema({
     resolvers,
+    dateScalarMode: 'isoDate',
 });
 
 const server = new ApolloServer({

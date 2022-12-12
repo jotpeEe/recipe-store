@@ -1,5 +1,4 @@
+import RecipeResolver from './recipe';
 import UserResolver from './user';
 
-const resolvers = [UserResolver] as const;
-
-export default resolvers;
+export default [UserResolver, RecipeResolver] as const;
