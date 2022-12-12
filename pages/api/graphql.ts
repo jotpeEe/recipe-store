@@ -27,6 +27,7 @@ const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) =>
 
 const schema = await buildSchema({
     resolvers,
+    dateScalarMode: 'isoDate',
 });
 
 const server = new ApolloServer({
