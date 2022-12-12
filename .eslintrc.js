@@ -24,11 +24,14 @@ module.exports = {
             'error',
             {
                 functions: false,
-                classes: true,
+                classes: false,
                 variables: true,
+                allowNamedExports: true,
             },
         ],
+        'max-classes-per-file': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
+        'no-underscore-dangle': 'off',
         'import/order': [
             'error',
             {
@@ -84,5 +87,13 @@ module.exports = {
         '@next/next/no-duplicate-head': 'error',
         '@next/next/no-head-import-in-document': 'error',
         '@next/next/no-script-component-in-head': 'error',
+    },
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
     },
 };
