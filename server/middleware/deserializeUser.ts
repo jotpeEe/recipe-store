@@ -37,7 +37,6 @@ const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
         if (!session) throw new ForbiddenError('Session has expired');
 
         // Check if user exist
-        // eslint-disable-next-line no-underscore-dangle
         const user = await UserModel.findById(JSON.parse(session)._id)
             .select('+verified')
             .lean(true);
