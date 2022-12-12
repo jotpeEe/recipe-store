@@ -230,4 +230,22 @@ export default class UserService {
             return false;
         }
     };
+
+    deleteUser = async (id: string, { req, res, deserializeUser }: Context) => {
+        try {
+            await deserializeUser(req, res);
+            const user = await UserModel.findByIdAndDelete(id);
+
+            // Delete the user's session
+            await redisClient.del(String(user?._id));
+
+            if (!user)
+                return new ValidationError('No user with that id exists');
+
+            return true;
+        } catch (error: any) {
+            errorHandler(error);
+            return false;
+        }
+    };
 }
