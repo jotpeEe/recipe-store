@@ -1,5 +1,5 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-micro';
-import { checkCookies, getCookie } from 'cookies-next';
+import { hasCookie, getCookie } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import errorHandler from '../controllers/error.controller';
@@ -18,7 +18,7 @@ const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
         ) {
             const { 1: token } = req.headers.authorization.split(' ');
             accessToken = token;
-        } else if (checkCookies('access_token', { req, res })) {
+        } else if (hasCookie('access_token', { req, res })) {
             accessToken = getCookie('access_token', { req, res });
         }
 
@@ -54,7 +54,7 @@ const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
         return user;
     } catch (error: any) {
         errorHandler(error);
-        return null;
+        return undefined;
     }
 };
 

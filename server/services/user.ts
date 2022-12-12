@@ -1,5 +1,9 @@
-import { AuthenticationError, ForbiddenError } from 'apollo-server-micro';
-import { setCookies } from 'cookies-next';
+import {
+    AuthenticationError,
+    ForbiddenError,
+    ValidationError,
+} from 'apollo-server-micro';
+import { setCookie } from 'cookies-next';
 import { OptionsType } from 'cookies-next/lib/types';
 import errorHandler from 'server/controllers/error.controller';
 import UserModel, { User } from 'server/models/user';
@@ -67,7 +71,7 @@ export default class UserService {
                 return new ForbiddenError('Email already exists');
             }
             errorHandler(error);
-            return null;
+            return { status: 'failure' };
         }
     };
 
@@ -96,17 +100,17 @@ export default class UserService {
             const { accessToken, refreshToken } = signTokens(user);
 
             // Add Tokens to Context
-            setCookies('access_token', accessToken, {
+            setCookie('access_token', accessToken, {
                 req,
                 res,
                 ...accessTokenCookieOptions,
             });
-            setCookies('refresh_token', refreshToken, {
+            setCookie('refresh_token', refreshToken, {
                 req,
                 res,
                 ...refreshTokenCookieOptions,
             });
-            setCookies('logged_in', 'true', {
+            setCookie('logged_in', 'true', {
                 req,
                 res,
                 ...accessTokenCookieOptions,
@@ -114,11 +118,11 @@ export default class UserService {
             });
             return {
                 status: 'success',
-                accessToken,
+                access_token: accessToken,
             };
         } catch (error: any) {
             errorHandler(error);
-            return null;
+            return { status: 'failure' };
         }
     };
 
@@ -135,7 +139,7 @@ export default class UserService {
             };
         } catch (error: any) {
             errorHandler(error);
-            return null;
+            return { status: 'failure' };
         }
     };
 
@@ -187,12 +191,12 @@ export default class UserService {
             );
 
             // Send access token cookie
-            setCookies('access_token', accessToken, {
+            setCookie('access_token', accessToken, {
                 req,
                 res,
                 ...accessTokenCookieOptions,
             });
-            setCookies('logged_in', 'true', {
+            setCookie('logged_in', 'true', {
                 req,
                 res,
                 ...accessTokenCookieOptions,
@@ -201,11 +205,11 @@ export default class UserService {
 
             return {
                 status: 'success',
-                accessToken,
+                access_token: accessToken,
             };
         } catch (error) {
             errorHandler(error);
-            return null;
+            return { status: 'failure' };
         }
     };
 
@@ -217,14 +221,14 @@ export default class UserService {
             await redisClient.del(String(user?._id));
 
             // Logout user
-            setCookies('access_token', '', { req, res, maxAge: -1 });
-            setCookies('refresh_token', '', { req, res, maxAge: -1 });
-            setCookies('logged_in', '', { req, res, maxAge: -1 });
+            setCookie('access_token', '', { req, res, maxAge: -1 });
+            setCookie('refresh_token', '', { req, res, maxAge: -1 });
+            setCookie('logged_in', '', { req, res, maxAge: -1 });
 
             return true;
         } catch (error) {
             errorHandler(error);
-            return null;
+            return false;
         }
     };
 }
