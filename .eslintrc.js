@@ -88,4 +88,12 @@ module.exports = {
         '@next/next/no-head-import-in-document': 'error',
         '@next/next/no-script-component-in-head': 'error',
     },
+    settings: {
+        'import/resolver': {
+            typescript: {
+                alwaysTryTypes: true,
+                project: './tsconfig.json',
+            },
+        },
+    },
 };

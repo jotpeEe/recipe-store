@@ -2,11 +2,9 @@ import { AuthenticationError, ForbiddenError } from 'apollo-server-micro';
 import { hasCookie, getCookie } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import errorHandler from '../controllers/error.controller';
-import UserModel from '../models/user';
-import { disconnectDB } from '../utils/connectDB';
-import redisClient from '../utils/connectRedis';
-import { verifyJwt } from '../utils/jwt';
+import errorHandler from '@controllers/error';
+import UserModel from '@models/user';
+import { disconnectDB, redisClient, verifyJwt } from '@utils';
 
 const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
     try {

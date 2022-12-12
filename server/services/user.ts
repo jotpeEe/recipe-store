@@ -5,13 +5,12 @@ import {
 } from 'apollo-server-micro';
 import { setCookie } from 'cookies-next';
 import { OptionsType } from 'cookies-next/lib/types';
-import errorHandler from 'server/controllers/error.controller';
-import UserModel, { User } from 'server/models/user';
-import { LoginInput } from 'server/schemas/user';
+
+import errorHandler from '@controllers/error';
+import UserModel, { User } from '@models/user';
+import { LoginInput } from '@schemas/user';
+import { disconnectDB, redisClient, signJwt, verifyJwt } from '@utils';
 import { Context } from 'server/types/context';
-import { disconnectDB } from 'server/utils/connectDB';
-import redisClient from 'server/utils/connectRedis';
-import { signJwt, verifyJwt } from 'server/utils/jwt';
 
 const accessTokenExpiresIn = 15;
 const refreshTokenExpiresIn = 60;

@@ -16,7 +16,11 @@
             "@pages/*": ["pages/*"],
             "@styles/*": ["styles/*"],
             "@templates/*": ["client/templates/*"],
-            "@utils/*": ["client/utils/*"]
+            "@utils*": ["server/utils"],
+            "@services/*": ["server/services/*"],
+            "@controllers/*": ["server/controllers/*"],
+            "@models/*": ["server/models/*"],
+            "@schemas/*": ["server/schemas/*"]
         },
         "moduleResolution": "node",
         "resolveJsonModule": true,
