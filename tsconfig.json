@@ -11,8 +11,9 @@
         "module": "esnext",
         "baseUrl": ".",
         "paths": {
-            "@components/*": ["client/components/*"],
-            "@hooks/*": ["client/hooks/*"],
+            "@components*": ["client/components"],
+            "@layouts*": ["client/layouts"],
+            "@sections*": ["client/sections"],
             "@pages/*": ["pages/*"],
             "@styles/*": ["styles/*"],
             "@templates/*": ["client/templates/*"],
