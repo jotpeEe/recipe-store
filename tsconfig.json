@@ -20,7 +20,9 @@
             "@services/*": ["server/services/*"],
             "@controllers/*": ["server/controllers/*"],
             "@models/*": ["server/models/*"],
-            "@schemas/*": ["server/schemas/*"]
+            "@schemas/*": ["server/schemas/*"],
+            "@resolvers*": ["server/resolvers/index"],
+            "@middleware/*": ["server/middleware/*"]
         },
         "moduleResolution": "node",
         "resolveJsonModule": true,
