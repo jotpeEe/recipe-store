@@ -31,3 +31,19 @@ h6 {
     font-weight: 600;
     line-height: 1;
 }
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    color: black;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--black) var(--orange);
+}
