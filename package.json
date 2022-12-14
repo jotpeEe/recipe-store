@@ -10,6 +10,8 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@fontsource/poppins": "^4.5.10",
+        "@fontsource/roboto": "^4.5.8",
         "@typegoose/typegoose": "^9.13.2",
         "apollo-server-micro": "^3.11.1",
         "bcryptjs": "^2.4.3",

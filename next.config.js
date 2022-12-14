@@ -7,6 +7,15 @@ const nextConfig = {
         config.experiments.topLevelAwait = true;
         return config;
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+                pathname: '/dxkgc7cab/**',
+            },
+        ],
+    },
 };
 
 module.exports = nextConfig;

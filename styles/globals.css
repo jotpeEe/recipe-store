@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h2,
+h4,
+h5,
+p {
+    font-family: 'Roboto';
+    line-height: 1.5;
+}
+
+h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h4 {
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
+h5 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    color: black;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--black) var(--orange);
+}
