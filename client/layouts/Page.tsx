@@ -1,12 +1,14 @@
 import Image from 'next/image';
 
+import { Nav } from '@components';
+
 type PageProps = {
     children: React.ReactNode;
 };
 
 const Page: React.FC<PageProps> = ({ children }) => (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
-        <header></header>
+        <Nav />
 
         <main className="flex w-full flex-1 flex-col  items-center justify-center text-center">
             {children}

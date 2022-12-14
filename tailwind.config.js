@@ -9,6 +9,7 @@ module.exports = {
             colors: {
                 primary: '#129575',
                 secondary: '#71B1A1',
+                nav: 'hsla(0,0%,100%,.75)',
             },
             spacing: {
                 section: '35rem',
