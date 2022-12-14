@@ -4,13 +4,13 @@ type CardListProps = {
 };
 
 const CardList: React.FC<CardListProps> = ({ children, wrap = false }) => (
-    <div
+    <ul
         className={`flex ${
             wrap ? 'flex-wrap' : 'flex-nowrap'
         } gap-12 flex-grow-0 `}
     >
         {children}
-    </div>
+    </ul>
 );
 
 export default CardList;

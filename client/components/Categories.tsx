@@ -1,5 +1,5 @@
 const Categories: React.FC = () => (
-    <div className="flex gap-3 pb-16">
+    <ul className="flex gap-3 pb-16">
         <button className="flex justify-center items-center  bg-primary rounded-lg">
             <span className="font-sans text-xs color-white px-5 py-2 text-white font-semibold">
                 All
@@ -40,7 +40,7 @@ const Categories: React.FC = () => (
                 Protein
             </span>
         </button>
-    </div>
+    </ul>
 );
 
 export default Categories;

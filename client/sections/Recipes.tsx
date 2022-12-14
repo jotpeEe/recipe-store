@@ -1,8 +1,8 @@
-import { Card, CardList, Categories, SectionTitle } from '@components';
+import { RecipeCard, CardList, Categories, SectionTitle } from '@components';
 import { SectionLayout as Layout } from '@layouts';
 
 const Recipes: React.FC = () => (
-    <Layout>
+    <Layout id="recipes">
         <div className="grid grid-cols-1to2 gap-20 py-28">
             <SectionTitle
                 subtitle="Recipes"
@@ -11,19 +11,19 @@ const Recipes: React.FC = () => (
             varius enim in eros elementum tristique. Duis cursus, mi quis
             viverra ornare, eros dolor interdum nulla, ut commodo diam libero
             vitae erat."
-                button
+                button="Create recipe"
             />
             <div>
                 <Categories />
                 <CardList wrap>
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
+                    <RecipeCard />
+                    <RecipeCard />
+                    <RecipeCard />
+                    <RecipeCard />
+                    <RecipeCard />
+                    <RecipeCard />
+                    <RecipeCard />
+                    <RecipeCard />
                 </CardList>
             </div>
         </div>
