@@ -12,6 +12,7 @@ module.exports = {
             },
             spacing: {
                 section: '35rem',
+                'header-p': '100px',
             },
             boxShadow: {
                 card: '0px 2px 8px 0px rgba(95, 126, 155, 0.3)',
