@@ -10,6 +10,7 @@ module.exports = {
                 primary: '#129575',
                 secondary: '#71B1A1',
                 nav: 'hsla(0,0%,100%,.75)',
+                input: 'rgb(227, 230, 232)',
             },
             spacing: {
                 section: '35rem',

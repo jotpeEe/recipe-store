@@ -43,7 +43,8 @@ body {
 }
 
 html {
-    scroll-behavior: smooth;
+    --scroll-behavior: smooth !important;
+    scroll-behavior: smooth !important;
     scrollbar-width: thin;
-    scrollbar-color: var(--black) var(--orange);
+    scrollbar-color: black #129575;
 }
