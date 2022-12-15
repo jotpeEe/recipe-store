@@ -16,6 +16,12 @@ h2 {
     line-height: 1.2;
 }
 
+h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: auto;
+}
+
 h4 {
     font-size: 1.125rem;
     font-weight: 400;
@@ -43,7 +49,8 @@ body {
 }
 
 html {
-    scroll-behavior: smooth;
+    --scroll-behavior: smooth !important;
+    scroll-behavior: smooth !important;
     scrollbar-width: thin;
-    scrollbar-color: var(--black) var(--orange);
+    scrollbar-color: black #129575;
 }
