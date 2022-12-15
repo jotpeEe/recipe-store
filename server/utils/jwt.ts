@@ -1,5 +1,12 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 
+import {
+    accessTokenPrivateKey,
+    accessTokenPublicKey,
+    refreshTokenPrivateKey,
+    refreshTokenPublicKey,
+} from '@constants';
+
 const keysToAscii = (key: string) =>
     Buffer.from(key, 'base64').toString('ascii');
 
@@ -8,10 +15,6 @@ export const signJwt = (
     keyName: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey',
     options?: SignOptions
 ) => {
-    const accessTokenPrivateKey = process.env
-        .ACCESS_TOKEN_PRIVATE_KEY as string;
-    const refreshTokenPrivateKey = process.env
-        .REFRESH_TOKEN_PRIVATE_KEY as string;
     let privateKey = '';
 
     if (keyName === 'accessTokenPrivateKey') {
@@ -31,9 +34,6 @@ export const verifyJwt = <T>(
     keyName: 'accessTokenPublicKey' | 'refreshTokenPublicKey'
 ): T | null => {
     let publicKey = '';
-    const accessTokenPublicKey = process.env.ACCESS_TOKEN_PUBLIC_KEY as string;
-    const refreshTokenPublicKey = process.env
-        .REFRESH_TOKEN_PUBLIC_KEY as string;
 
     if (keyName === 'accessTokenPublicKey') {
         publicKey = keysToAscii(accessTokenPublicKey);

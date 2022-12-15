@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const localURI = process.env.MONGODB_LOCAL_URI as string;
+import { LOCAL_URI } from '@constants';
 
 const connection: any = {};
 
@@ -18,7 +18,7 @@ export const connectDB = async () => {
         await mongoose.disconnect();
     }
 
-    const db = await mongoose.connect(localURI);
+    const db = await mongoose.connect(LOCAL_URI);
     console.log('? MongoDB Database Connected Successfully');
     connection.isConnected = db.connections[0].readyState;
 };
