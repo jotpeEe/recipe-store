@@ -18,6 +18,7 @@ module.exports = {
             },
             boxShadow: {
                 card: '0px 2px 8px 0px rgba(95, 126, 155, 0.3)',
+                form: '0px 10px 34px 0px rgb(95 126 155 / 18%)',
             },
         },
         fontFamily: {
