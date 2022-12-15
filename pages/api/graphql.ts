@@ -1,11 +1,11 @@
 import 'reflect-metadata';
-import deserializeUser from '@middleware/deserializeUser';
-import resolvers from '@resolvers';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'cors';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { buildSchema } from 'type-graphql';
 
+import deserializeUser from '@middleware/deserializeUser';
+import resolvers from '@resolvers';
 import { connectDB } from '@utils';
 
 const cors = Cors({
