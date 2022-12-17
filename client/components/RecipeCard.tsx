@@ -1,11 +1,11 @@
 import Image from 'next/image';
 
-import { IconBookmark, IconStar } from 'client/components/icons';
+import { IconBookmark, IconStar } from '@icons';
 
 import { Card, Title, Link } from './CardWithLinks';
 
 const RecipeCard: React.FC = () => (
-    <Card className="flex flex-col justify-center items-center h-230 rounded-lg ">
+    <Card className="flex flex-col justify-center text-center items-center h-230 rounded-lg ">
         <div className="absolute bottom-0 left-0 bg-gray-100 w-full h-3/4 rounded-lg"></div>
 
         <div className="relative">

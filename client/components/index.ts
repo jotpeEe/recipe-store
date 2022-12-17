@@ -1,6 +1,7 @@
 export { default as Button } from './Button';
 export { default as CardList } from './CardList';
 export { default as Categories } from './Categories';
+export { default as ErrorMessage } from './ErrorMessage';
 export { default as FormInput } from './FormInput';
 export { default as Nav } from './Nav';
 export { default as RecipeCard } from './RecipeCard';

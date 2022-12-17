@@ -2,8 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 
 import { PageLayout as Layout } from '@layouts';
-import { Recipes, Reviews } from '@sections';
-import Header from 'client/sections/Header';
+import { Header, Recipes, Reviews } from '@sections';
 
 /**
  * Home: The Landing page of the web app

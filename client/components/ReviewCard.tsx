@@ -1,11 +1,11 @@
 import Image from 'next/image';
 
-import { IconNext } from 'client/components/icons';
+import { IconNext } from '@icons';
 
 import { Card, Title, Link } from './CardWithLinks';
 
 const ReviewCard: React.FC = () => (
-    <Card className="p-16 flex flex-col max-w-md shadow-card rounded-xl">
+    <Card className="p-16 flex flex-col max-w-md text-center shadow-card rounded-xl">
         <div className="flex justify-start items-center gap-12 pb-12">
             <Image
                 width={110}
