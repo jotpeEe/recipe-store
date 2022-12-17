@@ -6,3 +6,4 @@ export { default as Nav } from './Nav';
 export { default as RecipeCard } from './RecipeCard';
 export { default as ReviewCard } from './ReviewCard';
 export { default as SectionTitle } from './SectionTitle';
+export { default as Spinner } from './Spinner';
