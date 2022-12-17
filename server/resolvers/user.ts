@@ -16,8 +16,8 @@ export default class UserResolver {
     }
 
     @Mutation(() => UserResponse)
-    async signupUser(@Arg('input') input: SignUpInput) {
-        return this.userService.signUpUser(input);
+    async signupUser(@Arg('input') input: SignUpInput, @Ctx() ctx: Context) {
+        return this.userService.signUpUser(input, ctx);
     }
 
     @Mutation(() => LoginResponse)

@@ -20,6 +20,9 @@ class SignUpInput {
 
     @Field(() => String)
     photo: string;
+
+    @Field(() => Boolean)
+    terms: boolean;
 }
 
 export default SignUpInput;
