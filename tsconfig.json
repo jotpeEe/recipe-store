@@ -14,6 +14,8 @@
             "@components": ["client/components"],
             "@constants": ["constants"],
             "@controllers/*": ["server/controllers/*"],
+            "@features": ["client/features"],
+            "@features/*": ["client/features/*"],
             "@generated/*": ["client/generated/*"],
             "@hooks/*": ["client/hooks/*"],
             "@icons": ["client/components/icons"],
@@ -27,6 +29,7 @@
             "@schemas/*": ["server/schemas/*"],
             "@sections": ["client/sections"],
             "@services/*": ["server/services/*"],
+            "@redux/*": ["client/redux/*"],
             "@styles/*": ["styles/*"],
             "@templates/*": ["client/templates/*"]
         },
