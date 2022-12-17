@@ -12,6 +12,7 @@
         "baseUrl": ".",
         "paths": {
             "@components": ["client/components"],
+            "@components/*": ["client/components/*"],
             "@constants": ["constants"],
             "@controllers/*": ["server/controllers/*"],
             "@features": ["client/features"],
@@ -20,6 +21,7 @@
             "@hooks/*": ["client/hooks/*"],
             "@icons": ["client/components/icons"],
             "@layouts": ["client/layouts"],
+            "@lib/*": ["client/lib/*"],
             "@middleware/*": ["server/middleware/*"],
             "@models/*": ["server/models/*"],
             "@pages/*": ["pages/*"],
