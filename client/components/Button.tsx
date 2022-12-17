@@ -1,11 +1,13 @@
 import { ButtonHTMLAttributes, FC } from 'react';
 
 import { IconArrow } from '@icons';
+import { IconArrow } from '@components/icons';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     small?: boolean;
     arrow?: boolean;
     fullWidth?: boolean;
+    icon?: JSX.Element;
 };
 
 const Button: FC<ButtonProps> = ({
@@ -15,6 +17,7 @@ const Button: FC<ButtonProps> = ({
     arrow = false,
     fullWidth = false,
     type,
+    icon,
 }) => (
     <button
         type={type}

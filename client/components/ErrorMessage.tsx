@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
-import { IconWarning } from '@icons';
+import { IconWarning } from 'client/components/icons';
 
 type ErrorMessageProps = {
     error: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
