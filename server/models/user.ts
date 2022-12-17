@@ -46,6 +46,9 @@ export class User {
     @prop({ default: 'default.jpeg' })
     photo: string;
 
+    @prop({ required: true })
+    terms: boolean;
+
     @prop({ default: true, select: false })
     verified: boolean;
 

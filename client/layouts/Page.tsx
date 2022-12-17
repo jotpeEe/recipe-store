@@ -10,7 +10,7 @@ const Page: React.FC<PageProps> = ({ children }) => (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
         <Nav />
 
-        <main className="flex w-full flex-1 flex-col  items-center justify-center text-center">
+        <main className="flex w-full flex-1 flex-col items-center justify-center">
             {children}
         </main>
 

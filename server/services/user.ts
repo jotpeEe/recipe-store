@@ -57,10 +57,32 @@ const findByEmail = async (email: string): Promise<User | null> =>
     UserModel.findOne({ email }).select('+password');
 
 export default class UserService {
-    signUpUser = async (input: Partial<User>) => {
+    signUpUser = async (input: Partial<User>, { req, res }: Context) => {
         try {
             const user = await UserModel.create(input);
             await disconnectDB();
+
+            // Sign JWT Tokens
+            const { accessToken, refreshToken } = signTokens(user);
+
+            // Add Tokens to Context
+            setCookie('access_token', accessToken, {
+                req,
+                res,
+                ...accessTokenCookieOptions,
+            });
+            setCookie('refresh_token', refreshToken, {
+                req,
+                res,
+                ...refreshTokenCookieOptions,
+            });
+            setCookie('logged_in', 'true', {
+                req,
+                res,
+                ...accessTokenCookieOptions,
+                httpOnly: false,
+            });
+
             return {
                 status: 'success',
                 user: user.toJSON(),

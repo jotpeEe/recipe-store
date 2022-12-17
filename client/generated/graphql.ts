@@ -166,6 +166,7 @@ export type SignUpInput = {
     password: Scalars['String'];
     passwordConfirm: Scalars['String'];
     photo: Scalars['String'];
+    terms: Scalars['Boolean'];
 };
 
 export type UpdateInput = {
@@ -186,6 +187,7 @@ export type UserData = {
     name: Scalars['String'];
     photo: Scalars['String'];
     role: Scalars['String'];
+    terms: Scalars['Boolean'];
     updatedAt: Scalars['DateTime'];
 };
 

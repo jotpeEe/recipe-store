@@ -20,6 +20,9 @@ class UserData {
     @Field(() => String)
     photo: string;
 
+    @Field(() => Boolean)
+    terms: boolean;
+
     @Field(() => Date)
     createdAt: Date;
 

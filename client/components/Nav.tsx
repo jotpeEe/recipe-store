@@ -1,10 +1,12 @@
 import { FC, ReactNode } from 'react';
 
+import classNames from 'classnames';
 import Image from 'next/image';
 import Link, { LinkProps } from 'next/link';
 
-import { Button } from '@components';
 import useScrollUp from '@hooks/useScrollUp';
+
+import Button from './Button';
 
 type NavItemProps = LinkProps & {
     children: ReactNode;
@@ -23,9 +25,10 @@ const Nav: FC = () => {
 
     return (
         <nav
-            className={`${
-                !scrollUp ? '-translate-y-32' : ''
-            } h-20 bg-transparent fixed top-0 lef-0 transition ease-in-out duration-200 w-full z-50`}
+            className={classNames(
+                'h-20 bg-transparent fixed top-0 lef-0 transition ease-in-out duration-200 w-full z-50',
+                !scrollUp && '-translate-y-32'
+            )}
         >
             <div className="flex justify-between absolute left-0 right-0 bottom-0 top-0 items-center z-10 max-w-7xl mx-auto">
                 <Link href="/">
@@ -35,7 +38,7 @@ const Nav: FC = () => {
                     <NavItem href="/#recipes">Recipes</NavItem>
                     <NavItem href="/#reviews">Reviews</NavItem>
                     <NavItem href="/login">Log in</NavItem>
-                    <Button small>Sign Up</Button>
+                    <Button size="small">Sign Up</Button>
                 </ul>
             </div>
 

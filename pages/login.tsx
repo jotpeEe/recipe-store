@@ -6,12 +6,12 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { object, string } from 'yup';
 
 import { Button, FormInput } from '@components';
+import { Footer } from '@components/auth';
 import {
     LoginInput,
     useGetMeQuery,
     useLoginUserMutation,
 } from '@generated/graphql';
-import { IconFacebook, IconGoogle } from '@icons';
 import { PageLayout as Layout } from '@layouts';
 import graphqlRequestClient from '@requests/graphqlClient';
 
@@ -42,13 +42,11 @@ const Login: NextPage = () => {
         {},
         {
             enabled: false,
-            onSuccess: data => {
-                console.log(data);
-            },
+            onSuccess: data => {},
         }
     );
 
-    const { mutate: loginUser } = useLoginUserMutation<Error>(
+    const { isLoading, mutate: loginUser } = useLoginUserMutation<Error>(
         graphqlRequestClient,
         {
             onSuccess() {
@@ -95,6 +93,7 @@ const Login: NextPage = () => {
                             <Button
                                 type="submit"
                                 className="my-7"
+                                isLoading={isLoading}
                                 fullWidth
                                 arrow
                             >
@@ -102,23 +101,7 @@ const Login: NextPage = () => {
                             </Button>
                         </form>
                     </FormProvider>
-                    <div className="w-full flex justify-center items-center before:w-10 before:h-px before:mr-2 before:bg-gray-300 after:w-10 after:h-px after:ml-2 after:bg-gray-300 text-gray-300">
-                        <h6>Or Sign in with</h6>
-                    </div>
-                    <div className="w-full flex gap-7 justify-center">
-                        <a href="" className="p-2.5 rounded-xl border">
-                            <IconGoogle />
-                        </a>
-                        <a href="" className="p-2.5 rounded-xl border">
-                            <IconFacebook />
-                        </a>
-                    </div>
-                    <div className="w-full flex justify-center items-center">
-                        <h6>{`Don't have account? `}</h6>{' '}
-                        <a href="" className="px-2 py-1">
-                            <h6 className="text-amber-500"> Sign up</h6>
-                        </a>
-                    </div>
+                    <Footer type="login" />
                 </div>
             </div>
         </Layout>

@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 
+import classNames from 'classnames';
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 import { IconWarning } from '@icons';
@@ -23,16 +24,13 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
 
     return (
         <div
-            className={`flex gap-1 w-full items-center py-2 ${
+            className={classNames(
+                'flex gap-1 w-full items-center py-2  transition duration-700',
                 active ? 'opacity-1' : 'opacity-0'
-            } transition duration-700`}
+            )}
         >
             <IconWarning />
-            {error ? (
-                <span className="text-xs text-red-600">{message}</span>
-            ) : (
-                <span className="text-xs text-red-600">{message}</span>
-            )}
+            <span className="text-xs text-red-600">{message}</span>
         </div>
     );
 };
