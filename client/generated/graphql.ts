@@ -51,7 +51,7 @@ export type Data = {
     description: Scalars['String'];
     id?: Maybe<Scalars['String']>;
     image: Scalars['String'];
-    prep_time: Scalars['Float'];
+    prep: Scalars['Float'];
     servings: Scalars['Float'];
     title: Scalars['String'];
     updatedAt: Scalars['DateTime'];
@@ -62,7 +62,7 @@ export type Input = {
     cuisine: Scalars['String'];
     description: Scalars['String'];
     image: Scalars['String'];
-    prep_time: Scalars['Float'];
+    prep: Scalars['Float'];
     servings: Scalars['Float'];
     title: Scalars['String'];
 };
@@ -128,7 +128,7 @@ export type PopulatedData = {
     description: Scalars['String'];
     id?: Maybe<Scalars['String']>;
     image: Scalars['String'];
-    prep_time: Scalars['Float'];
+    prep: Scalars['Float'];
     servings: Scalars['Float'];
     title: Scalars['String'];
     updatedAt: Scalars['DateTime'];
@@ -143,6 +143,7 @@ export type PopulatedResponse = {
 
 export type Query = {
     __typename?: 'Query';
+    getAllRecipes: ListResponse;
     getMe: UserResponse;
     getRecipe: PopulatedResponse;
     getRecipes: ListResponse;
@@ -173,7 +174,7 @@ export type UpdateInput = {
     cuisine?: InputMaybe<Scalars['String']>;
     description?: InputMaybe<Scalars['String']>;
     image?: InputMaybe<Scalars['String']>;
-    prep_time?: InputMaybe<Scalars['Float']>;
+    prep?: InputMaybe<Scalars['Float']>;
     servings?: InputMaybe<Scalars['Float']>;
     title?: InputMaybe<Scalars['String']>;
 };
@@ -206,6 +207,35 @@ export type DeleteUserMutation = {
     deleteUser: boolean;
 };
 
+export type GetAllRecipesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllRecipesQuery = {
+    __typename?: 'Query';
+    getAllRecipes: {
+        __typename?: 'ListResponse';
+        status: string;
+        results: number;
+        recipes: Array<{
+            __typename?: 'PopulatedData';
+            _id: string;
+            title: string;
+            description: string;
+            prep: number;
+            cuisine: string;
+            servings: number;
+            image: string;
+            createdAt: any;
+            updatedAt: any;
+            user: {
+                __typename?: 'UserData';
+                _id: string;
+                name: string;
+                photo: string;
+            };
+        }>;
+    };
+};
+
 export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetMeQuery = {
@@ -224,6 +254,25 @@ export type GetMeQuery = {
             updatedAt: any;
             createdAt: any;
         };
+    };
+};
+
+export type GetMyRecipesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMyRecipesQuery = {
+    __typename?: 'Query';
+    getRecipes: {
+        __typename?: 'ListResponse';
+        status: string;
+        results: number;
+        recipes: Array<{
+            __typename?: 'PopulatedData';
+            _id: string;
+            title: string;
+            prep: number;
+            servings: number;
+            image: string;
+        }>;
     };
 };
 
@@ -288,6 +337,51 @@ export const useDeleteUserMutation = <TError = unknown, TContext = unknown>(
             )(),
         options
     );
+export const GetAllRecipesDocument = `
+    query GetAllRecipes {
+  getAllRecipes {
+    status
+    results
+    recipes {
+      _id
+      title
+      description
+      prep
+      cuisine
+      servings
+      image
+      createdAt
+      updatedAt
+      user {
+        _id
+        name
+        photo
+      }
+    }
+  }
+}
+    `;
+export const useGetAllRecipesQuery = <
+    TData = GetAllRecipesQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetAllRecipesQueryVariables,
+    options?: UseQueryOptions<GetAllRecipesQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetAllRecipesQuery, TError, TData>(
+        variables === undefined
+            ? ['GetAllRecipes']
+            : ['GetAllRecipes', variables],
+        fetcher<GetAllRecipesQuery, GetAllRecipesQueryVariables>(
+            client,
+            GetAllRecipesDocument,
+            variables,
+            headers
+        ),
+        options
+    );
 export const GetMeDocument = `
     query GetMe {
   getMe {
@@ -316,6 +410,42 @@ export const useGetMeQuery = <TData = GetMeQuery, TError = unknown>(
         fetcher<GetMeQuery, GetMeQueryVariables>(
             client,
             GetMeDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetMyRecipesDocument = `
+    query GetMyRecipes {
+  getRecipes {
+    status
+    results
+    recipes {
+      _id
+      title
+      prep
+      servings
+      image
+    }
+  }
+}
+    `;
+export const useGetMyRecipesQuery = <
+    TData = GetMyRecipesQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetMyRecipesQueryVariables,
+    options?: UseQueryOptions<GetMyRecipesQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetMyRecipesQuery, TError, TData>(
+        variables === undefined
+            ? ['GetMyRecipes']
+            : ['GetMyRecipes', variables],
+        fetcher<GetMyRecipesQuery, GetMyRecipesQueryVariables>(
+            client,
+            GetMyRecipesDocument,
             variables,
             headers
         ),
