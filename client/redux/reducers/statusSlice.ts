@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const featuresStatusSlice = createSlice({
+export const statusSlice = createSlice({
     name: 'status',
     initialState: {
         imageUploading: false,
@@ -18,7 +18,6 @@ export const featuresStatusSlice = createSlice({
     },
 });
 
-export const { setImageUploading, setPageLoading } =
-    featuresStatusSlice.actions;
+export const { setImageUploading, setPageLoading } = statusSlice.actions;
 
-export default featuresStatusSlice.reducer;
+export default statusSlice.reducer;
