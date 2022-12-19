@@ -1,3 +1,4 @@
+export { default as AuthFooter } from './auth/Footer';
 export { default as Button } from './Button';
 export { default as CardList } from './CardList';
 export { default as Categories } from './Categories';
@@ -5,6 +6,10 @@ export { default as ErrorMessage } from './ErrorMessage';
 export { default as FormInput } from './FormInput';
 export { default as Nav } from './Nav';
 export { default as RecipeCard } from './RecipeCard';
+export { default as RecipesList } from './RecipesList';
 export { default as ReviewCard } from './ReviewCard';
 export { default as SectionTitle } from './SectionTitle';
+export { default as SignUpInfo } from './auth/SignUpInfo';
 export { default as Spinner } from './Spinner';
+export { default as UserInfo } from './user/Info';
+export { default as UserStats } from './user/Stats';

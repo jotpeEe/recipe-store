@@ -1,9 +1,22 @@
-import { RecipeCard, CardList, Categories, SectionTitle } from '@components';
-import { SectionLayout as Layout } from '@layouts';
+import { FC } from 'react';
 
-const Recipes: React.FC = () => (
+import {
+    RecipeCard,
+    CardList,
+    Categories,
+    SectionTitle,
+    RecipesList,
+} from '@components';
+import { SectionLayout as Layout } from '@layouts';
+import { IRecipe } from '@lib/types';
+
+type RecipesProps = {
+    recipes: Partial<IRecipe>[] | undefined;
+};
+
+const Recipes: FC<RecipesProps> = ({ recipes }) => (
     <Layout id="recipes">
-        <div className="grid grid-cols-1to2 gap-20 py-28">
+        <div className="grid grid-cols-1to2 gap-20 ">
             <SectionTitle
                 subtitle="Recipes"
                 title="The home store for all your recipes"
@@ -13,19 +26,7 @@ const Recipes: React.FC = () => (
             vitae erat."
                 button="Create recipe"
             />
-            <div>
-                <Categories />
-                <CardList wrap>
-                    <RecipeCard />
-                    <RecipeCard />
-                    <RecipeCard />
-                    <RecipeCard />
-                    <RecipeCard />
-                    <RecipeCard />
-                    <RecipeCard />
-                    <RecipeCard />
-                </CardList>
-            </div>
+            <RecipesList recipes={recipes} />
         </div>
     </Layout>
 );

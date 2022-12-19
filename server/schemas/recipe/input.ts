@@ -14,7 +14,7 @@ class Input {
     description: string;
 
     @Field(() => Number)
-    prep_time: number;
+    prep: number;
 
     @Field(() => String)
     cuisine: string;

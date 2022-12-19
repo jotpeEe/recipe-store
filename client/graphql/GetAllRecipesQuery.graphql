@@ -1,0 +1,22 @@
+query GetAllRecipes {
+    getAllRecipes {
+        status
+        results
+        recipes {
+            _id
+            title
+            description
+            prep
+            cuisine
+            servings
+            image
+            createdAt
+            updatedAt
+            user {
+                _id
+                name
+                photo
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ export { default as IconArrow } from './Arrow';
 export { default as IconBookmark } from './Bookmark';
 export { default as IconCheck } from './Check';
 export { default as IconFacebook } from './Facebook';
+export { default as IconFilter } from './Filter';
 export { default as IconGoogle } from './Google';
 export { default as IconImage } from './Image';
 export { default as IconNext } from './Next';

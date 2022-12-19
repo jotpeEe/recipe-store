@@ -13,6 +13,7 @@ module.exports = {
                 input: 'rgb(227, 230, 232)',
                 border: '#e5e7eb',
                 outlined: '#9ca3af',
+                'text-primary': '#000',
             },
             spacing: {
                 section: '35rem',
@@ -22,6 +23,9 @@ module.exports = {
                 card: '0px 2px 8px 0px rgba(95, 126, 155, 0.3)',
                 form: '0px 10px 34px 0px rgb(95 126 155 / 18%)',
                 border: '0px 0px 0px 1px inset',
+            },
+            maxWidth: {
+                '3/4': '75%',
             },
         },
         fontFamily: {
