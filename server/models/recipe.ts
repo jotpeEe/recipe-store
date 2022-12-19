@@ -26,7 +26,7 @@ export class Recipe {
     description: string;
 
     @prop({ required: true })
-    prep_time: number;
+    prep: number;
 
     @prop({ required: true })
     cuisine: string;

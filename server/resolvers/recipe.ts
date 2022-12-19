@@ -36,6 +36,11 @@ export default class RecipeResolver {
     }
 
     @Query(() => ListResponse)
+    async getAllRecipes() {
+        return this.recipeService.getAllRecipes();
+    }
+
+    @Query(() => ListResponse)
     async getRecipes(@Ctx() ctx: Context) {
         return this.recipeService.getRecipes(ctx);
     }

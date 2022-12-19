@@ -94,6 +94,27 @@ export default class RecipeService {
         }
     };
 
+    getAllRecipes = async () => {
+        try {
+            const recipesQuery = RecipeModel.find().populate('user');
+
+            const recipes = await recipesQuery.sort({ createdAt: -1 }).lean();
+
+            return {
+                status: 'success',
+                results: recipes.length,
+                recipes,
+            };
+        } catch (error: any) {
+            errorHandler(error);
+            return {
+                status: 'failure',
+                results: 0,
+                recipes: [],
+            };
+        }
+    };
+
     getRecipes = async ({ req, res, deserializeUser }: Context) => {
         try {
             const user = await deserializeUser(req, res);

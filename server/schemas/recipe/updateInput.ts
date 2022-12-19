@@ -14,7 +14,7 @@ class UpdateInput {
     description: string;
 
     @Field(() => Number, { nullable: true })
-    prep_time: number;
+    prep: number;
 
     @Field(() => String, { nullable: true })
     cuisine: string;
