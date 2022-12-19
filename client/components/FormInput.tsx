@@ -6,17 +6,19 @@ import { useFormContext } from 'react-hook-form';
 import ErrorMessage from './ErrorMessage';
 
 type FormInputProps = {
-    label: string;
     name: string;
+    label?: string;
     padding?: boolean;
     placeholder?: string;
     type?: string;
+    noValidation?: boolean;
 };
 
 const FormInput: FC<FormInputProps> = ({
     label,
     name,
     placeholder,
+    noValidation = false,
     padding = false,
     type = 'text',
 }) => {
@@ -36,17 +38,19 @@ const FormInput: FC<FormInputProps> = ({
                     padding && 'py-2'
                 )}
             >
-                <label
-                    htmlFor={name}
-                    className={classNames(
-                        type === 'checkbox'
-                            ? 'text-xs text-amber-500'
-                            : 'text-sm',
-                        padding && 'pr-9'
-                    )}
-                >
-                    {label}
-                </label>
+                {label && (
+                    <label
+                        htmlFor={name}
+                        className={classNames(
+                            type === 'checkbox'
+                                ? 'text-xs text-amber-500'
+                                : 'text-sm mb-2',
+                            padding && 'pr-9'
+                        )}
+                    >
+                        {label}
+                    </label>
+                )}
                 <input
                     type={type}
                     autoComplete="off"
@@ -55,13 +59,13 @@ const FormInput: FC<FormInputProps> = ({
                         'p-3 rounded-lg border text-xs',
                         type === 'checkbox'
                             ? 'w-4 h-4 accent-amber-500 text-white'
-                            : 'w-full mt-2',
+                            : 'w-full',
                         errors[name] && 'border-red-600'
                     )}
                     {...register(name)}
                 />
             </div>
-            <ErrorMessage error={errors[name]} />
+            {!noValidation && <ErrorMessage error={errors[name]} />}
         </div>
     );
 };
