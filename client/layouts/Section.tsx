@@ -9,8 +9,10 @@ const Section: React.FC<SectionProps> = ({
     id,
     maxWidth = false,
 }) => (
-    <section id={id} className={`${maxWidth ? 'max-w-full' : 'max-w-7xl'}`}>
-        {children}
+    <section id={id} className="w-full py-28">
+        <div className={`${maxWidth ? 'max-w-full' : 'mx-auto max-w-7xl'}`}>
+            {children}
+        </div>
     </section>
 );
 
