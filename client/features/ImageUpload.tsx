@@ -4,7 +4,7 @@ import { Controller, useController, useFormContext } from 'react-hook-form';
 
 import { ErrorMessage, Spinner } from '@components';
 import { CLDN_API_URL } from '@constants';
-import { useAppSelector } from '@hooks/redux';
+import { useAppSelector } from '@hooks';
 
 type ImageUploadProps = {
     name: string;

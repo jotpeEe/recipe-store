@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Image from 'next/image';
 import Link, { LinkProps } from 'next/link';
 
-import useScrollUp from '@hooks/useScrollUp';
+import { useScrollUp } from '@hooks';
 
 import Button from './Button';
 
@@ -37,6 +37,7 @@ const Nav: FC = () => {
                 <ul className="flex gap-3 items-center">
                     <NavItem href="/#recipes">Recipes</NavItem>
                     <NavItem href="/#reviews">Reviews</NavItem>
+                    <NavItem href="/profile">Profile</NavItem>
                     <NavItem href="/login">Log in</NavItem>
                     <Button size="small">Sign Up</Button>
                 </ul>
