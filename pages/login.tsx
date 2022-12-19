@@ -1,19 +1,15 @@
+import { useCallback } from 'react';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
 import { object, string } from 'yup';
 
-import { Button, FormInput } from '@components';
-import { Footer } from '@components/auth';
-import {
-    LoginInput,
-    useGetMeQuery,
-    useLoginUserMutation,
-} from '@generated/graphql';
+import { Button, FormInput, AuthFooter } from '@components';
+import { LoginInput } from '@generated/graphql';
+import { useAuth } from '@hooks';
 import { PageLayout as Layout } from '@layouts';
-import graphqlRequestClient from '@requests/graphqlClient';
 
 const loginSchema = object({
     email: string()
@@ -31,34 +27,15 @@ const loginSchema = object({
  */
 
 const Login: NextPage = () => {
-    const router = useRouter();
+    const { loginUser, loginStatus } = useAuth();
 
     const methods = useForm<LoginInput>({ resolver: yupResolver(loginSchema) });
 
     const { handleSubmit } = methods;
 
-    const query = useGetMeQuery(
-        graphqlRequestClient,
-        {},
-        {
-            enabled: false,
-            onSuccess: data => {},
-        }
-    );
-
-    const { isLoading, mutate: loginUser } = useLoginUserMutation<Error>(
-        graphqlRequestClient,
-        {
-            onSuccess() {
-                query.refetch();
-                router.push('/');
-            },
-        }
-    );
-
-    const onSubmitHandler: SubmitHandler<LoginInput> = values => {
+    const onSubmitHandler: SubmitHandler<LoginInput> = useCallback(values => {
         loginUser({ input: values });
-    };
+    }, []);
 
     return (
         <Layout>
@@ -93,15 +70,15 @@ const Login: NextPage = () => {
                             <Button
                                 type="submit"
                                 className="my-7"
-                                isLoading={isLoading}
                                 fullWidth
                                 arrow
+                                isLoading={loginStatus}
                             >
                                 Log in
                             </Button>
                         </form>
                     </FormProvider>
-                    <Footer type="login" />
+                    <AuthFooter type="login" />
                 </div>
             </div>
         </Layout>
