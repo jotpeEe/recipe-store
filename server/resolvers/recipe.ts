@@ -22,8 +22,13 @@ export default class RecipeResolver {
     }
 
     @Query(() => PopulatedResponse)
-    async getRecipe(@Arg('id') id: string, @Ctx() ctx: Context) {
-        return this.recipeService.getRecipe(id, ctx);
+    async getRecipe(@Arg('id') id: string) {
+        return this.recipeService.getRecipe(id);
+    }
+
+    @Query(() => PopulatedResponse, { nullable: true })
+    async getTempRecipe(@Ctx() ctx: Context) {
+        return this.recipeService.getTempRecipe(ctx);
     }
 
     @Mutation(() => Response)
@@ -45,7 +50,7 @@ export default class RecipeResolver {
         return this.recipeService.getRecipes(ctx);
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => PopulatedResponse)
     async deleteRecipe(@Arg('id') id: string, @Ctx() ctx: Context) {
         return this.recipeService.deleteRecipe(id, ctx);
     }

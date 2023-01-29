@@ -6,7 +6,9 @@ import {
 } from '@typegoose/typegoose';
 import type { Ref } from '@typegoose/typegoose';
 
-import { User } from '@models/user';
+import { Ingredient } from '@schemas/recipe';
+
+import { User } from './user';
 
 @ModelOptions({
     schemaOptions: {
@@ -26,16 +28,34 @@ export class Recipe {
     description: string;
 
     @prop({ required: true })
-    prep: number;
+    prep: string;
 
     @prop({ required: true })
     cuisine: string;
 
-    @prop({ required: true })
+    @prop()
     servings: number;
 
-    @prop({ required: true })
+    @prop({
+        default:
+            'https://res.cloudinary.com/dxkgc7cab/image/upload/v1673326140/m7xf1knsrfbyctetp4ln.png',
+    })
     image: string;
+
+    @prop({ default: false })
+    temp: boolean;
+
+    @prop()
+    step: number;
+
+    @prop()
+    steps: string[];
+
+    @prop()
+    reviews: string[];
+
+    @prop()
+    ingredients: Ingredient[];
 
     @prop({ required: true, ref: () => User })
     user: Ref<User>;
