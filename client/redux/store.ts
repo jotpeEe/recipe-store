@@ -7,7 +7,7 @@ import statusSlice from './reducers/statusSlice';
 
 type IStore = {
     auth: {
-        user: IUser | null;
+        user?: Partial<IUser>;
     };
     status: {
         imageUploading: boolean;
