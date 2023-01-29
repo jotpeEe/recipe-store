@@ -18,11 +18,11 @@ class SignUpInput {
     @Field(() => String)
     passwordConfirm: string | undefined;
 
-    @Field(() => String)
-    photo: string;
-
     @Field(() => Boolean)
     terms: boolean;
+
+    @Field(() => String, { nullable: true })
+    photo: string;
 }
 
 export default SignUpInput;

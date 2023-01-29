@@ -6,20 +6,21 @@ import {
 import { setCookie } from 'cookies-next';
 import { OptionsType } from 'cookies-next/lib/types';
 
-import errorHandler from '@controllers/error';
-import UserModel, { User } from '@models/user';
+import { cookies } from '@constants';
+import errorHandler from '@controllers';
+import { UserModel, User } from '@models';
 import { LoginInput } from '@schemas/user';
-import { disconnectDB, redisClient, signJwt, verifyJwt } from '@utils';
+import { redisClient, signJwt, verifyJwt } from '@utils';
 import { Context } from 'server/types/context';
 
 const accessTokenExpiresIn = 15;
 const refreshTokenExpiresIn = 60;
 
+const { ACCESS_TOKEN, REFRESH_TOKEN, LOGGED_IN } = cookies;
+
 const cookieOptions: OptionsType = {
     httpOnly: true,
-    // domain: '/',
     sameSite: 'lax',
-    // secure: true,
 };
 
 if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -60,23 +61,22 @@ export default class UserService {
     signUpUser = async (input: Partial<User>, { req, res }: Context) => {
         try {
             const user = await UserModel.create(input);
-            await disconnectDB();
 
             // Sign JWT Tokens
             const { accessToken, refreshToken } = signTokens(user);
 
             // Add Tokens to Context
-            setCookie('access_token', accessToken, {
+            setCookie(ACCESS_TOKEN, accessToken, {
                 req,
                 res,
                 ...accessTokenCookieOptions,
             });
-            setCookie('refresh_token', refreshToken, {
+            setCookie(REFRESH_TOKEN, refreshToken, {
                 req,
                 res,
                 ...refreshTokenCookieOptions,
             });
-            setCookie('logged_in', 'true', {
+            setCookie(LOGGED_IN, 'true', {
                 req,
                 res,
                 ...accessTokenCookieOptions,
@@ -92,19 +92,19 @@ export default class UserService {
                 return new ForbiddenError('Email already exists');
             }
             errorHandler(error);
-            return { status: 'failure' };
+            return { status: 'error' };
         }
     };
 
     loginUser = async (input: LoginInput, { req, res }: Context) => {
         try {
-            const message = 'Invalid email or password';
             // Find user by email
             const user = await findByEmail(input.email);
-            await disconnectDB();
 
             if (!user) {
-                return new AuthenticationError(message);
+                return new AuthenticationError(
+                    'There is no user with that email'
+                );
             }
 
             // Compare passwords
@@ -114,36 +114,36 @@ export default class UserService {
                     input.password
                 ))
             ) {
-                return new AuthenticationError(message);
+                return new AuthenticationError('Invalid password');
             }
 
             // Sign JWT Tokens
             const { accessToken, refreshToken } = signTokens(user);
 
             // Add Tokens to Context
-            setCookie('access_token', accessToken, {
+            setCookie(ACCESS_TOKEN, accessToken, {
                 req,
                 res,
                 ...accessTokenCookieOptions,
             });
-            setCookie('refresh_token', refreshToken, {
+            setCookie(REFRESH_TOKEN, refreshToken, {
                 req,
                 res,
                 ...refreshTokenCookieOptions,
             });
-            setCookie('logged_in', 'true', {
+            setCookie(LOGGED_IN, 'true', {
                 req,
                 res,
                 ...accessTokenCookieOptions,
                 httpOnly: false,
             });
+
             return {
                 status: 'success',
                 access_token: accessToken,
             };
         } catch (error: any) {
-            errorHandler(error);
-            return { status: 'failure' };
+            return { status: 'error' };
         }
     };
 
@@ -160,14 +160,14 @@ export default class UserService {
             };
         } catch (error: any) {
             errorHandler(error);
-            return { status: 'failure' };
+            return { status: 'error' };
         }
     };
 
     refreshAccessToken = async ({ req, res }: Context) => {
         try {
             // Get the refresh token
-            const { refreshToken } = req.cookies;
+            const refreshToken = req.cookies.refresh_token;
 
             if (!refreshToken) {
                 throw new ForbiddenError('Could not refresh access token');
@@ -187,6 +187,10 @@ export default class UserService {
             const session = await redisClient.get(decoded.userId);
 
             if (!session) {
+                setCookie(ACCESS_TOKEN, '', { req, res, maxAge: -1 });
+                setCookie(REFRESH_TOKEN, '', { req, res, maxAge: -1 });
+                setCookie(LOGGED_IN, '', { req, res, maxAge: -1 });
+
                 throw new ForbiddenError('User session has expired');
             }
 
@@ -194,7 +198,6 @@ export default class UserService {
             const user = await UserModel.findById(
                 JSON.parse(session)._id
             ).select('+verified');
-            await disconnectDB();
 
             if (!user || !user.verified) {
                 throw new ForbiddenError('Could not refresh access token');
@@ -212,12 +215,12 @@ export default class UserService {
             );
 
             // Send access token cookie
-            setCookie('access_token', accessToken, {
+            setCookie(ACCESS_TOKEN, accessToken, {
                 req,
                 res,
                 ...accessTokenCookieOptions,
             });
-            setCookie('logged_in', 'true', {
+            setCookie(LOGGED_IN, 'true', {
                 req,
                 res,
                 ...accessTokenCookieOptions,
@@ -230,7 +233,7 @@ export default class UserService {
             };
         } catch (error) {
             errorHandler(error);
-            return { status: 'failure' };
+            return { status: 'error' };
         }
     };
 
@@ -242,9 +245,9 @@ export default class UserService {
             await redisClient.del(String(user?._id));
 
             // Logout user
-            setCookie('access_token', '', { req, res, maxAge: -1 });
-            setCookie('refresh_token', '', { req, res, maxAge: -1 });
-            setCookie('logged_in', '', { req, res, maxAge: -1 });
+            setCookie(ACCESS_TOKEN, '', { req, res, maxAge: -1 });
+            setCookie(REFRESH_TOKEN, '', { req, res, maxAge: -1 });
+            setCookie(LOGGED_IN, '', { req, res, maxAge: -1 });
 
             return true;
         } catch (error) {

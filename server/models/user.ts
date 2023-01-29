@@ -28,6 +28,8 @@ import bcrypt from 'bcryptjs';
 export class User {
     readonly _id: string;
 
+    readonly id: string;
+
     @prop({ required: true })
     name: string;
 
