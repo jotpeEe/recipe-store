@@ -1,54 +1,67 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 
+import cn from 'classnames';
 import Image from 'next/image';
-import { useForm, FormProvider } from 'react-hook-form';
 
-import { IconFilter } from '@icons';
+import { IconPin } from '@icons';
 
 import Button from '../Button';
-import FormInput from '../FormInput';
 
 type UserInfoProps = {
-    children: ReactNode;
-    className?: string;
+    title?: string;
+    subtitle?: string;
     imgSrc?: string;
-    name?: string;
+    size?: 'sm' | 'md';
+    className?: string;
+    withFollow?: boolean;
+    withLocation?: boolean;
 };
 
 const UserInfo: FC<UserInfoProps> = ({
-    className,
-    children,
+    title,
+    subtitle,
     imgSrc = '/default.png',
-    name,
-}) => {
-    const methods = useForm();
-    return (
-        <div className={`grid grid-col-2 grid-rows-2 gap-6 ${className} `}>
-            <div className="col-span-2 flex gap-2">
-                <Image
-                    className="rounded-full self-center justify-self-center"
-                    height={56}
-                    width={56}
-                    src={imgSrc}
-                    alt="userInfo"
-                />
-                <div className="flex flex-col justify-center gap-1 ">
-                    <h3 className="text-xl">{`Hello ${name}`}</h3>
-                    <p className="text-xs text-outlined">{children}</p>
+    className,
+    size = 'md',
+    withFollow,
+    withLocation,
+}) => (
+    <div
+        className={cn(
+            'flex justify-between',
+            withFollow && 'justify-between',
+            className
+        )}
+    >
+        <div className={cn('flex h-fill', size === 'sm' ? 'gap-2' : 'gap-5')}>
+            <Image
+                width={size === 'sm' ? 35 : 56}
+                height={size === 'sm' ? 35 : 56}
+                src={imgSrc}
+                alt="recipe image"
+                className="rounded-full"
+            />
+            <div className="flex flex-col justify-center items-start gap-0.5">
+                <h5 className={cn(size === 'sm' && 'text-xs')}>{title}</h5>
+                <div className="flex gap-1">
+                    {withLocation && <IconPin />}
+                    <p
+                        className={cn(
+                            'text-outlined',
+                            size === 'sm' ? 'text-[10px] ' : ''
+                        )}
+                    >
+                        {subtitle}
+                    </p>
                 </div>
             </div>
-            <div className={`flex gap-4 h-fit items-center ${className}`}>
-                <FormProvider {...methods}>
-                    <FormInput
-                        name="search"
-                        placeholder="Search recipe"
-                        noValidation
-                    />
-                </FormProvider>
-                <Button size="small" icon={<IconFilter />} />
-            </div>
         </div>
-    );
-};
+        {withFollow && (
+            <Button size="sm" className="self-center ml-5 justify-self-end">
+                Follow
+            </Button>
+        )}
+    </div>
+);
 
 export default UserInfo;
