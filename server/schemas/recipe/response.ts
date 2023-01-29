@@ -1,14 +1,14 @@
 import { Field, ObjectType } from 'type-graphql';
 
-import Data from './data';
+import RecipeData from './data';
 
 @ObjectType()
 class Response {
     @Field(() => String)
     status: string;
 
-    @Field(() => Data)
-    recipe: Data;
+    @Field(() => RecipeData)
+    recipe: RecipeData;
 }
 
 export default Response;

@@ -1,5 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 
+import { Ingredient } from './ingredient';
+
 @ObjectType()
 class DataObject {
     @Field(() => String)
@@ -14,17 +16,29 @@ class DataObject {
     @Field(() => String)
     description: string;
 
-    @Field(() => Number)
-    prep: number;
+    @Field(() => String)
+    prep: string;
 
     @Field(() => String)
     cuisine: string;
 
-    @Field(() => Number)
-    servings: number;
+    @Field(() => Number, { nullable: true })
+    servings?: number;
 
     @Field(() => String)
     image: string;
+
+    @Field(() => Boolean)
+    temp: boolean;
+
+    @Field(() => [Ingredient])
+    ingredients: Ingredient[];
+
+    @Field(() => Number)
+    step: number;
+
+    @Field(() => [String])
+    steps: string[];
 
     @Field(() => Date)
     createdAt: Date;

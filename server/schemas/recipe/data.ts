@@ -3,9 +3,9 @@ import { Field, ObjectType } from 'type-graphql';
 import DataObject from './dataObject';
 
 @ObjectType()
-class Data extends DataObject {
+class RecipeData extends DataObject {
     @Field(() => String)
     user: string;
 }
 
-export default Data;
+export default RecipeData;
