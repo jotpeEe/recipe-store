@@ -1,9 +1,12 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import { dehydrate } from 'react-query';
 
-import { useRecipeQueries } from '@hooks';
-import { PageLayout as Layout } from '@layouts';
-import { Header, Recipes, Reviews } from '@sections';
+import { useGetAllRecipesQuery } from '@generated/graphql';
+import { useAppDispatch } from '@hooks';
+import { setPageLoading } from '@redux';
+import { queryClient, requestClient } from '@requests';
+import { Hero, Recipes, Reviews } from '@sections';
 
 /**
  * Home: The Landing page of the web app
@@ -11,22 +14,37 @@ import { Header, Recipes, Reviews } from '@sections';
  */
 
 const Home: NextPage = () => {
-    const { getAllRecipes } = useRecipeQueries();
+    const dispatch = useAppDispatch();
 
-    const { data: recipes } = getAllRecipes;
+    const { data: recipes } = useGetAllRecipesQuery(
+        requestClient,
+        {},
+        {
+            select: data => data.getAllRecipes.recipes,
+            onError() {
+                dispatch(setPageLoading(false));
+            },
+        }
+    );
+
     return (
         <>
             <Head>
-                <title>Create Next App</title>
+                <title>RecipeSpot</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Layout>
-                <Header />
-                <Recipes recipes={recipes} />
-                <Reviews />
-            </Layout>
+            <Hero />
+            <Recipes recipes={recipes} />
+            <Reviews />
         </>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => ({
+    props: {
+        dehydratedState: dehydrate(queryClient),
+        enableAuth: !!req.cookies.refresh_token,
+    },
+});
 
 export default Home;
