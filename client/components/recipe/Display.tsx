@@ -41,6 +41,7 @@ const Display: FC<DisplayProps> = ({
                         setActive={setActive}
                         active={active}
                         array={buttons}
+                        size="sm"
                     />
                 </Animated>
             )}

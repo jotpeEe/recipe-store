@@ -24,7 +24,7 @@ const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
                 title={name}
                 subtitle={formattedDate}
             />
-            <p className="text-xs max-w-[45ch]">{text}</p>
+            <p className="text-xs max-w-[40ch]">{text}</p>
             {(pos.length !== 0 || neg.length !== 0) && (
                 <div className="flex gap-2">
                     <Button disabled size="xs">
