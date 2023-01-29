@@ -1,8 +1,7 @@
-query GetAllRecipes{
-    getAllRecipes{
+mutation CreateRecipe($input: Input!) {
+    createRecipe(input: $input) {
         status
-        results
-        recipes {
+        recipe {
             id: _id
             title
             description
@@ -12,11 +11,8 @@ query GetAllRecipes{
             image
             createdAt
             updatedAt
-            user {
-                _id
-                name
-                photo
-            }
+            user
+            temp
         }
     }
 }

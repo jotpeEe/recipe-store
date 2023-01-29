@@ -1,19 +1,19 @@
-query GetAllRecipes{
-    getAllRecipes{
-        status
-        results
-        recipes {
+query GetRecipeById($id: String!) {
+    getRecipe(id: $id) {
+        recipe {
             id: _id
+            cuisine
             title
             description
             prep
-            cuisine
             servings
+            ingredients {
+                name
+                amount
+            }
             image
-            createdAt
-            updatedAt
+            steps
             user {
-                _id
                 name
                 photo
             }

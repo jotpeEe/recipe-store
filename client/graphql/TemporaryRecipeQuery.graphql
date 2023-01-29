@@ -1,8 +1,7 @@
-query GetAllRecipes{
-    getAllRecipes{
+query GetTempRecipe {
+    temp: getTempRecipe {
         status
-        results
-        recipes {
+        recipe {
             id: _id
             title
             description
@@ -10,12 +9,10 @@ query GetAllRecipes{
             cuisine
             servings
             image
-            createdAt
-            updatedAt
-            user {
-                _id
+            steps
+            ingredients {
                 name
-                photo
+                amount
             }
         }
     }
