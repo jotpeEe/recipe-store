@@ -1,56 +1,88 @@
-import { ButtonHTMLAttributes, FC } from 'react';
+import { FC, ReactNode, ButtonHTMLAttributes } from 'react';
 
 import classNames from 'classnames';
+import Link from 'next/link';
 
 import { IconArrow } from '@icons';
 
 import Spinner from './Spinner';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    size?: 'small' | 'medium' | 'large';
+    children?: ReactNode;
+    href?: string;
     arrow?: boolean;
-    outlined?: boolean;
+    circle?: boolean;
     fullWidth?: boolean;
     icon?: JSX.Element;
     isLoading?: boolean;
+    outlined?: boolean;
+    rotate?: boolean;
+    size?: 'xs' | 'sm' | 'md' | 'lg';
 };
 
 const Button: FC<ButtonProps> = ({
+    arrow,
+    href,
     children,
+    circle,
     className,
-    isLoading = false,
-    size = 'large',
-    outlined = false,
-    arrow = false,
-    fullWidth = false,
-    type = 'button',
+    fullWidth,
     icon,
-}) => (
-    <button
-        type={type}
-        className={classNames(
-            'flex items-center justify-center bg-primary gap-2 text-white font-semibold rounded-xl hover:bg-green-600 transition-all h-fit',
-            size === 'small' && 'text-xs py-2 px-5 leading-none',
-            size === 'small' && outlined && 'font-normal',
-            size === 'medium' && 'px-5 py-2',
-            size === 'large' && 'px-12 py-4',
-            fullWidth ? 'w-full' : 'w-fit',
-            outlined
-                ? 'bg-white text-outlined border'
-                : 'bg-primary text-white',
-            className && `${className}`
-        )}
-    >
-        {!isLoading ? (
-            <>
-                {icon && icon}
-                {children && children}
-                {arrow && <IconArrow />}
-            </>
-        ) : (
-            <Spinner color="text-amber-500" />
-        )}
-    </button>
-);
+    isLoading,
+    outlined,
+    rotate,
+    size = 'lg',
+    type,
+    ...props
+}) => {
+    const styles = classNames(
+        'flex items-center justify-center bg-primary gap-2 text-white font-semibold text-center transition-all h-fit',
+        circle
+            ? 'rounded-full p-4 text-black border border-black bg-white '
+            : 'rounded-xl',
+        size === 'xs' && !circle && 'text-xs py-0.5 px-3',
+        size === 'sm' && !circle && 'text-xs py-2 px-5 leading-none',
+        size === 'sm' && outlined && !circle && 'font-normal',
+        size === 'md' && !circle && 'px-5 py-2',
+        size === 'lg' && !circle && 'px-12 py-4',
+        fullWidth ? 'w-full' : 'w-fit',
+        outlined && !circle
+            ? 'bg-white text-outlined border'
+            : 'bg-primary text-white hover:bg-green-600',
+        rotate && 'rotate-180',
+        (outlined || circle) && 'hover:bg-gray-200',
+        className && `${className}`
+    );
+
+    return (
+        <>
+            {!href ? (
+                <button type={type} className={styles} {...props}>
+                    {!isLoading ? (
+                        <>
+                            {icon && icon}
+                            {children && children}
+                            {arrow && <IconArrow />}
+                        </>
+                    ) : (
+                        <Spinner color="text-amber-500" />
+                    )}
+                </button>
+            ) : (
+                <Link className={styles} href={href}>
+                    {!isLoading ? (
+                        <>
+                            {icon && icon}
+                            {children && children}
+                            {arrow && <IconArrow />}
+                        </>
+                    ) : (
+                        <Spinner color="text-amber-500" />
+                    )}
+                </Link>
+            )}
+        </>
+    );
+};
 
 export default Button;
