@@ -1,5 +1,4 @@
-export { connectDB } from './connectDB';
-export { disconnectDB } from './connectDB';
+export { default as connectDB } from './connectDB';
 export { signJwt } from './jwt';
 export { verifyJwt } from './jwt';
 export { default as redisClient } from './connectRedis';

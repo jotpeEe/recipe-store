@@ -1,9 +1,11 @@
 import { createClient } from 'redis';
 
-import { redisURL } from '@constants';
+import { REDIS_URL } from '@constants';
+
+if (!REDIS_URL) throw new Error('Redis url const not defined');
 
 const redisClient = createClient({
-    url: redisURL,
+    url: REDIS_URL,
 });
 
 const connectRedis = async () => {
