@@ -1,0 +1,24 @@
+query getReviewsByRecipe($id: String!) {
+    getReviewsByRecipe(id: $id) {
+        status
+        results
+        reviews {
+            id: _id
+            text
+            recipe {
+                id: _id
+            }
+            recipeAuthor {
+                name
+                photo
+            }
+            user {
+                name
+                photo
+            }
+            pos
+            neg
+            createdAt
+        }
+    }
+}
