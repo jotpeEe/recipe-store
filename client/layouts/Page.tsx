@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { Nav } from '@components';
+const Nav = dynamic(() => import('../components/nav'), { ssr: false });
 
 type PageProps = {
     children: React.ReactNode;
