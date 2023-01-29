@@ -10,17 +10,21 @@ type FormInputProps = {
     label?: string;
     padding?: boolean;
     placeholder?: string;
-    type?: string;
+    type?: 'text' | 'number' | 'checkbox' | 'email' | 'password';
+    element?: 'input' | 'textarea' | 'select';
     noValidation?: boolean;
+    value?: string | number;
 };
 
 const FormInput: FC<FormInputProps> = ({
+    element = 'input',
     label,
     name,
+    value,
     placeholder,
-    noValidation = false,
     padding = false,
     type = 'text',
+    noValidation,
 }) => {
     const {
         register,
@@ -28,7 +32,7 @@ const FormInput: FC<FormInputProps> = ({
     } = useFormContext();
 
     return (
-        <div>
+        <>
             <div
                 className={classNames(
                     'text-sm flex',
@@ -51,22 +55,38 @@ const FormInput: FC<FormInputProps> = ({
                         {label}
                     </label>
                 )}
-                <input
-                    type={type}
-                    autoComplete="off"
-                    placeholder={placeholder}
-                    className={classNames(
-                        'p-3 rounded-lg border text-xs',
-                        type === 'checkbox'
-                            ? 'w-4 h-4 accent-amber-500 text-white'
-                            : 'w-full',
-                        errors[name] && 'border-red-600'
-                    )}
-                    {...register(name)}
-                />
+                {element === 'textarea' && (
+                    <textarea
+                        defaultValue={value}
+                        autoComplete="off"
+                        placeholder={placeholder}
+                        rows={4}
+                        className={classNames(
+                            'p-3 rounded-lg border text-xs w-full resize-none',
+                            errors[name] && 'border-red-600'
+                        )}
+                        {...register(name)}
+                    />
+                )}
+                {element === 'input' && (
+                    <input
+                        type={type}
+                        defaultValue={value}
+                        autoComplete="off"
+                        placeholder={placeholder}
+                        className={classNames(
+                            'p-3 rounded-lg border min-w-max text-xs',
+                            type === 'checkbox'
+                                ? 'w-4 h-4 accent-amber-500 text-white'
+                                : 'w-full',
+                            errors[name] && 'border-red-600'
+                        )}
+                        {...register(name)}
+                    />
+                )}
             </div>
             {!noValidation && <ErrorMessage error={errors[name]} />}
-        </div>
+        </>
     );
 };
 

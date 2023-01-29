@@ -2,15 +2,19 @@ import { FC, useCallback, SyntheticEvent } from 'react';
 
 import { Controller, useController, useFormContext } from 'react-hook-form';
 
-import { ErrorMessage, Spinner } from '@components';
 import { CLDN_API_URL } from '@constants';
 import { useAppSelector } from '@hooks';
+
+import Spinner from '../Spinner';
+import ErrorMessage from './ErrorMessage';
 
 type ImageUploadProps = {
     name: string;
 };
 
-const ImageUpload: FC<ImageUploadProps> = ({ name }) => {
+if (!CLDN_API_URL) throw new Error('Cloudinary endpoint not defined');
+
+const ImageInput: FC<ImageUploadProps> = ({ name }) => {
     const uploadingImage = useAppSelector(state => state.status.imageUploading);
 
     const {
@@ -81,4 +85,4 @@ const ImageUpload: FC<ImageUploadProps> = ({ name }) => {
     );
 };
 
-export default ImageUpload;
+export default ImageInput;
