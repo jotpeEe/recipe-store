@@ -43,27 +43,27 @@ export type Scalars = {
     DateTime: any;
 };
 
-export type Data = {
-    __typename?: 'Data';
-    _id: Scalars['String'];
-    createdAt: Scalars['DateTime'];
-    cuisine: Scalars['String'];
-    description: Scalars['String'];
-    id?: Maybe<Scalars['String']>;
-    image: Scalars['String'];
-    prep: Scalars['Float'];
-    servings: Scalars['Float'];
-    title: Scalars['String'];
-    updatedAt: Scalars['DateTime'];
-    user: Scalars['String'];
+export type Ingredient = {
+    __typename?: 'Ingredient';
+    amount: Scalars['String'];
+    name: Scalars['String'];
+};
+
+export type IngredientInput = {
+    amount: Scalars['String'];
+    name: Scalars['String'];
 };
 
 export type Input = {
     cuisine: Scalars['String'];
     description: Scalars['String'];
-    image: Scalars['String'];
-    prep: Scalars['Float'];
-    servings: Scalars['Float'];
+    image?: InputMaybe<Scalars['String']>;
+    ingredients?: InputMaybe<Array<IngredientInput>>;
+    prep: Scalars['String'];
+    servings?: InputMaybe<Scalars['Float']>;
+    step?: InputMaybe<Scalars['Float']>;
+    steps?: InputMaybe<Array<Scalars['String']>>;
+    temp?: InputMaybe<Scalars['Boolean']>;
     title: Scalars['String'];
 };
 
@@ -88,19 +88,32 @@ export type LoginResponse = {
 export type Mutation = {
     __typename?: 'Mutation';
     createRecipe: Response;
-    deleteRecipe: Scalars['Boolean'];
+    createReview: ReviewResponse;
+    deleteRecipe: PopulatedResponse;
+    deleteReview: ReviewPopulatedResponse;
     deleteUser: Scalars['Boolean'];
     loginUser: LoginResponse;
     signupUser: UserResponse;
     updateRecipe: Response;
+    updateReview: ReviewResponse;
 };
 
 export type MutationCreateRecipeArgs = {
     input: Input;
 };
 
+export type MutationCreateReviewArgs = {
+    id: Scalars['String'];
+    input: Scalars['String'];
+};
+
 export type MutationDeleteRecipeArgs = {
     id: Scalars['String'];
+};
+
+export type MutationDeleteReviewArgs = {
+    id: Scalars['String'];
+    recipeId: Scalars['String'];
 };
 
 export type MutationDeleteUserArgs = {
@@ -120,6 +133,11 @@ export type MutationUpdateRecipeArgs = {
     input: UpdateInput;
 };
 
+export type MutationUpdateReviewArgs = {
+    id: Scalars['String'];
+    input: Scalars['String'];
+};
+
 export type PopulatedData = {
     __typename?: 'PopulatedData';
     _id: Scalars['String'];
@@ -128,8 +146,13 @@ export type PopulatedData = {
     description: Scalars['String'];
     id?: Maybe<Scalars['String']>;
     image: Scalars['String'];
-    prep: Scalars['Float'];
-    servings: Scalars['Float'];
+    ingredients: Array<Ingredient>;
+    prep: Scalars['String'];
+    reviews: Array<ReviewData>;
+    servings?: Maybe<Scalars['Float']>;
+    step: Scalars['Float'];
+    steps: Array<Scalars['String']>;
+    temp: Scalars['Boolean'];
     title: Scalars['String'];
     updatedAt: Scalars['DateTime'];
     user: UserData;
@@ -137,16 +160,20 @@ export type PopulatedData = {
 
 export type PopulatedResponse = {
     __typename?: 'PopulatedResponse';
-    recipe: PopulatedData;
+    recipe?: Maybe<PopulatedData>;
     status: Scalars['String'];
 };
 
 export type Query = {
     __typename?: 'Query';
     getAllRecipes: ListResponse;
+    getLastReviews: ReviewListResponse;
     getMe: UserResponse;
     getRecipe: PopulatedResponse;
     getRecipes: ListResponse;
+    getReviewsByAuthor: ReviewListResponse;
+    getReviewsByRecipe: ReviewListResponse;
+    getTempRecipe?: Maybe<PopulatedResponse>;
     logoutUser: Scalars['Boolean'];
     refreshAccessToken: LoginResponse;
 };
@@ -155,9 +182,82 @@ export type QueryGetRecipeArgs = {
     id: Scalars['String'];
 };
 
+export type QueryGetReviewsByAuthorArgs = {
+    author: Scalars['String'];
+};
+
+export type QueryGetReviewsByRecipeArgs = {
+    id: Scalars['String'];
+};
+
+export type RecipeData = {
+    __typename?: 'RecipeData';
+    _id: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    cuisine: Scalars['String'];
+    description: Scalars['String'];
+    id?: Maybe<Scalars['String']>;
+    image: Scalars['String'];
+    ingredients: Array<Ingredient>;
+    prep: Scalars['String'];
+    servings?: Maybe<Scalars['Float']>;
+    step: Scalars['Float'];
+    steps: Array<Scalars['String']>;
+    temp: Scalars['Boolean'];
+    title: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+    user: Scalars['String'];
+};
+
 export type Response = {
     __typename?: 'Response';
-    recipe: Data;
+    recipe: RecipeData;
+    status: Scalars['String'];
+};
+
+export type ReviewData = {
+    __typename?: 'ReviewData';
+    _id: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    id?: Maybe<Scalars['String']>;
+    neg: Array<Scalars['String']>;
+    pos: Array<Scalars['String']>;
+    recipe: Scalars['String'];
+    recipeAuthor: Scalars['String'];
+    text: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+    user: Scalars['String'];
+};
+
+export type ReviewListResponse = {
+    __typename?: 'ReviewListResponse';
+    results: Scalars['Float'];
+    reviews: Array<ReviewPopulatedData>;
+    status: Scalars['String'];
+};
+
+export type ReviewPopulatedData = {
+    __typename?: 'ReviewPopulatedData';
+    _id: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    id?: Maybe<Scalars['String']>;
+    neg: Array<Scalars['String']>;
+    pos: Array<Scalars['String']>;
+    recipe: RecipeData;
+    recipeAuthor: UserData;
+    text: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+    user: UserData;
+};
+
+export type ReviewPopulatedResponse = {
+    __typename?: 'ReviewPopulatedResponse';
+    status: Scalars['String'];
+};
+
+export type ReviewResponse = {
+    __typename?: 'ReviewResponse';
+    review: ReviewData;
     status: Scalars['String'];
 };
 
@@ -166,7 +266,7 @@ export type SignUpInput = {
     name: Scalars['String'];
     password: Scalars['String'];
     passwordConfirm: Scalars['String'];
-    photo: Scalars['String'];
+    photo?: InputMaybe<Scalars['String']>;
     terms: Scalars['Boolean'];
 };
 
@@ -174,8 +274,12 @@ export type UpdateInput = {
     cuisine?: InputMaybe<Scalars['String']>;
     description?: InputMaybe<Scalars['String']>;
     image?: InputMaybe<Scalars['String']>;
-    prep?: InputMaybe<Scalars['Float']>;
+    ingredients?: InputMaybe<Array<IngredientInput>>;
+    prep?: InputMaybe<Scalars['String']>;
+    reviews?: InputMaybe<Array<Scalars['String']>>;
     servings?: InputMaybe<Scalars['Float']>;
+    step?: InputMaybe<Scalars['Float']>;
+    steps?: InputMaybe<Array<Scalars['String']>>;
     title?: InputMaybe<Scalars['String']>;
 };
 
@@ -184,7 +288,7 @@ export type UserData = {
     _id: Scalars['String'];
     createdAt: Scalars['DateTime'];
     email: Scalars['String'];
-    id?: Maybe<Scalars['String']>;
+    id: Scalars['String'];
     name: Scalars['String'];
     photo: Scalars['String'];
     role: Scalars['String'];
@@ -196,6 +300,45 @@ export type UserResponse = {
     __typename?: 'UserResponse';
     status: Scalars['String'];
     user: UserData;
+};
+
+export type CreateRecipeMutationVariables = Exact<{
+    input: Input;
+}>;
+
+export type CreateRecipeMutation = {
+    __typename?: 'Mutation';
+    createRecipe: {
+        __typename?: 'Response';
+        status: string;
+        recipe: {
+            __typename?: 'RecipeData';
+            title: string;
+            description: string;
+            prep: string;
+            cuisine: string;
+            servings?: number | null;
+            image: string;
+            createdAt: any;
+            updatedAt: any;
+            user: string;
+            temp: boolean;
+            id: string;
+        };
+    };
+};
+
+export type DeleteRecipeMutationVariables = Exact<{
+    id: Scalars['String'];
+}>;
+
+export type DeleteRecipeMutation = {
+    __typename?: 'Mutation';
+    deleteRecipe: {
+        __typename?: 'PopulatedResponse';
+        status: string;
+        recipe?: { __typename?: 'PopulatedData'; id: string } | null;
+    };
 };
 
 export type DeleteUserMutationVariables = Exact<{
@@ -217,15 +360,15 @@ export type GetAllRecipesQuery = {
         results: number;
         recipes: Array<{
             __typename?: 'PopulatedData';
-            _id: string;
             title: string;
             description: string;
-            prep: number;
+            prep: string;
             cuisine: string;
-            servings: number;
+            servings?: number | null;
             image: string;
             createdAt: any;
             updatedAt: any;
+            id: string;
             user: {
                 __typename?: 'UserData';
                 _id: string;
@@ -246,7 +389,7 @@ export type GetMeQuery = {
         user: {
             __typename?: 'UserData';
             _id: string;
-            id?: string | null;
+            id: string;
             email: string;
             name: string;
             role: string;
@@ -267,12 +410,40 @@ export type GetMyRecipesQuery = {
         results: number;
         recipes: Array<{
             __typename?: 'PopulatedData';
-            _id: string;
             title: string;
-            prep: number;
-            servings: number;
+            prep: string;
             image: string;
+            cuisine: string;
+            id: string;
         }>;
+    };
+};
+
+export type GetRecipeByIdQueryVariables = Exact<{
+    id: Scalars['String'];
+}>;
+
+export type GetRecipeByIdQuery = {
+    __typename?: 'Query';
+    getRecipe: {
+        __typename?: 'PopulatedResponse';
+        recipe?: {
+            __typename?: 'PopulatedData';
+            cuisine: string;
+            title: string;
+            description: string;
+            prep: string;
+            servings?: number | null;
+            image: string;
+            steps: Array<string>;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+            }>;
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        } | null;
     };
 };
 
@@ -293,6 +464,17 @@ export type LogoutUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type LogoutUserQuery = { __typename?: 'Query'; logoutUser: boolean };
 
+export type RefreshAccessTokenQueryVariables = Exact<{ [key: string]: never }>;
+
+export type RefreshAccessTokenQuery = {
+    __typename?: 'Query';
+    refreshAccessToken: {
+        __typename?: 'LoginResponse';
+        status: string;
+        access_token: string;
+    };
+};
+
 export type SignUpUserMutationVariables = Exact<{
     input: SignUpInput;
 }>;
@@ -306,6 +488,128 @@ export type SignUpUserMutation = {
     };
 };
 
+export type GetTempRecipeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetTempRecipeQuery = {
+    __typename?: 'Query';
+    temp?: {
+        __typename?: 'PopulatedResponse';
+        status: string;
+        recipe?: {
+            __typename?: 'PopulatedData';
+            title: string;
+            description: string;
+            prep: string;
+            cuisine: string;
+            servings?: number | null;
+            image: string;
+            steps: Array<string>;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+            }>;
+        } | null;
+    } | null;
+};
+
+export type UpdateRecipeMutationVariables = Exact<{
+    id: Scalars['String'];
+    input: UpdateInput;
+}>;
+
+export type UpdateRecipeMutation = {
+    __typename?: 'Mutation';
+    updateRecipe: {
+        __typename?: 'Response';
+        status: string;
+        recipe: { __typename?: 'RecipeData'; id: string };
+    };
+};
+
+export const CreateRecipeDocument = `
+    mutation CreateRecipe($input: Input!) {
+  createRecipe(input: $input) {
+    status
+    recipe {
+      id: _id
+      title
+      description
+      prep
+      cuisine
+      servings
+      image
+      createdAt
+      updatedAt
+      user
+      temp
+    }
+  }
+}
+    `;
+export const useCreateRecipeMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        CreateRecipeMutation,
+        TError,
+        CreateRecipeMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        CreateRecipeMutation,
+        TError,
+        CreateRecipeMutationVariables,
+        TContext
+    >(
+        ['CreateRecipe'],
+        (variables?: CreateRecipeMutationVariables) =>
+            fetcher<CreateRecipeMutation, CreateRecipeMutationVariables>(
+                client,
+                CreateRecipeDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
+export const DeleteRecipeDocument = `
+    mutation DeleteRecipe($id: String!) {
+  deleteRecipe(id: $id) {
+    status
+    recipe {
+      id: _id
+    }
+  }
+}
+    `;
+export const useDeleteRecipeMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        DeleteRecipeMutation,
+        TError,
+        DeleteRecipeMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        DeleteRecipeMutation,
+        TError,
+        DeleteRecipeMutationVariables,
+        TContext
+    >(
+        ['DeleteRecipe'],
+        (variables?: DeleteRecipeMutationVariables) =>
+            fetcher<DeleteRecipeMutation, DeleteRecipeMutationVariables>(
+                client,
+                DeleteRecipeDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
 export const DeleteUserDocument = `
     mutation DeleteUser($id: String!) {
   deleteUser(id: $id)
@@ -343,7 +647,7 @@ export const GetAllRecipesDocument = `
     status
     results
     recipes {
-      _id
+      id: _id
       title
       description
       prep
@@ -421,11 +725,11 @@ export const GetMyRecipesDocument = `
     status
     results
     recipes {
-      _id
+      id: _id
       title
       prep
-      servings
       image
+      cuisine
     }
   }
 }
@@ -446,6 +750,49 @@ export const useGetMyRecipesQuery = <
         fetcher<GetMyRecipesQuery, GetMyRecipesQueryVariables>(
             client,
             GetMyRecipesDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetRecipeByIdDocument = `
+    query GetRecipeById($id: String!) {
+  getRecipe(id: $id) {
+    recipe {
+      id: _id
+      cuisine
+      title
+      description
+      prep
+      servings
+      ingredients {
+        name
+        amount
+      }
+      image
+      steps
+      user {
+        name
+        photo
+      }
+    }
+  }
+}
+    `;
+export const useGetRecipeByIdQuery = <
+    TData = GetRecipeByIdQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetRecipeByIdQueryVariables,
+    options?: UseQueryOptions<GetRecipeByIdQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetRecipeByIdQuery, TError, TData>(
+        ['GetRecipeById', variables],
+        fetcher<GetRecipeByIdQuery, GetRecipeByIdQueryVariables>(
+            client,
+            GetRecipeByIdDocument,
             variables,
             headers
         ),
@@ -506,6 +853,35 @@ export const useLogoutUserQuery = <TData = LogoutUserQuery, TError = unknown>(
         ),
         options
     );
+export const RefreshAccessTokenDocument = `
+    query RefreshAccessToken {
+  refreshAccessToken {
+    status
+    access_token
+  }
+}
+    `;
+export const useRefreshAccessTokenQuery = <
+    TData = RefreshAccessTokenQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: RefreshAccessTokenQueryVariables,
+    options?: UseQueryOptions<RefreshAccessTokenQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<RefreshAccessTokenQuery, TError, TData>(
+        variables === undefined
+            ? ['RefreshAccessToken']
+            : ['RefreshAccessToken', variables],
+        fetcher<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables>(
+            client,
+            RefreshAccessTokenDocument,
+            variables,
+            headers
+        ),
+        options
+    );
 export const SignUpUserDocument = `
     mutation SignUpUser($input: SignUpInput!) {
   signupUser(input: $input) {
@@ -538,6 +914,84 @@ export const useSignUpUserMutation = <TError = unknown, TContext = unknown>(
             fetcher<SignUpUserMutation, SignUpUserMutationVariables>(
                 client,
                 SignUpUserDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
+export const GetTempRecipeDocument = `
+    query GetTempRecipe {
+  temp: getTempRecipe {
+    status
+    recipe {
+      id: _id
+      title
+      description
+      prep
+      cuisine
+      servings
+      image
+      steps
+      ingredients {
+        name
+        amount
+      }
+    }
+  }
+}
+    `;
+export const useGetTempRecipeQuery = <
+    TData = GetTempRecipeQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetTempRecipeQueryVariables,
+    options?: UseQueryOptions<GetTempRecipeQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetTempRecipeQuery, TError, TData>(
+        variables === undefined
+            ? ['GetTempRecipe']
+            : ['GetTempRecipe', variables],
+        fetcher<GetTempRecipeQuery, GetTempRecipeQueryVariables>(
+            client,
+            GetTempRecipeDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const UpdateRecipeDocument = `
+    mutation UpdateRecipe($id: String!, $input: UpdateInput!) {
+  updateRecipe(id: $id, input: $input) {
+    status
+    recipe {
+      id: _id
+    }
+  }
+}
+    `;
+export const useUpdateRecipeMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        UpdateRecipeMutation,
+        TError,
+        UpdateRecipeMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        UpdateRecipeMutation,
+        TError,
+        UpdateRecipeMutationVariables,
+        TContext
+    >(
+        ['UpdateRecipe'],
+        (variables?: UpdateRecipeMutationVariables) =>
+            fetcher<UpdateRecipeMutation, UpdateRecipeMutationVariables>(
+                client,
+                UpdateRecipeDocument,
                 variables,
                 headers
             )(),
