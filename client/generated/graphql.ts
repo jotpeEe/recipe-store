@@ -447,6 +447,62 @@ export type GetRecipeByIdQuery = {
     };
 };
 
+export type GetReviewsByAuthorQueryVariables = Exact<{
+    author: Scalars['String'];
+}>;
+
+export type GetReviewsByAuthorQuery = {
+    __typename?: 'Query';
+    getReviewsByAuthor: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            id: string;
+            recipe: { __typename?: 'RecipeData'; id: string };
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+            };
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        }>;
+    };
+};
+
+export type GetReviewsByRecipeQueryVariables = Exact<{
+    id: Scalars['String'];
+}>;
+
+export type GetReviewsByRecipeQuery = {
+    __typename?: 'Query';
+    getReviewsByRecipe: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            id: string;
+            recipe: { __typename?: 'RecipeData'; id: string };
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+            };
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        }>;
+    };
+};
+
 export type LoginUserMutationVariables = Exact<{
     input: LoginInput;
 }>;
@@ -525,6 +581,29 @@ export type UpdateRecipeMutation = {
         __typename?: 'Response';
         status: string;
         recipe: { __typename?: 'RecipeData'; id: string };
+    };
+};
+
+export type GetLastReviewsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetLastReviewsQuery = {
+    __typename?: 'Query';
+    getLastReviews: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            createdAt: any;
+            recipe: {
+                __typename?: 'RecipeData';
+                title: string;
+                image: string;
+                id: string;
+            };
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        }>;
     };
 };
 
@@ -798,6 +877,96 @@ export const useGetRecipeByIdQuery = <
         ),
         options
     );
+export const GetReviewsByAuthorDocument = `
+    query getReviewsByAuthor($author: String!) {
+  getReviewsByAuthor(author: $author) {
+    status
+    results
+    reviews {
+      id: _id
+      text
+      recipe {
+        id: _id
+      }
+      recipeAuthor {
+        name
+        photo
+      }
+      user {
+        name
+        photo
+      }
+      pos
+      neg
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetReviewsByAuthorQuery = <
+    TData = GetReviewsByAuthorQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetReviewsByAuthorQueryVariables,
+    options?: UseQueryOptions<GetReviewsByAuthorQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetReviewsByAuthorQuery, TError, TData>(
+        ['getReviewsByAuthor', variables],
+        fetcher<GetReviewsByAuthorQuery, GetReviewsByAuthorQueryVariables>(
+            client,
+            GetReviewsByAuthorDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetReviewsByRecipeDocument = `
+    query getReviewsByRecipe($id: String!) {
+  getReviewsByRecipe(id: $id) {
+    status
+    results
+    reviews {
+      id: _id
+      text
+      recipe {
+        id: _id
+      }
+      recipeAuthor {
+        name
+        photo
+      }
+      user {
+        name
+        photo
+      }
+      pos
+      neg
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetReviewsByRecipeQuery = <
+    TData = GetReviewsByRecipeQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetReviewsByRecipeQueryVariables,
+    options?: UseQueryOptions<GetReviewsByRecipeQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetReviewsByRecipeQuery, TError, TData>(
+        ['getReviewsByRecipe', variables],
+        fetcher<GetReviewsByRecipeQuery, GetReviewsByRecipeQueryVariables>(
+            client,
+            GetReviewsByRecipeDocument,
+            variables,
+            headers
+        ),
+        options
+    );
 export const LoginUserDocument = `
     mutation LoginUser($input: LoginInput!) {
   loginUser(input: $input) {
@@ -995,5 +1164,47 @@ export const useUpdateRecipeMutation = <TError = unknown, TContext = unknown>(
                 variables,
                 headers
             )(),
+        options
+    );
+export const GetLastReviewsDocument = `
+    query getLastReviews {
+  getLastReviews {
+    status
+    results
+    reviews {
+      text
+      recipe {
+        id: _id
+        title
+        image
+      }
+      user {
+        name
+        photo
+      }
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetLastReviewsQuery = <
+    TData = GetLastReviewsQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetLastReviewsQueryVariables,
+    options?: UseQueryOptions<GetLastReviewsQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetLastReviewsQuery, TError, TData>(
+        variables === undefined
+            ? ['getLastReviews']
+            : ['getLastReviews', variables],
+        fetcher<GetLastReviewsQuery, GetLastReviewsQueryVariables>(
+            client,
+            GetLastReviewsDocument,
+            variables,
+            headers
+        ),
         options
     );
