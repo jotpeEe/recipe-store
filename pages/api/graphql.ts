@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-micro';
 import Cors from 'cors';
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildSchema } from 'type-graphql';
 
 import deserializeUser from '@middleware/deserializeUser';
@@ -9,11 +9,10 @@ import resolvers from '@resolvers';
 import { connectDB } from '@utils';
 
 const cors = Cors({
+    origin: ['http://localhost:3000', 'https://recipes.mklos.co'],
     credentials: true,
-    origin: ['http://localhost:3000'],
 });
 
-// Middleware to run the cors configuration
 const runMiddleware = (req: NextApiRequest, res: NextApiResponse, fn: any) =>
     new Promise((resolve, reject) => {
         fn(req, res, (result: any) => {
@@ -32,6 +31,7 @@ const schema = await buildSchema({
 
 const server = new ApolloServer({
     schema,
+    cache: 'bounded',
     csrfPrevention: true,
     context: ({ req, res }: { req: NextApiRequest; res: NextApiResponse }) => ({
         req,
@@ -50,9 +50,11 @@ const startServer = server.start();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors);
-    await connectDB();
     await startServer;
-    await server.createHandler({ path: '/api/graphql' })(req, res);
+    await connectDB();
+    await server.createHandler({
+        path: '/api/graphql',
+    })(req, res);
 };
 
 export default handler;
