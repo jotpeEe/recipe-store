@@ -1,6 +1,8 @@
 import { MinLength } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 
+import { Ingredient, IngredientInput } from './ingredient';
+
 @InputType()
 class Input {
     @MinLength(8, { message: 'Title must be at least 8 characters long' })
@@ -13,17 +15,29 @@ class Input {
     @Field(() => String)
     description: string;
 
-    @Field(() => Number)
-    prep: number;
+    @Field(() => String)
+    prep: string;
 
     @Field(() => String)
     cuisine: string;
 
-    @Field(() => Number)
-    servings: number;
+    @Field(() => Number, { nullable: true })
+    servings?: number;
 
-    @Field(() => String)
-    image: string;
+    @Field(() => String, { nullable: true })
+    image?: string;
+
+    @Field({ nullable: true })
+    temp?: boolean;
+
+    @Field(() => [IngredientInput], { nullable: true })
+    ingredients?: Ingredient[];
+
+    @Field(() => [String], { nullable: true })
+    steps?: string[];
+
+    @Field(() => Number, { nullable: true })
+    step?: number;
 }
 
 export default Input;

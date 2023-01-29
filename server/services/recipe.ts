@@ -1,8 +1,8 @@
 import { ValidationError } from 'apollo-server-micro';
 
-import errorHandler from '@controllers/error';
-import RecipeModel from '@models/recipe';
-import Input from '@schemas/recipe/input';
+import errorHandler from '@controllers';
+import { Recipe, RecipeModel } from '@models';
+import { Input } from '@schemas/recipe';
 import { Context } from 'server/types/context';
 
 export default class RecipeService {
@@ -26,15 +26,42 @@ export default class RecipeService {
         } catch (error: any) {
             errorHandler(error);
             return {
-                status: 'failure',
+                status: 'error',
                 recipe: undefined,
             };
         }
     };
 
-    getRecipe = async (id: string, { req, res, deserializeUser }: Context) => {
+    getTempRecipe = async ({
+        req,
+        res,
+        deserializeUser,
+    }: Context): Promise<{
+        recipe: Recipe | null;
+        status: 'error' | 'success';
+    }> => {
         try {
-            await deserializeUser(req, res);
+            const user = await deserializeUser(req, res);
+
+            const recipeQuery = RecipeModel.findOne({
+                user: user?._id,
+                temp: true,
+            }).populate('user');
+
+            const recipe = await recipeQuery.lean();
+
+            return { status: 'success', recipe };
+        } catch (error: any) {
+            errorHandler(error);
+            return {
+                status: 'error',
+                recipe: null,
+            };
+        }
+    };
+
+    getRecipe = async (id: string) => {
+        try {
             const recipe = await RecipeModel.findById(id)
                 .populate('user')
                 .lean();
@@ -52,7 +79,7 @@ export default class RecipeService {
         } catch (error: any) {
             errorHandler(error);
             return {
-                status: 'failure',
+                status: 'error',
                 recipe: undefined,
             };
         }
@@ -88,7 +115,7 @@ export default class RecipeService {
         } catch (error: any) {
             errorHandler(error);
             return {
-                status: 'failure',
+                status: 'error',
                 recipe: undefined,
             };
         }
@@ -96,7 +123,9 @@ export default class RecipeService {
 
     getAllRecipes = async () => {
         try {
-            const recipesQuery = RecipeModel.find().populate('user');
+            const recipesQuery = RecipeModel.find({
+                temp: false,
+            }).populate('user');
 
             const recipes = await recipesQuery.sort({ createdAt: -1 }).lean();
 
@@ -108,7 +137,7 @@ export default class RecipeService {
         } catch (error: any) {
             errorHandler(error);
             return {
-                status: 'failure',
+                status: 'error',
                 results: 0,
                 recipes: [],
             };
@@ -118,11 +147,14 @@ export default class RecipeService {
     getRecipes = async ({ req, res, deserializeUser }: Context) => {
         try {
             const user = await deserializeUser(req, res);
-            const recipeQuery = RecipeModel.find({ user: user?._id }).populate(
-                'user'
-            );
+            const recipes = await RecipeModel.find({
+                user: user?._id,
+                temp: false,
+            })
+                .populate('user')
+                .sort({ createdAt: -1 })
+                .lean();
 
-            const recipes = await recipeQuery.sort({ createdAt: -1 }).lean();
             return {
                 status: 'success',
                 results: recipes.length,
@@ -131,7 +163,7 @@ export default class RecipeService {
         } catch (error: any) {
             errorHandler(error);
             return {
-                status: 'failure',
+                status: 'error',
                 results: 0,
                 recipes: [],
             };
@@ -147,12 +179,12 @@ export default class RecipeService {
             const recipe = await RecipeModel.findByIdAndDelete(id);
 
             if (!recipe)
-                return new ValidationError('No post with that id exists');
+                return new ValidationError('No recipe with that id exists');
 
-            return true;
+            return { status: 'success' };
         } catch (error: any) {
             errorHandler(error);
-            return false;
+            return { status: 'error' };
         }
     };
 }

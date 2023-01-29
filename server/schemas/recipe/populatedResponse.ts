@@ -7,8 +7,8 @@ class PopulatedResponse {
     @Field(() => String)
     status: string;
 
-    @Field(() => PopulatedData)
-    recipe: PopulatedData;
+    @Field(() => PopulatedData, { nullable: true })
+    recipe: PopulatedData | null;
 }
 
 export default PopulatedResponse;

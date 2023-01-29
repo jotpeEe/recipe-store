@@ -1,0 +1,18 @@
+mutation CreateRecipe($input: Input!) {
+    createRecipe(input: $input) {
+        status
+        recipe {
+            id: _id
+            title
+            description
+            prep
+            cuisine
+            servings
+            image
+            createdAt
+            updatedAt
+            user
+            temp
+        }
+    }
+}

@@ -1,9 +1,9 @@
-query GetAllRecipes {
-    getAllRecipes {
+query GetAllRecipes{
+    getAllRecipes{
         status
         results
         recipes {
-            _id
+            id: _id
             title
             description
             prep

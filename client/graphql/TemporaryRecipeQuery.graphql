@@ -1,0 +1,19 @@
+query GetTempRecipe {
+    temp: getTempRecipe {
+        status
+        recipe {
+            id: _id
+            title
+            description
+            prep
+            cuisine
+            servings
+            image
+            steps
+            ingredients {
+                name
+                amount
+            }
+        }
+    }
+}

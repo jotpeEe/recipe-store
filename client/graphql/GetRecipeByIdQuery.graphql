@@ -1,0 +1,22 @@
+query GetRecipeById($id: String!) {
+    getRecipe(id: $id) {
+        recipe {
+            id: _id
+            cuisine
+            title
+            description
+            prep
+            servings
+            ingredients {
+                name
+                amount
+            }
+            image
+            steps
+            user {
+                name
+                photo
+            }
+        }
+    }
+}

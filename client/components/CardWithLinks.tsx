@@ -14,14 +14,14 @@ export const Card: React.FC<CardProps> = ({ children, className }) => (
 export const Title: React.FC<LinkProps> = ({ children, href, className }) => (
     <a
         href={href}
-        className={`before:content-[''] before:absolute before:w-full before:h-full before:left-0 before:top-0 before:z-10 ${className}`}
+        className={`before:content-[''] before:absolute before:w-full before:h-full before:left-0 before:top-0 before:z-40 ${className}`}
     >
         {children}
     </a>
 );
 
 export const Link: React.FC<LinkProps> = ({ children, href, className }) => (
-    <a href={href} className={`z-20 ${className}`}>
+    <a href={href} className={`z-50] ${className}`}>
         {children}
     </a>
 );

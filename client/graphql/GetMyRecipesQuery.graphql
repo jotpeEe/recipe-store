@@ -3,11 +3,11 @@ query GetMyRecipes {
         status
         results
         recipes {
-            _id
+            id: _id
             title
             prep
-            servings
             image
+            cuisine
         }
     }
 }
