@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type IUser = {
     _id: string;
     id: string;
@@ -10,17 +12,37 @@ export type IUser = {
     createdAt: string;
 };
 
+export type IIngredient = {
+    name: string;
+    amount: string;
+};
+
+export type IHeader = {
+    header: string;
+};
+
+export type NavState = {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export type IStep = {
+    step: string;
+};
+
 export type IRecipe = {
-    _id: string;
+    id: string;
     title: string;
     description: string;
-    prep: number;
+    prep: string;
     cuisine: string;
-    servings: number;
+    servings?: number | null | undefined;
     image: string;
-    createdAt: string;
-    updatedAt: string;
-    user: {
+    temp?: boolean;
+    step?: number;
+    steps: string[];
+    ingredients: IIngredient[];
+    user?: {
         name: string;
         photo: string;
     };
