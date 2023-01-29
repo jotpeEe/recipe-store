@@ -47,3 +47,18 @@ export type IRecipe = {
         photo: string;
     };
 };
+
+export type IReviewMini = {
+    className?: string;
+    review: {
+        id: string;
+        createdAt: Date;
+        text: string;
+        pos: string[];
+        neg: string[];
+        user: {
+            name: string;
+            photo: string;
+        };
+    };
+};
