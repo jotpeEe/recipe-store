@@ -2,8 +2,6 @@ version: '3.7'
 services:
     mongo:
         image: mongo
-        ports:
-            - '6000:27017'
         volumes:
             - mongo:/data/db
         env_file:
@@ -11,11 +9,27 @@ services:
 
     cache:
         image: redis:7-alpine
-        ports:
-            - '6379:6379'
+        env_file:
+            - .env.local
         command: redis-server --save 20 1 --loglevel warning
         volumes:
             - cache:/data
+
+    recipes:
+        build:
+            context: .
+        env_file:
+            - .env.local
+        ports:
+            - '3000:3000'
+        depends_on:
+            - mongo
+            - cache
+        links:
+            - mongo
+            - cache
+        volumes:
+            - ./:/usr/src/app
 
 volumes:
     mongo:
