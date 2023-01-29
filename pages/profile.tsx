@@ -64,7 +64,7 @@ export const ProfilePage: NextPage = () => {
                     </div>
                     <div className="lg:col-start-1 lg:col-end-6 row-span-6 children:pb-5">
                         <h5>Your recipes</h5>
-                        <RecipesList recipes={recipes} />
+                        <RecipesList recipes={recipes} panel />
                     </div>
 
                     <div className="lg:col-start-7 lg:col-span-2 col-start-1 lg:row-start-2 children:pb-5">

@@ -10,9 +10,10 @@ import Switch from './Switch';
 type RecipesListProps = {
     className?: string;
     recipes?: Partial<IRecipe>[];
+    panel?: boolean;
 };
 
-const RecipesList: FC<RecipesListProps> = ({ className, recipes }) => {
+const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     const [active, setActive] = useState(0);
     const [limit, setLimit] = useState(RECIPE_LIMIT);
 
@@ -71,19 +72,21 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes }) => {
                     recipeList.map((recipe, index) => (
                         <RecipeCard key={index} recipe={recipe} />
                     ))}
-                <div className="self-center">
-                    <Button href="/create" className="mb-3" size="sm">
-                        Create new recipe
-                    </Button>
-                    <Button
-                        onClick={handleClick}
-                        className="self-center"
-                        outlined
-                        size="sm"
-                    >
-                        View more recipes
-                    </Button>
-                </div>
+                {panel && (
+                    <div className="self-center">
+                        <Button href="/create" className="mb-3" size="sm">
+                            Create new recipe
+                        </Button>
+                        <Button
+                            onClick={handleClick}
+                            className="self-center"
+                            outlined
+                            size="sm"
+                        >
+                            View more recipes
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     );
