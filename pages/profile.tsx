@@ -3,14 +3,8 @@ import { MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
 
-import {
-    Button,
-    RecipesList,
-    SearchInput,
-    UserInfo,
-    UserStats,
-} from '@components';
-import ReviewMini from '@components/card/ReviewMini';
+import { RecipesList, SearchInput, UserInfo, UserStats } from '@components';
+import ReviewList from '@components/ReviewList';
 import {
     useGetMyRecipesQuery,
     useGetReviewsByAuthorQuery,
@@ -21,9 +15,6 @@ import { setPageLoading } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
 export const ProfilePage: NextPage = () => {
-    const REVIEWS_LIMIT = 4;
-    const [clicked, setClicked] = useState(false);
-    const [limit, setLimit] = useState(REVIEWS_LIMIT);
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(state => state?.auth?.user);
@@ -48,17 +39,6 @@ export const ProfilePage: NextPage = () => {
     );
 
     const { photo, name } = user ?? {};
-
-    const slicedReviews = reviews?.slice(0, limit);
-
-    const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-        e => {
-            e.preventDefault();
-            if (reviews) setLimit(clicked ? REVIEWS_LIMIT : reviews.length);
-            setClicked(state => !state);
-        },
-        [clicked]
-    );
 
     useEffect(() => {
         dispatch(setPageLoading(true));
@@ -87,27 +67,9 @@ export const ProfilePage: NextPage = () => {
                         <RecipesList recipes={recipes} panel />
                     </div>
 
-                    <div className="lg:col-start-7 lg:col-span-2 col-start-1 lg:row-start-2 children:pb-5 max-h-list overflow-y-auto">
+                    <div className="lg:col-start-7 lg:col-span-2 col-start-1 lg:row-start-2 children:pb-5 ">
                         <h5>Reviews</h5>
-                        {slicedReviews?.map(
-                            ({ __typename, ...review }, index) => (
-                                <ReviewMini
-                                    key={index}
-                                    review={{ ...review }}
-                                />
-                            )
-                        )}
-                        {reviews && reviews?.length > REVIEWS_LIMIT && (
-                            <div>
-                                <Button
-                                    outlined
-                                    onClick={handleClick}
-                                    size="sm"
-                                >
-                                    {clicked ? 'Load less' : 'Load more'}
-                                </Button>
-                            </div>
-                        )}
+                        <ReviewList reviews={reviews} />
                     </div>
                 </div>
             )}

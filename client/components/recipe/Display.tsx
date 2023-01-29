@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import Animated from '@components/AnimatedDiv';
 import ReviewMini from '@components/card/ReviewMini';
+import ReviewList from '@components/ReviewList';
 import Switch from '@components/Switch';
 import { IIngredient, IReviewMini } from '@lib/types';
 
@@ -66,11 +67,9 @@ const Display: FC<DisplayProps> = ({
                     {steps &&
                         active === 1 &&
                         steps?.map((text, index) => <p key={index}>{text}</p>)}
-                    {reviews &&
-                        active === 2 &&
-                        reviews?.map((review, index) => (
-                            <ReviewMini key={index} review={{ ...review }} />
-                        ))}
+                    {reviews && active === 2 && (
+                        <ReviewList reviews={reviews} />
+                    )}
                 </div>
             )}
         </>
