@@ -66,7 +66,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
                 />
             </div>
             <div
-                className={`grid grid-cols-fill gap-12 overflow-y-auto overflow-x-hidden`}
+                className={`grid grid-cols-fill gap-12 overflow-y-auto overflow-x-hidden max-h-list`}
             >
                 {recipeList &&
                     recipeList.map((recipe, index) => (

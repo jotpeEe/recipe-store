@@ -22,6 +22,7 @@ module.exports = {
                 'text-primary': '#000',
             },
             spacing: {
+                list: '600px',
                 section: '35rem',
                 'header-p': '100px',
                 space0: '0%',
