@@ -1,10 +1,13 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-micro';
-import { hasCookie, getCookie } from 'cookies-next';
+import { hasCookie, getCookie, setCookie } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import errorHandler from '@controllers/error';
-import UserModel from '@models/user';
-import { disconnectDB, redisClient, verifyJwt } from '@utils';
+import { cookies } from '@constants';
+import errorHandler from '@controllers';
+import { UserModel } from '@models';
+import { redisClient, verifyJwt } from '@utils';
+
+const { ACCESS_TOKEN, REFRESH_TOKEN, LOGGED_IN } = cookies;
 
 const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -16,8 +19,8 @@ const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
         ) {
             const { 1: token } = req.headers.authorization.split(' ');
             accessToken = token;
-        } else if (hasCookie('access_token', { req, res })) {
-            accessToken = getCookie('access_token', { req, res });
+        } else if (hasCookie(ACCESS_TOKEN, { req, res })) {
+            accessToken = getCookie(ACCESS_TOKEN, { req, res });
         }
 
         if (!accessToken)
@@ -34,13 +37,17 @@ const deserializeUser = async (req: NextApiRequest, res: NextApiResponse) => {
         // Check if the session is valid
         const session = await redisClient.get(decoded.userId);
 
-        if (!session) throw new ForbiddenError('Session has expired');
+        if (!session) {
+            setCookie(ACCESS_TOKEN, '', { req, res, maxAge: -1 });
+            setCookie(REFRESH_TOKEN, '', { req, res, maxAge: -1 });
+            setCookie(LOGGED_IN, '', { req, res, maxAge: -1 });
+            throw new ForbiddenError('Session has expired');
+        }
 
         // Check if user exist
         const user = await UserModel.findById(JSON.parse(session)._id)
             .select('+verified')
             .lean(true);
-        await disconnectDB();
 
         if (!user || !user.verified) {
             throw new ForbiddenError(
