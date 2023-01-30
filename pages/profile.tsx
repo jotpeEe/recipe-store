@@ -15,6 +15,7 @@ import { setPageLoading } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
 export const ProfilePage: NextPage = () => {
+    const [fetch, setFetch] = useState(false);
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(state => state?.auth?.user);
@@ -35,14 +36,15 @@ export const ProfilePage: NextPage = () => {
         {
             author: user?._id as string,
         },
-        { select: data => data.getReviewsByAuthor.reviews }
+        { enabled: fetch, select: data => data.getReviewsByAuthor.reviews }
     );
 
     const { photo, name } = user ?? {};
 
     useEffect(() => {
-        dispatch(setPageLoading(true));
-    }, [isLoading]);
+        if (user) setFetch(true);
+        if (!user) setFetch(false);
+    }, [user]);
 
     return (
         <Layout>
