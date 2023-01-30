@@ -7,7 +7,7 @@ export type IUser = {
     name: string;
     role: string;
     photo: string;
-    terms: boolean;
+    terms?: boolean;
     updatedAt: string;
     createdAt: string;
 };
