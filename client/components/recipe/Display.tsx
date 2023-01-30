@@ -1,28 +1,17 @@
 import { FC, useEffect, useState } from 'react';
 
 import Animated from '@components/AnimatedDiv';
-import ReviewMini from '@components/card/ReviewMini';
 import ReviewList from '@components/ReviewList';
 import Switch from '@components/Switch';
-import { IIngredient, IReviewMini } from '@lib/types';
 
+// eslint-disable-next-line import/no-cycle
+import { useRecipe } from '.';
 import Ingredient from './Ingredient';
 
-type DisplayProps = {
-    step?: number;
-    ingredients?: IIngredient[];
-    servings?: number | null;
-    steps?: string[];
-    reviews?: IReviewMini['review'][];
-};
+const Display: FC = () => {
+    const { id, step, ingredients, servings, steps, reviews, user } =
+        useRecipe();
 
-const Display: FC<DisplayProps> = ({
-    step,
-    ingredients,
-    servings,
-    steps,
-    reviews,
-}) => {
     const [active, setActive] = useState<number>(0);
 
     useEffect(() => {
@@ -68,7 +57,12 @@ const Display: FC<DisplayProps> = ({
                         active === 1 &&
                         steps?.map((text, index) => <p key={index}>{text}</p>)}
                     {reviews && active === 2 && (
-                        <ReviewList reviews={reviews} />
+                        <ReviewList
+                            addEnable
+                            reviews={reviews}
+                            id={id}
+                            recipeAuthor={user}
+                        />
                     )}
                 </div>
             )}
