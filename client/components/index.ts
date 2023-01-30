@@ -5,7 +5,7 @@ export { default as FormInput } from './input/Form';
 export { default as ImageInput } from './input/Image';
 export { default as Nav } from './nav';
 export { default as Preview } from './createRecipe/Preview';
-export { default as Recipe } from './recipe';
+export { Recipe } from './recipe';
 export { default as RecipeCard } from './card/Recipe';
 export { default as RecipeTitle } from './recipe/Title';
 export { default as RecipesList } from './RecipesList';
