@@ -328,6 +328,16 @@ export type CreateRecipeMutation = {
     };
 };
 
+export type CreateReviewMutationVariables = Exact<{
+    input: Scalars['String'];
+    id: Scalars['String'];
+}>;
+
+export type CreateReviewMutation = {
+    __typename?: 'Mutation';
+    createReview: { __typename?: 'ReviewResponse'; status: string };
+};
+
 export type DeleteRecipeMutationVariables = Exact<{
     id: Scalars['String'];
 }>;
@@ -442,7 +452,12 @@ export type GetRecipeByIdQuery = {
                 name: string;
                 amount: string;
             }>;
-            user: { __typename?: 'UserData'; name: string; photo: string };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
         } | null;
     };
 };
@@ -653,6 +668,39 @@ export const useCreateRecipeMutation = <TError = unknown, TContext = unknown>(
             )(),
         options
     );
+export const CreateReviewDocument = `
+    mutation CreateReview($input: String!, $id: String!) {
+  createReview(input: $input, id: $id) {
+    status
+  }
+}
+    `;
+export const useCreateReviewMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        CreateReviewMutation,
+        TError,
+        CreateReviewMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        CreateReviewMutation,
+        TError,
+        CreateReviewMutationVariables,
+        TContext
+    >(
+        ['CreateReview'],
+        (variables?: CreateReviewMutationVariables) =>
+            fetcher<CreateReviewMutation, CreateReviewMutationVariables>(
+                client,
+                CreateReviewDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
 export const DeleteRecipeDocument = `
     mutation DeleteRecipe($id: String!) {
   deleteRecipe(id: $id) {
@@ -851,6 +899,7 @@ export const GetRecipeByIdDocument = `
       image
       steps
       user {
+        id: _id
         name
         photo
       }

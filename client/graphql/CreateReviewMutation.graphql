@@ -1,0 +1,5 @@
+mutation CreateReview($input: String!, $id: String!) {
+    createReview(input: $input, id: $id) {
+        status
+    }
+}
