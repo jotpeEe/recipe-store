@@ -1,4 +1,4 @@
-import { MouseEventHandler, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
@@ -40,6 +40,10 @@ export const ProfilePage: NextPage = () => {
     );
 
     const { photo, name } = user ?? {};
+
+    useEffect(() => {
+        queryClient.refetchQueries('GetTempRecipe');
+    }, []);
 
     useEffect(() => {
         if (user) setFetch(true);
