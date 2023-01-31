@@ -9,7 +9,7 @@ import Button from '../Button';
 import { useSlider } from './index';
 
 type SliderControllerProps = {
-    buttons?: 'inside' | 'outside';
+    inside?: boolean;
     steps: number;
 };
 
@@ -32,18 +32,31 @@ const Dot: FC<DotProps> = ({ id }) => {
     );
 };
 
-const SliderController: FC<SliderControllerProps> = ({ steps }) => {
+const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
     const { step, next, previous } = useSlider();
 
     return (
-        <div className="flex justify-between items-center py-12 w-fill">
-            <ul className="flex gap-2 h-fit">
-                {[...Array(steps).keys()].map((i, idx) => (
-                    <Dot key={idx} id={idx} />
-                ))}
-            </ul>
-            <div className="flex gap-6">
+        <div
+            className={classNames(
+                inside
+                    ? 'absolute w-full -translate-y-[310%]'
+                    : 'flex justify-between items-center py-12 w-fill'
+            )}
+        >
+            {!inside && (
+                <ul className="flex gap-2 h-fit">
+                    {[...Array(steps).keys()].map((i, idx) => (
+                        <Dot key={idx} id={idx} />
+                    ))}
+                </ul>
+            )}
+            <div
+                className={classNames(
+                    inside ? 'flex justify-between' : 'flex gap-6'
+                )}
+            >
                 <Button
+                    className="border-none bg-transparent"
                     circle
                     rotate
                     icon={<IconArrow />}
@@ -51,6 +64,7 @@ const SliderController: FC<SliderControllerProps> = ({ steps }) => {
                     disabled={step === 0}
                 />
                 <Button
+                    className="border-none bg-transparent"
                     circle
                     icon={<IconArrow />}
                     onClick={next}
