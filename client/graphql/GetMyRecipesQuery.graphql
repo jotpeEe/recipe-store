@@ -8,6 +8,10 @@ query GetMyRecipes {
             prep
             image
             cuisine
+            user {
+                name
+                photo
+            }
         }
     }
 }

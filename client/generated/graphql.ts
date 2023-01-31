@@ -425,6 +425,7 @@ export type GetMyRecipesQuery = {
             image: string;
             cuisine: string;
             id: string;
+            user: { __typename?: 'UserData'; name: string; photo: string };
         }>;
     };
 };
@@ -857,6 +858,10 @@ export const GetMyRecipesDocument = `
       prep
       image
       cuisine
+      user {
+        name
+        photo
+      }
     }
   }
 }
