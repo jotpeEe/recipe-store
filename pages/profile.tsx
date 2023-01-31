@@ -53,7 +53,7 @@ export const ProfilePage: NextPage = () => {
     return (
         <Layout>
             {!isLoading && (
-                <div className="grid lg:grid-cols-8 grid-cols-1 lg:grid-rows-8 grid-rows-8 gap-y-24 gap-x-12">
+                <div className="grid lg:grid-cols-8 grid-cols-1 lg:grid-rows-8 grid-rows-8 gap-y-18 gap-x-12 relative overflow-hidden">
                     <div className="grid sm:grid-cols-4 gap-12 lg:col-span-5 mx-auto">
                         <div className="flex flex-col sm:col-span-2 gap-8">
                             <UserInfo
@@ -61,7 +61,7 @@ export const ProfilePage: NextPage = () => {
                                 subtitle="What are we cooking today?"
                                 imgSrc={photo}
                             />
-                            <SearchInput />
+                            <SearchInput recipes={recipes} />
                         </div>
                         <UserStats
                             recipes={recipes?.length}

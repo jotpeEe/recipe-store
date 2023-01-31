@@ -6,6 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import ErrorMessage from './ErrorMessage';
 
 type FormInputProps = {
+    autoComplete?: 'on' | 'off';
     name: string;
     label?: string;
     padding?: boolean;
@@ -21,6 +22,7 @@ const FormInput: FC<FormInputProps> = ({
     label,
     name,
     value,
+    autoComplete = 'off',
     placeholder,
     padding = false,
     type = 'text',
@@ -58,7 +60,7 @@ const FormInput: FC<FormInputProps> = ({
                 {element === 'textarea' && (
                     <textarea
                         defaultValue={value}
-                        autoComplete="off"
+                        autoComplete={autoComplete}
                         placeholder={placeholder}
                         rows={4}
                         className={classNames(
