@@ -2,10 +2,10 @@ import { createContext, FC, useContext, useEffect } from 'react';
 
 import classNames from 'classnames';
 import { hasCookie } from 'cookies-next';
-import { useQueryClient } from 'react-query';
 
 import { IconClock, IconStar } from '@icons';
 import { IIngredient, IReview } from '@lib/types';
+import { queryClient } from '@requests';
 
 import Animated from '../AnimatedDiv';
 import UserInfo from '../user/Info';
@@ -37,7 +37,6 @@ const RecipeContext = createContext<RecipeComponentProps | undefined>(
 
 export const Recipe: FC<RecipeComponentProps> = props => {
     const { title, image, prep, description, user } = props;
-    const queryClient = useQueryClient();
 
     const { name, photo } = user || {};
     const numPrep = prep ? parseInt(prep, 10) : undefined;
@@ -105,7 +104,7 @@ export const useRecipe = () => {
     const context = useContext(RecipeContext);
 
     if (!context) {
-        throw new Error('useSlider must be used within a Slider');
+        throw new Error('useRecipe must be used within a Recipe');
     }
     return context;
 };

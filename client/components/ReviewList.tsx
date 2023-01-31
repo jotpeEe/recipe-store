@@ -3,12 +3,11 @@ import { FC, MouseEventHandler, useCallback, useState } from 'react';
 import { hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 
 import { useCreateReviewMutation } from '@generated/graphql';
-import { useAppDispatch, useAppSelector } from '@hooks';
+import { useAppSelector } from '@hooks';
 import { IReview } from '@lib/types';
-import { requestClient } from '@requests';
+import { queryClient, requestClient } from '@requests';
 
 import Button from './Button';
 import ReviewMini from './card/ReviewMini';
@@ -39,7 +38,6 @@ const ReviewList: FC<ReviewListProps> = ({
     const [open, setOpen] = useState(false);
     const { user } = useAppSelector(state => state.auth);
     const router = useRouter();
-    const queryClient = useQueryClient();
 
     const isTheSameUser = recipeAuthor?.id === user?.id;
 

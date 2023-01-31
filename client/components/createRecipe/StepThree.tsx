@@ -12,7 +12,7 @@ import {
 } from '@generated/graphql';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { lettersAndNumbers } from '@lib/regex';
-import { IRecipe } from '@lib/types';
+import type { IRecipe } from '@lib/types';
 import { addStep, setRecipe } from '@redux';
 import { requestClient } from '@requests';
 

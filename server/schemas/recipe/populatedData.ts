@@ -1,6 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
 
-import { ReviewPopulatedData } from '@schemas/review';
 import ReviewData from '@schemas/review/data';
 import { UserData } from '@schemas/user';
 
