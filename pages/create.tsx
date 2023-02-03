@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
 
@@ -9,12 +11,15 @@ import { setRecipe } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
 const CreateRecipe: NextPage = () => {
+    const [first, setFirst] = useState(true);
     const dispatch = useAppDispatch();
 
     const { data, isLoading } = useGetTempRecipeQuery(
         requestClient,
         {},
         {
+            refetchOnMount: true,
+            enabled: first,
             select: res => {
                 const {
                     id,
@@ -28,6 +33,8 @@ const CreateRecipe: NextPage = () => {
             },
         }
     );
+
+    useEffect(() => setFirst(false), []);
 
     if (isLoading) return null;
 
