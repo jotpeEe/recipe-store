@@ -54,8 +54,8 @@ export const ProfilePage: NextPage = () => {
         <Layout>
             {!isLoading && (
                 <div className="grid lg:grid-cols-8 grid-cols-1 lg:grid-rows-8 grid-rows-8 gap-y-18 gap-x-12 relative overflow-hidden">
-                    <div className="grid sm:grid-cols-4 gap-12 lg:col-span-5 mx-auto">
-                        <div className="flex flex-col sm:col-span-2 gap-8">
+                    <div className="grid sm:grid-cols-4 gap-12 lg:col-span-5 col-start-1 lg:mx-0 mx-auto">
+                        <div className="flex flex-col sm:col-span-2 gap-8 w-full">
                             <UserInfo
                                 title={name}
                                 subtitle="What are we cooking today?"

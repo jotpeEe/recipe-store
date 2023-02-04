@@ -68,6 +68,7 @@ const Display: FC = () => {
                             reviews={reviews}
                             id={id}
                             recipeAuthor={user}
+                            fullWidth
                         />
                     )}
                 </div>

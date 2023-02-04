@@ -21,13 +21,13 @@ type RecipeMiniProps = {
 const RecipeMini: FC<RecipeMiniProps> = ({ id, title, user, prep, image }) => {
     const { name, photo } = user ?? {};
     return (
-        <div className="">
+        <div className="pt-12 ">
             <Image
                 width={80}
                 height={80}
                 alt="recipe photo"
                 src={image ?? '/default.png'}
-                className="rounded-full translate-y-1/2 translate-x-[210%] shadow-card shadow-gray-400"
+                className="rounded-full absolute -translate-y-8 translate-x-[210%] shadow-card shadow-gray-400"
             ></Image>
             <Card className=" min-w-[250px] border-gray-300 shadow-card shadow-gray-300 rounded-lg">
                 <div className="flex flex-col gap-6 p-3">
