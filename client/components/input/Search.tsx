@@ -71,7 +71,7 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
                 exists ? 'grid-rows-5' : 'grid-rows-4'
             )}
         >
-            <div className={`flex gap-4 h-fit items-center`}>
+            <div className={`flex gap-4 h-full items-center`}>
                 <FormProvider {...methods}>
                     <FormInput
                         name="input"

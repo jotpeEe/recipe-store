@@ -55,7 +55,11 @@ const Display: FC = () => {
                         ))}
                     {steps &&
                         active === 1 &&
-                        steps?.map((text, index) => <p key={index}>{text}</p>)}
+                        steps?.map((text, index) => (
+                            <p className="max-w-[40ch]" key={index}>
+                                {text}
+                            </p>
+                        ))}
                     {reviews && active === 2 && (
                         <ReviewList
                             addEnable
