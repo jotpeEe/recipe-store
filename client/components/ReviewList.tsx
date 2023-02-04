@@ -44,8 +44,8 @@ const ReviewList: FC<ReviewListProps> = ({
     const methods = useForm<ReviewInput>();
     const { handleSubmit, reset } = methods;
 
-    const REVIEWS_LIMIT = 4;
-    const [limit, setLimit] = useState(REVIEWS_LIMIT);
+    const REVIEW_LIMIT = 4;
+    const [limit, setLimit] = useState(REVIEW_LIMIT);
     const slicedReviews = reviews?.slice(0, limit);
 
     const { mutate: createReview } = useCreateReviewMutation(requestClient, {
@@ -61,10 +61,10 @@ const ReviewList: FC<ReviewListProps> = ({
     const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
         e => {
             e.preventDefault();
-            if (reviews) setLimit(clicked ? REVIEWS_LIMIT : reviews.length);
+            if (reviews) setLimit(clicked ? REVIEW_LIMIT : reviews.length);
             setClicked(state => !state);
         },
-        [clicked]
+        [clicked, reviews]
     );
 
     const handleCommentClick: MouseEventHandler<HTMLButtonElement> =
@@ -88,7 +88,7 @@ const ReviewList: FC<ReviewListProps> = ({
 
     return (
         <div className="">
-            {reviews && reviews?.length > REVIEWS_LIMIT && (
+            {reviews && reviews?.length > 4 && (
                 <button
                     onClick={handleClick}
                     className="flex items-center gap-3 bg-primary rounded-3xl w-full mb-4 shadow-card shadow-gray-400"
