@@ -34,6 +34,8 @@ const Dot: FC<DotProps> = ({ id }) => {
 
 const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
     const { step, next, previous } = useSlider();
+    const isFirst = step === 0;
+    const isLast = step === steps - 1;
 
     return (
         <div
@@ -61,14 +63,16 @@ const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
                     rotate
                     icon={<IconArrow />}
                     onClick={previous}
-                    disabled={step === 0}
+                    disabled={isFirst}
+                    hidden={isFirst}
                 />
                 <Button
                     className="border-none bg-transparent"
                     circle
                     icon={<IconArrow />}
                     onClick={next}
-                    disabled={step === steps - 1}
+                    disabled={isLast}
+                    hidden={isLast}
                 />
             </div>
         </div>

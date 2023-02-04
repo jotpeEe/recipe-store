@@ -58,8 +58,8 @@ const Slider = ({ children, controller, inside }: SliderProps) => {
 
     return (
         <SliderContext.Provider value={controls}>
-            <div className="">
-                <div className="overflow-hidden">
+            <div className="overflow-hidden">
+                <div className="">
                     <ul
                         className={classNames(
                             'flex p-1 children:shrink-0 children:pr-8 children:transition children:duration-300 children:ease',

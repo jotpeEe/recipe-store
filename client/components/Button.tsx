@@ -33,6 +33,7 @@ const Button: FC<ButtonProps> = ({
     rotate,
     size = 'lg',
     type,
+    hidden,
     ...props
 }) => {
     const styles = classNames(
@@ -51,6 +52,7 @@ const Button: FC<ButtonProps> = ({
             : 'bg-primary text-white hover:bg-green-600',
         rotate && 'rotate-180',
         (outlined || circle) && 'hover:bg-gray-200',
+        hidden && 'opacity-0',
         className && `${className}`
     );
 
