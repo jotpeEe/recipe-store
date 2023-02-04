@@ -6,7 +6,6 @@ import { object, string, TypeOf } from 'yup';
 
 import { useUpdateRecipeMutation } from '@generated/graphql';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { letters, lettersAndNumbers } from '@lib/regex';
 import { addIngredient, setInfo } from '@redux';
 import { requestClient } from '@requests';
 
@@ -16,12 +15,8 @@ import { useSlider } from '../slider';
 import Panel from './Panel';
 
 const ingredientSchema = object({
-    name: string()
-        .required('Name is required')
-        .matches(letters, 'Name must include only letters'),
-    amount: string()
-        .required('Amount is required')
-        .matches(lettersAndNumbers, 'Must include only letters or numbers'),
+    name: string().required('Name is required'),
+    amount: string().required('Amount is required'),
 });
 
 type IngredientInput = TypeOf<typeof ingredientSchema>;

@@ -3,6 +3,7 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import { RECIPE_LIMIT } from '@constants';
 import { IRecipe } from '@lib/types';
 
+import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';
 import RecipeCard from './card/Recipe';
 import Switch from './Switch';
@@ -10,9 +11,10 @@ import Switch from './Switch';
 type RecipesListProps = {
     className?: string;
     recipes?: Partial<IRecipe>[];
+    panel?: boolean;
 };
 
-const RecipesList: FC<RecipesListProps> = ({ className, recipes }) => {
+const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     const [active, setActive] = useState(0);
     const [limit, setLimit] = useState(RECIPE_LIMIT);
 
@@ -55,7 +57,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes }) => {
     }, []);
 
     return (
-        <div className={`${className} children:mb-4`}>
+        <div className={`${className} children:mb-4 overflow-hidden`}>
             <div className="flex gap-3 w-fit">
                 <Switch
                     array={cuisine}
@@ -65,25 +67,29 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes }) => {
                 />
             </div>
             <div
-                className={`grid grid-cols-fill gap-12 overflow-y-auto overflow-x-hidden`}
+                className={`grid grid-cols-fill gap-12 overflow-y-auto overflow-x-hidden max-h-list`}
             >
                 {recipeList &&
                     recipeList.map((recipe, index) => (
-                        <RecipeCard key={index} recipe={recipe} />
+                        <AnimateOnLoad key={index} index={index}>
+                            <RecipeCard recipe={recipe} />
+                        </AnimateOnLoad>
                     ))}
-                <div className="self-center">
-                    <Button href="/create" className="mb-3" size="sm">
-                        Create new recipe
-                    </Button>
-                    <Button
-                        onClick={handleClick}
-                        className="self-center"
-                        outlined
-                        size="sm"
-                    >
-                        View more recipes
-                    </Button>
-                </div>
+                {panel && (
+                    <div className="self-center">
+                        <Button href="/create" className="mb-3" size="sm">
+                            Create new recipe
+                        </Button>
+                        <Button
+                            onClick={handleClick}
+                            className="self-center"
+                            outlined
+                            size="sm"
+                        >
+                            View more recipes
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     );

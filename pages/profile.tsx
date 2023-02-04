@@ -1,76 +1,93 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
-import { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
 
-import { RecipesList, UserInfo, UserStats } from '@components';
-import { GetMeDocument } from '@generated/graphql';
+import { RecipesList, SearchInput, UserInfo, UserStats } from '@components';
+import ReviewList from '@components/ReviewList';
 import {
-    useAppDispatch,
-    useAppSelector,
-    useAuth,
-    useRecipeQueries,
-} from '@hooks';
-import { SectionLayout, PageLayout } from '@layouts';
+    useGetMyRecipesQuery,
+    useGetReviewsByAuthorQuery,
+} from '@generated/graphql';
+import { useAppDispatch, useAppSelector } from '@hooks';
+import { SectionLayout as Layout } from '@layouts';
 import { setPageLoading } from '@redux';
-import { axiosGetMe, queryClient } from '@requests';
+import { queryClient, requestClient } from '@requests';
 
 export const ProfilePage: NextPage = () => {
+    const [fetch, setFetch] = useState(false);
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(state => state?.auth?.user);
 
-    const { authRefresh } = useAuth();
-    const { getRecipes } = useRecipeQueries();
-    const { data: recipes, isLoading } = getRecipes;
+    const { data: recipes, isLoading } = useGetMyRecipesQuery(
+        requestClient,
+        {},
+        {
+            select: data => data.getRecipes.recipes,
+            onError() {
+                dispatch(setPageLoading(false));
+            },
+        }
+    );
 
-    const recipesNumber = useMemo(() => recipes?.length, [recipes]);
-
-    authRefresh();
+    const { data: reviews } = useGetReviewsByAuthorQuery(
+        requestClient,
+        {
+            author: user?._id as string,
+        },
+        { enabled: fetch, select: data => data.getReviewsByAuthor.reviews }
+    );
 
     const { photo, name } = user ?? {};
 
     useEffect(() => {
-        dispatch(setPageLoading(true));
-    }, [isLoading]);
+        queryClient.refetchQueries('GetTempRecipe');
+    }, []);
+
+    useEffect(() => {
+        if (user) setFetch(true);
+        if (!user) setFetch(false);
+    }, [user]);
 
     return (
-        <PageLayout>
-            <SectionLayout>
-                <div className="grid grid-cols-8 grid-rows-4 gap-y-24 gap-x-12">
-                    <div className="grid grid-cols-4 gap-12 col-span-5">
-                        <UserInfo
-                            className="col-span-2"
-                            name={name}
-                            imgSrc={photo}
-                        >
-                            What are we cooking today?
-                        </UserInfo>
+        <Layout>
+            {!isLoading && (
+                <div className="grid lg:grid-cols-8 grid-cols-1 lg:grid-rows-8 grid-rows-8 gap-y-18 gap-x-12 relative overflow-hidden">
+                    <div className="grid sm:grid-cols-4 gap-12 lg:col-span-5 col-start-1 lg:mx-0 mx-auto">
+                        <div className="flex flex-col sm:col-span-2 gap-8 w-full">
+                            <UserInfo
+                                title={name}
+                                subtitle="What are we cooking today?"
+                                imgSrc={photo}
+                            />
+                            <SearchInput recipes={recipes} />
+                        </div>
                         <UserStats
-                            recipes={recipesNumber}
-                            className="col-span-2"
+                            recipes={recipes?.length}
+                            className="sm:col-span-2"
                         />
                     </div>
-                    <RecipesList
-                        recipes={recipes}
-                        className="col-span-5 row-span-3"
-                    />
-                    <div className="col-start-7 row-start-2">Reviews</div>
+                    <div className="lg:col-start-1 lg:col-end-6 row-span-6 children:pb-5">
+                        <h5>Your recipes</h5>
+                        <RecipesList recipes={recipes} panel />
+                    </div>
+
+                    <div className="lg:col-start-7 lg:col-span-2 col-start-1 lg:row-start-2 children:pb-5 ">
+                        <h5>Reviews</h5>
+                        <ReviewList reviews={reviews} />
+                    </div>
                 </div>
-            </SectionLayout>
-        </PageLayout>
+            )}
+        </Layout>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    if (req.cookies.access_token) {
-        await queryClient.prefetchQuery(['getMe', {}], () =>
-            axiosGetMe(GetMeDocument, req.cookies.access_token as string)
-        );
-    } else {
+    if (!req.cookies.access_token) {
         return {
             redirect: {
-                destination: '/login',
+                destination: '/auth',
                 permanent: false,
             },
         };

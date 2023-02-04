@@ -7,7 +7,7 @@ export type IUser = {
     name: string;
     role: string;
     photo: string;
-    terms: boolean;
+    terms?: boolean;
     updatedAt: string;
     createdAt: string;
 };
@@ -46,4 +46,21 @@ export type IRecipe = {
         name: string;
         photo: string;
     };
+};
+
+export type IReview = {
+    id: string;
+    createdAt: Date;
+    text: string;
+    pos: string[];
+    neg: string[];
+    user: {
+        name: string;
+        photo: string;
+    };
+};
+
+export type IReviewMini = {
+    className?: string;
+    review: IReview;
 };

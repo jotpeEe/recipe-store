@@ -328,6 +328,16 @@ export type CreateRecipeMutation = {
     };
 };
 
+export type CreateReviewMutationVariables = Exact<{
+    input: Scalars['String'];
+    id: Scalars['String'];
+}>;
+
+export type CreateReviewMutation = {
+    __typename?: 'Mutation';
+    createReview: { __typename?: 'ReviewResponse'; status: string };
+};
+
 export type DeleteRecipeMutationVariables = Exact<{
     id: Scalars['String'];
 }>;
@@ -415,6 +425,7 @@ export type GetMyRecipesQuery = {
             image: string;
             cuisine: string;
             id: string;
+            user: { __typename?: 'UserData'; name: string; photo: string };
         }>;
     };
 };
@@ -442,8 +453,69 @@ export type GetRecipeByIdQuery = {
                 name: string;
                 amount: string;
             }>;
-            user: { __typename?: 'UserData'; name: string; photo: string };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
         } | null;
+    };
+};
+
+export type GetReviewsByAuthorQueryVariables = Exact<{
+    author: Scalars['String'];
+}>;
+
+export type GetReviewsByAuthorQuery = {
+    __typename?: 'Query';
+    getReviewsByAuthor: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            id: string;
+            recipe: { __typename?: 'RecipeData'; id: string };
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+            };
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        }>;
+    };
+};
+
+export type GetReviewsByRecipeQueryVariables = Exact<{
+    id: Scalars['String'];
+}>;
+
+export type GetReviewsByRecipeQuery = {
+    __typename?: 'Query';
+    getReviewsByRecipe: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            id: string;
+            recipe: { __typename?: 'RecipeData'; id: string };
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+            };
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        }>;
     };
 };
 
@@ -528,6 +600,29 @@ export type UpdateRecipeMutation = {
     };
 };
 
+export type GetLastReviewsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetLastReviewsQuery = {
+    __typename?: 'Query';
+    getLastReviews: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            createdAt: any;
+            recipe: {
+                __typename?: 'RecipeData';
+                title: string;
+                image: string;
+                id: string;
+            };
+            user: { __typename?: 'UserData'; name: string; photo: string };
+        }>;
+    };
+};
+
 export const CreateRecipeDocument = `
     mutation CreateRecipe($input: Input!) {
   createRecipe(input: $input) {
@@ -569,6 +664,39 @@ export const useCreateRecipeMutation = <TError = unknown, TContext = unknown>(
             fetcher<CreateRecipeMutation, CreateRecipeMutationVariables>(
                 client,
                 CreateRecipeDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
+export const CreateReviewDocument = `
+    mutation CreateReview($input: String!, $id: String!) {
+  createReview(input: $input, id: $id) {
+    status
+  }
+}
+    `;
+export const useCreateReviewMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        CreateReviewMutation,
+        TError,
+        CreateReviewMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        CreateReviewMutation,
+        TError,
+        CreateReviewMutationVariables,
+        TContext
+    >(
+        ['CreateReview'],
+        (variables?: CreateReviewMutationVariables) =>
+            fetcher<CreateReviewMutation, CreateReviewMutationVariables>(
+                client,
+                CreateReviewDocument,
                 variables,
                 headers
             )(),
@@ -730,6 +858,10 @@ export const GetMyRecipesDocument = `
       prep
       image
       cuisine
+      user {
+        name
+        photo
+      }
     }
   }
 }
@@ -772,6 +904,7 @@ export const GetRecipeByIdDocument = `
       image
       steps
       user {
+        id: _id
         name
         photo
       }
@@ -793,6 +926,96 @@ export const useGetRecipeByIdQuery = <
         fetcher<GetRecipeByIdQuery, GetRecipeByIdQueryVariables>(
             client,
             GetRecipeByIdDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetReviewsByAuthorDocument = `
+    query getReviewsByAuthor($author: String!) {
+  getReviewsByAuthor(author: $author) {
+    status
+    results
+    reviews {
+      id: _id
+      text
+      recipe {
+        id: _id
+      }
+      recipeAuthor {
+        name
+        photo
+      }
+      user {
+        name
+        photo
+      }
+      pos
+      neg
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetReviewsByAuthorQuery = <
+    TData = GetReviewsByAuthorQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetReviewsByAuthorQueryVariables,
+    options?: UseQueryOptions<GetReviewsByAuthorQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetReviewsByAuthorQuery, TError, TData>(
+        ['getReviewsByAuthor', variables],
+        fetcher<GetReviewsByAuthorQuery, GetReviewsByAuthorQueryVariables>(
+            client,
+            GetReviewsByAuthorDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetReviewsByRecipeDocument = `
+    query getReviewsByRecipe($id: String!) {
+  getReviewsByRecipe(id: $id) {
+    status
+    results
+    reviews {
+      id: _id
+      text
+      recipe {
+        id: _id
+      }
+      recipeAuthor {
+        name
+        photo
+      }
+      user {
+        name
+        photo
+      }
+      pos
+      neg
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetReviewsByRecipeQuery = <
+    TData = GetReviewsByRecipeQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetReviewsByRecipeQueryVariables,
+    options?: UseQueryOptions<GetReviewsByRecipeQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetReviewsByRecipeQuery, TError, TData>(
+        ['getReviewsByRecipe', variables],
+        fetcher<GetReviewsByRecipeQuery, GetReviewsByRecipeQueryVariables>(
+            client,
+            GetReviewsByRecipeDocument,
             variables,
             headers
         ),
@@ -995,5 +1218,47 @@ export const useUpdateRecipeMutation = <TError = unknown, TContext = unknown>(
                 variables,
                 headers
             )(),
+        options
+    );
+export const GetLastReviewsDocument = `
+    query getLastReviews {
+  getLastReviews {
+    status
+    results
+    reviews {
+      text
+      recipe {
+        id: _id
+        title
+        image
+      }
+      user {
+        name
+        photo
+      }
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetLastReviewsQuery = <
+    TData = GetLastReviewsQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetLastReviewsQueryVariables,
+    options?: UseQueryOptions<GetLastReviewsQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetLastReviewsQuery, TError, TData>(
+        variables === undefined
+            ? ['getLastReviews']
+            : ['getLastReviews', variables],
+        fetcher<GetLastReviewsQuery, GetLastReviewsQueryVariables>(
+            client,
+            GetLastReviewsDocument,
+            variables,
+            headers
+        ),
         options
     );

@@ -14,6 +14,7 @@ import SliderController from './Controller';
 type SliderProps = {
     children: ReactNode[];
     controller?: boolean;
+    inside?: boolean;
 };
 
 const SliderContext = createContext<
@@ -26,7 +27,7 @@ const SliderContext = createContext<
     | undefined
 >(undefined);
 
-const Slider = ({ children, controller }: SliderProps) => {
+const Slider = ({ children, controller, inside }: SliderProps) => {
     const [step, setStep] = useState<number>(0);
     const steps = children.length;
 
@@ -58,26 +59,30 @@ const Slider = ({ children, controller }: SliderProps) => {
     return (
         <SliderContext.Provider value={controls}>
             <div className="overflow-hidden">
-                <ul
-                    className={classNames(
-                        'flex children:shrink-0 children:py-1 children:pr-6 children:pl-1 children:transition children:duration-300 children:ease',
-                        step === 1 && '[&>*]:-translate-x-space1',
-                        step === 2 && '[&>*]:-translate-x-space2',
-                        step === 3 && '[&>*]:-translate-x-space3',
-                        step === 4 && '[&>*]:-translate-x-space4',
-                        step === 5 && '[&>*]:-translate-x-space5',
-                        step === 6 && '[&>*]:-translate-x-space6',
-                        step === 7 && '[&>*]:-translate-x-space7',
-                        step === 8 && '[&>*]:-translate-x-space8',
-                        step === 9 && '[&>*]:-translate-x-space9',
-                        step === 10 && '[&>*]:-translate-x-space10',
-                        step === 11 && '[&>*]:-translate-x-space11'
-                    )}
-                >
-                    {children}
-                </ul>
+                <div className="">
+                    <ul
+                        className={classNames(
+                            'flex p-1 children:shrink-0 children:pr-8 children:transition children:duration-300 children:ease',
+                            step === 1 && '[&>*]:-translate-x-space1',
+                            step === 2 && '[&>*]:-translate-x-space2',
+                            step === 3 && '[&>*]:-translate-x-space3',
+                            step === 4 && '[&>*]:-translate-x-space4',
+                            step === 5 && '[&>*]:-translate-x-space5',
+                            step === 6 && '[&>*]:-translate-x-space6',
+                            step === 7 && '[&>*]:-translate-x-space7',
+                            step === 8 && '[&>*]:-translate-x-space8',
+                            step === 9 && '[&>*]:-translate-x-space9',
+                            step === 10 && '[&>*]:-translate-x-space10',
+                            step === 11 && '[&>*]:-translate-x-space11'
+                        )}
+                    >
+                        {children}
+                    </ul>
+                </div>
+                {controller && steps > 4 && (
+                    <SliderController steps={steps} inside={inside} />
+                )}
             </div>
-            {controller && <SliderController steps={steps} />}
         </SliderContext.Provider>
     );
 };

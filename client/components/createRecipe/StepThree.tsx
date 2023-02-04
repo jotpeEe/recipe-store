@@ -11,8 +11,7 @@ import {
     useUpdateRecipeMutation,
 } from '@generated/graphql';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { lettersAndNumbers } from '@lib/regex';
-import { IRecipe } from '@lib/types';
+import type { IRecipe } from '@lib/types';
 import { addStep, setRecipe } from '@redux';
 import { requestClient } from '@requests';
 
@@ -23,8 +22,7 @@ import Panel from './Panel';
 const stepSchema = object({
     step: string()
         .required('Step is required')
-        .min(10, 'Must be at least 10 characters long')
-        .matches(lettersAndNumbers, 'Must include only letters and numbers'),
+        .min(10, 'Must be at least 10 characters long'),
 });
 
 type StepInput = TypeOf<typeof stepSchema>;

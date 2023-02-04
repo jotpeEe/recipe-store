@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import Recipe from '@components/recipe';
+import { Recipe } from '@components/recipe';
 import { useAppSelector } from '@hooks';
 
 const Preview: FC = () => {

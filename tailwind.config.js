@@ -8,7 +8,7 @@ module.exports = {
     theme: {
         extend: {
             gridTemplateColumns: {
-                '1to2': '1fr 2fr',
+                '1to2': '1fr minmax(0, 2fr)',
                 slider: 'repeat(12, minmax(0, 1fr)',
                 fill: 'repeat(auto-fill, minmax(125px, 1fr))',
             },
@@ -22,6 +22,7 @@ module.exports = {
                 'text-primary': '#000',
             },
             spacing: {
+                list: '600px',
                 section: '35rem',
                 'header-p': '100px',
                 space0: '0%',
@@ -47,6 +48,11 @@ module.exports = {
             },
             maxWidth: {
                 '3/4': '75%',
+            },
+            transitionDelay: {
+                400: '400ms',
+                600: '600ms',
+                800: '800ms',
             },
         },
         fontFamily: {

@@ -14,6 +14,7 @@ query GetRecipeById($id: String!) {
             image
             steps
             user {
+                id: _id
                 name
                 photo
             }

@@ -1,0 +1,19 @@
+query getLastReviews {
+    getLastReviews {
+        status
+        results
+        reviews {
+            text
+            recipe {
+                id: _id
+                title
+                image
+            }
+            user {
+                name
+                photo
+            }
+            createdAt
+        }
+    }
+}

@@ -63,7 +63,11 @@ const Login: FC = () => {
                     Welcome back!
                 </div>
                 <FormProvider {...methods}>
-                    <form onSubmit={handleSubmit(onSubmitHandler)} noValidate>
+                    <form
+                        className="w-full"
+                        onSubmit={handleSubmit(onSubmitHandler)}
+                        noValidate
+                    >
                         <FormInput
                             label="Email"
                             name="email"

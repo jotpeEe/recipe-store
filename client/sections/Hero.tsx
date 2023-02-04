@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { SectionTitle } from '@components';
 
 const Hero = () => (
-    <div className="pt-[100px] h-full sm:h-screen w-full">
+    <div className="pt-[100px] h-full md:h-screen w-full">
         <div className="flex md:flex-row flex-col md:justify-between justify-center gap-10 md:gap-4 items-center h-full max-w-7xl px-12 lg:px-header-p mx-auto">
             <SectionTitle
                 title="RecipeStore"

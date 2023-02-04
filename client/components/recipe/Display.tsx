@@ -1,27 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 
-import Animated from '@components/AnimatedDiv';
-import ReviewMini from '@components/card/ReviewMini';
+import Animated from '@components/animations/AnimatedDiv';
+import AnimateOnLoad from '@components/animations/AnimateOnLoad';
+import ReviewList from '@components/ReviewList';
 import Switch from '@components/Switch';
-import { IIngredient, IReviewMini } from '@lib/types';
 
+// eslint-disable-next-line import/no-cycle
+import { useRecipe } from '.';
 import Ingredient from './Ingredient';
 
-type DisplayProps = {
-    step?: number;
-    ingredients?: IIngredient[];
-    servings?: number | null;
-    steps?: string[];
-    reviews?: IReviewMini['review'][];
-};
+const Display: FC = () => {
+    const { id, step, ingredients, servings, steps, reviews, user } =
+        useRecipe();
 
-const Display: FC<DisplayProps> = ({
-    step,
-    ingredients,
-    servings,
-    steps,
-    reviews,
-}) => {
     const [active, setActive] = useState<number>(0);
 
     useEffect(() => {
@@ -41,6 +32,7 @@ const Display: FC<DisplayProps> = ({
                         setActive={setActive}
                         active={active}
                         array={buttons}
+                        size="sm"
                     />
                 </Animated>
             )}
@@ -57,19 +49,28 @@ const Display: FC<DisplayProps> = ({
                     {ingredients &&
                         active === 0 &&
                         ingredients?.map((ingredient, index) => (
-                            <Ingredient
-                                key={index}
-                                {...{ ...ingredient, id: index }}
-                            />
+                            <AnimateOnLoad key={index} index={index}>
+                                <Ingredient {...{ ...ingredient, id: index }} />
+                            </AnimateOnLoad>
                         ))}
                     {steps &&
                         active === 1 &&
-                        steps?.map((text, index) => <p key={index}>{text}</p>)}
-                    {reviews &&
-                        active === 2 &&
-                        reviews?.map((review, index) => (
-                            <ReviewMini key={index} review={{ ...review }} />
+                        steps?.map((text, index) => (
+                            <AnimateOnLoad key={index} index={index}>
+                                <p className="max-w-[40ch]" key={index}>
+                                    {text}
+                                </p>
+                            </AnimateOnLoad>
                         ))}
+                    {reviews && active === 2 && (
+                        <ReviewList
+                            addEnable
+                            reviews={reviews}
+                            id={id}
+                            recipeAuthor={user}
+                            fullWidth
+                        />
+                    )}
                 </div>
             )}
         </>

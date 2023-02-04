@@ -11,10 +11,10 @@ const CheckListItem: FC<{ children: ReactNode }> = ({ children }) => (
 );
 
 const SignUpInfo: FC = () => (
-    <div className="flex flex-col items-start p-8 [&>*]:pb-4 font-sans">
+    <div className="flex flex-col items-start p-8 [&>*]:pb-4 font-sans max-w-[35ch]">
         <h3 className="text-xl">Create an account</h3>
         <p className="">
-            Let’s help you set up your account, it <br /> won’t take long.
+            Let’s help you set up your account, it won’t take long.
         </p>
         <p>With account you can:</p>
         <ul className="[&>li]:pb-2">
@@ -22,10 +22,7 @@ const SignUpInfo: FC = () => (
             <CheckListItem>Bookmark recipes from others.</CheckListItem>
             <CheckListItem>Check your recipes</CheckListItem>
         </ul>
-        <p>
-            Let’s help you set up your account, it <br />
-            won’t take long.
-        </p>
+        <p>Let’s help you set up your account, it won’t take long.</p>
         <Footer type="signup" />
     </div>
 );

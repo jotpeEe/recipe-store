@@ -25,12 +25,12 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
     return (
         <div
             className={classNames(
-                'flex gap-1 w-full items-center py-2  transition duration-700',
+                'flex gap-1 w-full items-center jpy-2  transition duration-700',
                 active ? 'opacity-1' : 'opacity-0'
             )}
         >
             <IconWarning />
-            <span className="text-xs text-red-600">{message}</span>
+            <span className="text-xs text-red-600 max-w-[25ch]">{message}</span>
         </div>
     );
 };
