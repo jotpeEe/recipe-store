@@ -8,7 +8,7 @@ module.exports = {
     theme: {
         extend: {
             gridTemplateColumns: {
-                '1to2': '1fr 2fr',
+                '1to2': '1fr minmax(0, 2fr)',
                 slider: 'repeat(12, minmax(0, 1fr)',
                 fill: 'repeat(auto-fill, minmax(125px, 1fr))',
             },
