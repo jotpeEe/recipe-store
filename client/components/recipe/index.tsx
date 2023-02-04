@@ -7,7 +7,7 @@ import { IconClock, IconStar } from '@icons';
 import { IIngredient, IReview } from '@lib/types';
 import { queryClient } from '@requests';
 
-import Animated from '../AnimatedDiv';
+import Animated from '../animations/AnimatedDiv';
 import UserInfo from '../user/Info';
 // eslint-disable-next-line import/no-cycle
 import Display from './Display';

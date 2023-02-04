@@ -3,6 +3,7 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import { RECIPE_LIMIT } from '@constants';
 import { IRecipe } from '@lib/types';
 
+import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';
 import RecipeCard from './card/Recipe';
 import Switch from './Switch';
@@ -56,7 +57,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     }, []);
 
     return (
-        <div className={`${className} children:mb-4`}>
+        <div className={`${className} children:mb-4 overflow-hidden`}>
             <div className="flex gap-3 w-fit">
                 <Switch
                     array={cuisine}
@@ -70,7 +71,9 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
             >
                 {recipeList &&
                     recipeList.map((recipe, index) => (
-                        <RecipeCard key={index} recipe={recipe} />
+                        <AnimateOnLoad key={index} index={index}>
+                            <RecipeCard recipe={recipe} />
+                        </AnimateOnLoad>
                     ))}
                 {panel && (
                     <div className="self-center">

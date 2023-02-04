@@ -49,6 +49,11 @@ module.exports = {
             maxWidth: {
                 '3/4': '75%',
             },
+            transitionDelay: {
+                400: '400ms',
+                600: '600ms',
+                800: '800ms',
+            },
         },
         fontFamily: {
             sans: ['Poppins', 'system-ui', 'sans-serif'],

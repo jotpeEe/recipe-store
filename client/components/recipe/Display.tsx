@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
-import Animated from '@components/AnimatedDiv';
+import Animated from '@components/animations/AnimatedDiv';
+import AnimateOnLoad from '@components/animations/AnimateOnLoad';
 import ReviewList from '@components/ReviewList';
 import Switch from '@components/Switch';
 
@@ -48,17 +49,18 @@ const Display: FC = () => {
                     {ingredients &&
                         active === 0 &&
                         ingredients?.map((ingredient, index) => (
-                            <Ingredient
-                                key={index}
-                                {...{ ...ingredient, id: index }}
-                            />
+                            <AnimateOnLoad key={index} index={index}>
+                                <Ingredient {...{ ...ingredient, id: index }} />
+                            </AnimateOnLoad>
                         ))}
                     {steps &&
                         active === 1 &&
                         steps?.map((text, index) => (
-                            <p className="max-w-[40ch]" key={index}>
-                                {text}
-                            </p>
+                            <AnimateOnLoad key={index} index={index}>
+                                <p className="max-w-[40ch]" key={index}>
+                                    {text}
+                                </p>
+                            </AnimateOnLoad>
                         ))}
                     {reviews && active === 2 && (
                         <ReviewList

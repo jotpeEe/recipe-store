@@ -5,6 +5,7 @@ import { hasCookie } from 'cookies-next';
 import Link from 'next/link';
 import { useQueryClient } from 'react-query';
 
+import AnimateOnLoad from '@components/animations/AnimateOnLoad';
 import { useLogoutUserQuery } from '@generated/graphql';
 import { useAppDispatch } from '@hooks';
 import { NavState } from '@lib/types';
@@ -90,33 +91,35 @@ const Navigation: FC<NavState> = ({ open, setOpen }) => {
                 }
             >
                 {options.map(({ title, url, onLogin, onClick }, index) => (
-                    <li key={index} className={'flex gap-3 sm:w-fit w-full'}>
-                        {url ? (
-                            <>
-                                {(onLogin === loggedIn ||
-                                    onLogin === undefined) && (
-                                    <Link
-                                        className="sm:px-5 pl-6 sm:py-2 py-5 sm:w-fit w-full"
-                                        href={url}
-                                        onClick={() => setOpen(false)}
-                                    >
-                                        <h5>{title}</h5>
-                                    </Link>
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                {loggedIn && (
-                                    <button
-                                        className="flex sm:px-5 pl-6 py-2 sm:w-fit w-full"
-                                        onClick={onClick}
-                                    >
-                                        <h5>{title}</h5>
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </li>
+                    <AnimateOnLoad key={index} index={index}>
+                        <li className={'flex gap-3 sm:w-fit w-full'}>
+                            {url ? (
+                                <>
+                                    {(onLogin === loggedIn ||
+                                        onLogin === undefined) && (
+                                        <Link
+                                            className="sm:px-5 pl-6 sm:py-2 py-5 sm:w-fit w-full"
+                                            href={url}
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            <h5>{title}</h5>
+                                        </Link>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    {loggedIn && (
+                                        <button
+                                            className="flex sm:px-5 pl-6 py-2 sm:w-fit w-full"
+                                            onClick={onClick}
+                                        >
+                                            <h5>{title}</h5>
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </li>
+                    </AnimateOnLoad>
                 ))}
             </ul>
         </nav>

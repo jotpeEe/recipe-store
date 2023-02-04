@@ -3,7 +3,7 @@ import { FC } from 'react';
 import classNames from 'classnames';
 import Image from 'next/image';
 
-import Animated from '@components/AnimatedDiv';
+import Animated from '@components/animations/AnimatedDiv';
 
 type RecipeTitleProps = {
     className?: string;

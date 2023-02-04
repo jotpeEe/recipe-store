@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 import classNames from 'classnames';
 import { useForm, FormProvider } from 'react-hook-form';
 
+import AnimateOnLoad from '@components/animations/AnimateOnLoad';
 import RecipeMini from '@components/card/RecipeMini';
 import { useGetAllRecipesQuery } from '@generated/graphql';
 import { IconFilter } from '@icons';
@@ -82,10 +83,12 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
                 <Button size="sm" icon={<IconFilter />} />
             </div>
             {exists && (
-                <div className="flex row-span-4 ">
+                <div className="flex row-span-3 ">
                     <Slider controller inside>
                         {search?.map((recipe, index) => (
-                            <RecipeMini key={index} {...recipe} />
+                            <AnimateOnLoad key={index} index={index}>
+                                <RecipeMini {...recipe} />
+                            </AnimateOnLoad>
                         ))}
                     </Slider>
                 </div>

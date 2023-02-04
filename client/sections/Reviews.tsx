@@ -1,4 +1,5 @@
 import { Slider, SectionTitle, ReviewCard } from '@components';
+import AnimateOnLoad from '@components/animations/AnimateOnLoad';
 import { useGetLastReviewsQuery } from '@generated/graphql';
 import { SectionLayout as Layout } from '@layouts';
 import { requestClient } from '@requests';
@@ -24,7 +25,9 @@ const Reviews: React.FC = () => {
                 />
                 <Slider controller>
                     {reviews.map((review, index) => (
-                        <ReviewCard key={index} {...review} />
+                        <AnimateOnLoad key={index} index={index}>
+                            <ReviewCard {...review} />
+                        </AnimateOnLoad>
                     ))}
                 </Slider>
             </div>

@@ -9,6 +9,7 @@ import { useAppSelector } from '@hooks';
 import { IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
+import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';
 import ReviewMini from './card/ReviewMini';
 import FormInput from './input/Form';
@@ -103,11 +104,13 @@ const ReviewList: FC<ReviewListProps> = ({
             )}
             <div className="max-h-[400px] overflow-y-auto">
                 {slicedReviews?.map((review, index) => (
-                    <ReviewMini key={index} review={review} />
+                    <AnimateOnLoad key={index} index={index}>
+                        <ReviewMini review={review} />
+                    </AnimateOnLoad>
                 ))}
             </div>
             {addEnable && !isTheSameUser && (
-                <>
+                <div className="w-full">
                     <button
                         onClick={handleCommentClick}
                         className="flex items-center gap-3 bg-primary rounded-3xl w-full mb-4 shadow-card shadow-gray-400"
@@ -131,7 +134,7 @@ const ReviewList: FC<ReviewListProps> = ({
                             </form>
                         </FormProvider>
                     )}
-                </>
+                </div>
             )}
         </div>
     );
