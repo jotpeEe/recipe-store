@@ -15,10 +15,10 @@ const Section: React.FC<SectionProps> = ({
     flex,
     maxWidth = false,
 }) => (
-    <section id={id} className="w-full py-28">
+    <section id={id} className={classNames('w-full lg:py-28 py-14')}>
         <div
             className={classNames(
-                'md:px-12 px-6',
+                'md:px-12 sm:px-6 px-3',
                 maxWidth ? 'max-w-full' : 'mx-auto max-w-7xl',
                 flex && 'flex justify-center lg:gap-24 md:gap-16 gap-6',
                 className && className

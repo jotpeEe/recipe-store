@@ -37,7 +37,7 @@ const FormInput: FC<FormInputProps> = ({
         <>
             <div
                 className={classNames(
-                    'text-sm flex',
+                    'text-sm flex w-full',
                     type === 'checkbox'
                         ? 'items-center w-full justify-end gap-2 flex-row-reverse'
                         : 'flex-col justify-center items-start',
@@ -77,9 +77,9 @@ const FormInput: FC<FormInputProps> = ({
                         autoComplete="off"
                         placeholder={placeholder}
                         className={classNames(
-                            'p-3 rounded-lg border min-w-max text-xs',
+                            'p-3 rounded-lg border text-xs',
                             type === 'checkbox'
-                                ? 'w-4 h-4 accent-amber-500 text-white'
+                                ? 'w-4 h-4 accent-amber-500 text-white min-w-max'
                                 : 'w-full',
                             errors[name] && 'border-red-600'
                         )}
