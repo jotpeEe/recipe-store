@@ -1,5 +1,6 @@
 import { FC, MouseEventHandler, useCallback, useState } from 'react';
 
+import classNames from 'classnames';
 import { hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -23,6 +24,7 @@ type ReviewListProps = {
         name: string;
         photo: string;
     };
+    fullWidth?: boolean;
 };
 
 type ReviewInput = {
@@ -34,6 +36,7 @@ const ReviewList: FC<ReviewListProps> = ({
     id,
     addEnable,
     recipeAuthor,
+    fullWidth,
 }) => {
     const [clicked, setClicked] = useState(false);
     const [open, setOpen] = useState(false);
@@ -88,7 +91,7 @@ const ReviewList: FC<ReviewListProps> = ({
     }, []);
 
     return (
-        <div className="">
+        <div className={classNames(fullWidth ? 'w-full' : 'w-fit')}>
             {reviews && reviews?.length > 4 && (
                 <button
                     onClick={handleClick}
