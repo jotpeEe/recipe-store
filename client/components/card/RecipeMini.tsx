@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import Image from 'next/image';
 
-import { Card, Link, Title } from '@components/CardWithLinks';
+import { Card, Title } from '@components/CardWithLinks';
 import { IconClock } from '@components/icons';
 
 type RecipeMiniProps = {

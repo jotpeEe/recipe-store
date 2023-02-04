@@ -1,6 +1,5 @@
 import { FC, useMemo } from 'react';
 
-import classNames from 'classnames';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import AnimateOnLoad from '@components/animations/AnimateOnLoad';
@@ -66,13 +65,8 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
     const exists = search && search.length !== 0;
 
     return (
-        <div
-            className={classNames(
-                'grid grid-col-2 gap-6 ',
-                exists ? 'grid-rows-5' : 'grid-rows-4'
-            )}
-        >
-            <div className={`flex gap-4 h-full items-center`}>
+        <div className="grid grid-col-2 gap-6 grid-rows-4">
+            <div className="flex gap-4 h-full items-center max-w-[335px]">
                 <FormProvider {...methods}>
                     <FormInput
                         name="input"
