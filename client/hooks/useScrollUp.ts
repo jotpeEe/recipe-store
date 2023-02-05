@@ -1,26 +1,24 @@
 import { useState, useEffect } from 'react';
 
-const useScrollUp = (threshold = 0) => {
-    const [scroll, setScroll] = useState<'up' | 'down' | 'idle'>('idle');
+const useScrollUp = () => {
+    const NAV_HEIGHT = 100;
+    const [scrollUp, setScrollUp] = useState(true);
 
     useEffect(() => {
         let lastScrollY = window.pageYOffset;
-
         let ticking = false;
 
         const updateScrollUp = () => {
             const scrollY = window.pageYOffset;
 
-            if (scrollY < lastScrollY || scrollY < threshold) setScroll('up');
-            if (scrollY > lastScrollY) setScroll('down');
+            setScrollUp(scrollY <= lastScrollY || scrollY < NAV_HEIGHT);
             lastScrollY = scrollY;
             ticking = false;
         };
 
-        const onScroll: () => void = () => {
+        const onScroll = () => {
             if (!ticking) {
                 window.requestAnimationFrame(updateScrollUp);
-
                 ticking = true;
             }
         };
@@ -30,7 +28,7 @@ const useScrollUp = (threshold = 0) => {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    return scroll;
+    return scrollUp;
 };
 
 export default useScrollUp;
