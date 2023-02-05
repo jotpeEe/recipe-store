@@ -25,7 +25,7 @@ const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
     return (
         <div
             className={classNames(
-                'flex gap-1 w-full items-center jpy-2  transition duration-700',
+                'flex gap-1 w-full items-center py-2  transition duration-700',
                 active ? 'opacity-1' : 'opacity-0'
             )}
         >
