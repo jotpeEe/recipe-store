@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useRefreshAccessTokenQuery, useGetMeQuery } from '@generated/graphql';
@@ -38,7 +37,7 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
         }
     );
 
-    const { isLoading } = useGetMeQuery(
+    useGetMeQuery(
         requestClient,
         {},
         {
@@ -61,11 +60,11 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
 
     return (
         <div className="flex min-h-screen flex-col py-2">
-            <Nav isLoading={isLoading} />
+            <Nav />
 
             <main className="flex w-full flex-1 flex-col">{children}</main>
 
-            <footer className="flex h-24 w-full items-center justify-center border-t">
+            {/* <footer className="flex h-24 w-full items-center justify-center border-t">
                 <a
                     className="flex items-center justify-center gap-2"
                     href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -80,7 +79,7 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
                         height={16}
                     />
                 </a>
-            </footer>
+            </footer> */}
         </div>
     );
 };
