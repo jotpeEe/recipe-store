@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import classNames from 'classnames';
+import cn from 'classnames';
 
 import { type IIngredient } from '@lib/types';
 
