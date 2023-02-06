@@ -4,9 +4,8 @@ import {
     useState,
     useContext,
     useCallback,
+    FC,
 } from 'react';
-
-import classNames from 'classnames';
 
 // eslint-disable-next-line import/no-cycle
 import SliderController from './Controller';
@@ -27,7 +26,7 @@ const SliderContext = createContext<
     | undefined
 >(undefined);
 
-const Slider = ({ children, controller, inside }: SliderProps) => {
+const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
     const [step, setStep] = useState<number>(0);
     const steps = children.length;
 
@@ -59,26 +58,18 @@ const Slider = ({ children, controller, inside }: SliderProps) => {
     return (
         <SliderContext.Provider value={controls}>
             <div className="overflow-hidden">
-                <div className="">
-                    <ul
-                        className={classNames(
-                            'flex p-1 children:shrink-0 children:pr-8 children:transition children:duration-300 children:ease',
-                            step === 1 && '[&>*]:-translate-x-space1',
-                            step === 2 && '[&>*]:-translate-x-space2',
-                            step === 3 && '[&>*]:-translate-x-space3',
-                            step === 4 && '[&>*]:-translate-x-space4',
-                            step === 5 && '[&>*]:-translate-x-space5',
-                            step === 6 && '[&>*]:-translate-x-space6',
-                            step === 7 && '[&>*]:-translate-x-space7',
-                            step === 8 && '[&>*]:-translate-x-space8',
-                            step === 9 && '[&>*]:-translate-x-space9',
-                            step === 10 && '[&>*]:-translate-x-space10',
-                            step === 11 && '[&>*]:-translate-x-space11'
-                        )}
-                    >
-                        {children}
-                    </ul>
-                </div>
+                <ul className="flex p-1">
+                    {children.map((child, index) => (
+                        <li
+                            key={index}
+                            className="pl-1 shrink-0 pr-8 transition duration-300 ease"
+                            style={{ transform: `translateX(-${step * 100}%)` }}
+                        >
+                            {child}
+                        </li>
+                    ))}
+                </ul>
+
                 {controller && steps > 4 && (
                     <SliderController steps={steps} inside={inside} />
                 )}
