@@ -6,26 +6,26 @@ const AnimateOnLoad: FC<{ index: number; children: ReactNode }> = ({
     index,
     children,
 }) => {
-    const [delay, setDelay] = useState(index);
+    // set initial delay
+    const [delay, setDelay] = useState(index * 100);
     const [active, setActive] = useState(false);
 
     useEffect(() => {
         setActive(true);
+
+        // clear delay after first load for other interactive transitions on a client
         setTimeout(() => setDelay(0), index * 100);
     }, []);
 
     return (
         <div
             className={classNames(
-                `transition-all`,
-                active ? 'opacity-100' : 'opacity-0 translate-y-4',
-                delay === 1 && 'delay-100',
-                delay === 2 && 'delay-200',
-                delay === 3 && 'delay-300',
-                delay === 4 && 'delay-400',
-                delay === 5 && 'delay-500',
-                delay === 6 && 'delay-600'
+                'transition-all',
+                active ? 'opacity-100' : 'opacity-0 translate-y-4'
             )}
+            style={{
+                transitionDelay: `${delay}ms`,
+            }}
         >
             {children}
         </div>
