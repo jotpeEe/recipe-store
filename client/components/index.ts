@@ -3,7 +3,7 @@ export { default as Button } from './Button';
 export { default as ErrorMessage } from './input/ErrorMessage';
 export { default as FormInput } from './input/Form';
 export { default as ImageInput } from './input/Image';
-export { default as Nav } from './nav';
+export { default as Nav } from './Nav';
 export { default as Preview } from './createRecipe/Preview';
 export { Recipe } from './recipe';
 export { default as RecipeCard } from './card/Recipe';

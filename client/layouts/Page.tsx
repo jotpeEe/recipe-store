@@ -9,7 +9,7 @@ import { IUser } from '@lib/types';
 import { setPageLoading, setUser } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
-const Nav = dynamic(() => import('../components/nav'), { ssr: false });
+const Nav = dynamic(() => import('../components/Nav'), { ssr: false });
 
 type PageProps = {
     children: React.ReactNode;
