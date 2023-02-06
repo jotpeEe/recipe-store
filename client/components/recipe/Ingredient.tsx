@@ -11,20 +11,16 @@ const Ingredient: FC<IIngredient> = ({ name, amount }) => {
 
     return (
         <div
-            className={classNames(
-                'col-span-3 flex gap-4 items-center w-fit py-2 px-3 rounded-xl cursor-pointer transition',
-                disabled ? 'bg-gray-300 line-thgrough' : 'bg-primary'
-            )}
             onClick={handleClick}
+            className={cn(
+                'relative py-2 rounded-lg flex select-none justify-between items-center after:h-[1px] transition after:w-full after:absolute after:bottom-0 after:transition after:right-0 ',
+                disabled
+                    ? 'line-through text-gray-300 after:bg-gray-300'
+                    : 'after:bg-primary'
+            )}
         >
-            <div className="flex items-center gap-4">
-                <h5 className={classNames(disabled ? 'line-through' : '')}>
-                    {amount}
-                </h5>
-            </div>
-            <div className={classNames(disabled ? 'line-through' : '')}>
-                {name}
-            </div>
+            <p className="text-sm">{name}</p>
+            <span className="font-semibold">{amount}</span>
         </div>
     );
 };
