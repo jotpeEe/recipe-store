@@ -25,18 +25,6 @@ module.exports = {
                 list: '600px',
                 section: '35rem',
                 'header-p': '100px',
-                space0: '0%',
-                space1: '100%',
-                space2: '200%',
-                space3: '300%',
-                space4: '400%',
-                space5: '500%',
-                space6: '600%',
-                space7: '700%',
-                space8: '800%',
-                space9: '900%',
-                space10: '1000%',
-                space11: '1100%',
             },
             boxShadow: {
                 card: '0px 2px 8px 0px rgba(95, 126, 155, 0.3)',
@@ -48,11 +36,6 @@ module.exports = {
             },
             maxWidth: {
                 '3/4': '75%',
-            },
-            transitionDelay: {
-                400: '400ms',
-                600: '600ms',
-                800: '800ms',
             },
         },
         fontFamily: {

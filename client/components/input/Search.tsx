@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { useForm, FormProvider } from 'react-hook-form';
 
@@ -67,6 +67,7 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
                 </FormProvider>
                 <Button size="sm" icon={<IconFilter />} />
             </div>
+
             {exists && (
                 <div className="flex row-span-3 ">
                     <Slider controller inside>
