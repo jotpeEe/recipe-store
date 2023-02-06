@@ -14,13 +14,10 @@ type Recipe =
     | undefined;
 
 const useRecipesFilter = (recipes: Recipe, input: string) =>
-    recipes
-        ?.filter(
-            recipe =>
-                recipe.title.toLowerCase().includes(input) ||
-                recipe.cuisine.toLowerCase().includes(input) ||
-                recipe.title.toLowerCase().includes(input)
-        )
-        .slice(0, 12);
+    recipes?.filter(
+        recipe =>
+            recipe.title.toLowerCase().includes(input) ||
+            recipe.cuisine.toLowerCase().includes(input)
+    );
 
 export default useRecipesFilter;
