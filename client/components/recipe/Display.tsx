@@ -57,8 +57,11 @@ const Display: FC = () => {
                         active === 1 &&
                         steps?.map((text, index) => (
                             <AnimateOnLoad key={index} index={index}>
-                                <p className="max-w-[40ch]" key={index}>
-                                    {text}
+                                <p
+                                    className="max-w-[35ch] text-sm break-word"
+                                    key={index}
+                                >
+                                    {index + 1}. &nbsp; {text}
                                 </p>
                             </AnimateOnLoad>
                         ))}

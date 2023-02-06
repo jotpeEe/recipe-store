@@ -62,7 +62,7 @@ const SignUp: FC = () => {
     );
 
     return (
-        <div className="flex justify-center items-center w-full">
+        <div className="flex justify-center items-center w-screen md:w-full mx-auto">
             <div className="flex md:justify-between md:flex-row  md:items-start items-center flex-col">
                 <SignUpInfo />
                 <div className="flex flex-col justify-center items-start shadow-form rounded-3xl p-8 [&>div]:pb-7 [&>a]:pb-7">
