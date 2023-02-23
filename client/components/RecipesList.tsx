@@ -59,14 +59,16 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     }, []);
 
     return (
-        <div className={`${className} children:mb-4 overflow-hidden`}>
-            <div className="flex gap-3 w-fit">
-                <Switch
-                    array={cuisine}
-                    active={active}
-                    setActive={setActive}
-                    size="sm"
-                />
+        <div className={`${className} children:mb-4`}>
+            <div className="overflow-hidden">
+                <ul className="flex gap-3 w-fit overflow-x-scroll scrollbar-none">
+                    <Switch
+                        array={cuisine}
+                        active={active}
+                        setActive={setActive}
+                        size="sm"
+                    />
+                </ul>
             </div>
             <div
                 className={cn(
