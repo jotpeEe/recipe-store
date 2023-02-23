@@ -70,7 +70,7 @@ const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
                     ))}
                 </ul>
 
-                {controller && steps > 4 && (
+                {controller && steps > 1 && (
                     <SliderController steps={steps} inside={inside} />
                 )}
             </div>
