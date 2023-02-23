@@ -66,17 +66,24 @@ const Nav: FC = () => {
     return (
         <header
             className={cn(
-                'fixed sm:top-0 sm:bottom-auto bottom-0 left-0 transition ease-in-out bg-white sm:bg-transparent sm:shadow-none shadow-card shadow-gray-400 sm:h-20 h-14 duration-200 w-full z-[100]',
+                'fixed h-14 w-full bottom-0 left-0 bg-white shadow-card shadow-gray-400 duration-200 transition ease-in-out z-[100]',
+                'sm:h-20 sm:top-0 sm:bottom-auto sm:bg-transparent sm:shadow-none',
                 !scroll && 'sm:-translate-y-full'
             )}
         >
-            <div className="flex sm:justify-between justify-center items-center h-full max-w-7xl mx-auto md:px-12 px-6">
+            <div
+                className={cn(
+                    'flex justify-center items-center h-full max-w-7xl mx-auto px-6',
+                    'md:px-12 sm:justify-between '
+                )}
+            >
                 <Link className="sm:block hidden z-40" href="/">
                     <Image src="/logo.png" width={63} height={27} alt="logo" />
                 </Link>
                 <nav
                     className={cn(
-                        'flex items-center justify-center sm:gap-3 sm:w-fit w-full z-40'
+                        'flex items-center justify-center w-full z-40',
+                        'sm:gap-3 sm:w-fit '
                     )}
                 >
                     {nav.map(({ href, icon, name, auth }, index) => {
@@ -84,7 +91,8 @@ const Nav: FC = () => {
                             return (
                                 <Link
                                     className={cn(
-                                        'relative flex justify-center sm-py-2 sm:px-5 items-center flex-col sm:[&>*:first-child]:hidden',
+                                        'relative flex justify-center items-center flex-col ',
+                                        'sm:py-2 sm:px-5 sm:[&>*:first-child]:hidden',
                                         name
                                             ? 'flex-auto max-w-[100px]'
                                             : 'sm:hidden'
@@ -93,7 +101,12 @@ const Nav: FC = () => {
                                     href={href}
                                 >
                                     {icon}
-                                    <span className="text-[10px] sm:text-base font-semibold whitespace-nowrap">
+                                    <span
+                                        className={cn(
+                                            'text-[10px] font-semibold whitespace-nowrap',
+                                            'sm:text-base'
+                                        )}
+                                    >
                                         {name}
                                     </span>
                                 </Link>
@@ -102,7 +115,10 @@ const Nav: FC = () => {
                     })}
                     {loggedIn && (
                         <button
-                            className="flex-auto max-w-[100px] flex justify-center sm-py-2 sm:px-5 items-center flex-col sm:[&>*:first-child]:hidden"
+                            className={cn(
+                                'flex-auto max-w-[100px] flex justify-center sm:py-2 items-center flex-col',
+                                'sm:[&>*:first-child]:hidden sm:px-5'
+                            )}
                             onClick={handleClick}
                         >
                             <IconLogout />
