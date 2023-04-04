@@ -51,6 +51,23 @@ module.exports = {
                 },
             },
         ],
+        'sort-imports': [
+            'error',
+            {
+                ignoreCase: false,
+                ignoreDeclarationSort: true, // don"t want to sort import lines, use eslint-plugin-import instead
+                ignoreMemberSort: false,
+                memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+                allowSeparatedGroups: true,
+            },
+        ],
+        '@typescript-eslint/consistent-type-imports': [
+            'warn',
+            {
+                prefer: 'type-imports',
+                fixStyle: 'inline-type-imports',
+            },
+        ],
         'class-methods-use-this': 'off',
         '@typescript-eslint/no-use-before-define': [
             'error',
