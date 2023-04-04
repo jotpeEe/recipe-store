@@ -22,6 +22,9 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Disable env validation from utils/env.mjs
+ARG SKIP_ENV_VALIDATION=true
+
 RUN yarn build
 
 # If using npm comment out above and use below instead
