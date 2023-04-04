@@ -2,7 +2,6 @@ import { GetServerSideProps, type NextPage } from 'next';
 import { dehydrate } from 'react-query';
 
 import { Slider } from '@components';
-import { SectionLayout as Layout } from '@layouts';
 import { queryClient } from '@requests';
 import { Login, Signup } from '@sections';
 
@@ -12,12 +11,12 @@ import { Login, Signup } from '@sections';
  */
 
 const Auth: NextPage = () => (
-    <Layout>
+    <section className="m-auto w-screen md:max-w-3xl py-14 md:py-24">
         <Slider>
             <Login />
             <Signup />
         </Slider>
-    </Layout>
+    </section>
 );
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {

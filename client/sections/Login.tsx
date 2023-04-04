@@ -56,8 +56,8 @@ const Login: FC = () => {
     }, []);
 
     return (
-        <div className="flex justify-center md:items-center w-full">
-            <div className="flex flex-col justify-center items-start shadow-form h-fit rounded-3xl p-8 [&>div]:pb-7 [&>a]:pb-7">
+        <div className="flex justify-center md:items-center w-screen md:w-[700px]">
+            <div className="flex flex-col justify-center items-start shadow-form h-fit rounded-3xl p-4 min-[375px]:p-8 [&>div]:pb-7 [&>a]:pb-7">
                 <div className="flex flex-col justify-center items-start">
                     <h3>Hello,</h3>
                     Welcome back!

@@ -15,7 +15,7 @@ const Section: React.FC<SectionProps> = ({
     flex,
     maxWidth = false,
 }) => (
-    <section id={id} className={classNames('w-full lg:py-28 py-14')}>
+    <section id={id} className={classNames('w-full lg:py-28 py-24')}>
         <div
             className={classNames(
                 'md:px-12 sm:px-6 px-3',

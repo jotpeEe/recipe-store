@@ -8,7 +8,7 @@ type LinkProps = CardProps & {
 };
 
 export const Card: React.FC<CardProps> = ({ children, className }) => (
-    <li className={`relative ${className}`}>{children}</li>
+    <div className={`relative ${className}`}>{children}</div>
 );
 
 export const Title: React.FC<LinkProps> = ({ children, href, className }) => (

@@ -5,7 +5,7 @@ import { dehydrate } from 'react-query';
 
 import { Slider, StepOne, StepTwo, StepThree, Preview } from '@components';
 import { useGetTempRecipeQuery } from '@generated/graphql';
-import { useAppDispatch } from '@hooks';
+import { useAppDispatch, useWindowSize } from '@hooks';
 import { SectionLayout } from '@layouts';
 import { setRecipe } from '@redux';
 import { queryClient, requestClient } from '@requests';
@@ -13,6 +13,7 @@ import { queryClient, requestClient } from '@requests';
 const CreateRecipe: NextPage = () => {
     const [first, setFirst] = useState(true);
     const dispatch = useAppDispatch();
+    const width = useWindowSize();
 
     const { data, isLoading } = useGetTempRecipeQuery(
         requestClient,
@@ -47,7 +48,7 @@ const CreateRecipe: NextPage = () => {
                     <StepThree />
                 </Slider>
             </div>
-            <Preview />
+            {width && width > 768 && <Preview />}
         </SectionLayout>
     );
 };

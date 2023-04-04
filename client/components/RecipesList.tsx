@@ -1,5 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
+import cn from 'classnames';
+
 import { RECIPE_LIMIT } from '@constants';
 import { IRecipe } from '@lib/types';
 
@@ -57,17 +59,24 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     }, []);
 
     return (
-        <div className={`${className} children:mb-4 overflow-hidden`}>
-            <div className="flex gap-3 w-fit">
-                <Switch
-                    array={cuisine}
-                    active={active}
-                    setActive={setActive}
-                    size="sm"
-                />
+        <div className={`${className} children:mb-4`}>
+            <div className="overflow-hidden">
+                <ul className="flex gap-3 w-fit overflow-x-scroll scrollbar-none">
+                    <Switch
+                        array={cuisine}
+                        active={active}
+                        setActive={setActive}
+                        size="sm"
+                    />
+                </ul>
             </div>
             <div
-                className={`grid grid-cols-fill gap-12 overflow-y-auto overflow-x-hidden max-h-list`}
+                className={cn(
+                    'grid grid-cols-fill gap-12 max-h-list',
+                    RECIPE_LIMIT === limit
+                        ? 'overflow-hidden'
+                        : 'overflow-y-auto overflow-x-hidden'
+                )}
             >
                 {recipeList &&
                     recipeList.map((recipe, index) => (

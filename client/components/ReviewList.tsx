@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler, useCallback, useState } from 'react';
 
-import classNames from 'classnames';
+import cn from 'classnames';
 import { hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -91,7 +91,7 @@ const ReviewList: FC<ReviewListProps> = ({
     }, []);
 
     return (
-        <div className={classNames(fullWidth ? 'w-full' : 'w-fit')}>
+        <div className={cn(fullWidth ? 'w-full' : 'w-fit')}>
             {reviews && reviews?.length > 4 && (
                 <button
                     onClick={handleClick}
@@ -105,7 +105,12 @@ const ReviewList: FC<ReviewListProps> = ({
                     </h5>
                 </button>
             )}
-            <div className="max-h-[400px] overflow-y-auto">
+            <div
+                className={cn(
+                    'max-h-[400px]',
+                    clicked ? 'overflow-y-auto' : 'overflow-hidden'
+                )}
+            >
                 {slicedReviews?.map((review, index) => (
                     <AnimateOnLoad key={index} index={index}>
                         <ReviewMini review={review} />

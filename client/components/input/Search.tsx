@@ -5,6 +5,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import AnimateOnLoad from '@components/animations/AnimateOnLoad';
 import RecipeMini from '@components/card/RecipeMini';
 import { useGetAllRecipesQuery } from '@generated/graphql';
+import { useRecipesFilter } from '@hooks';
 import { IconFilter } from '@icons';
 import { requestClient } from '@requests';
 import useDebounce from 'client/hooks/useDebounce';
@@ -46,20 +47,10 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
 
     const search = useMemo(() => {
         const inputLower = input.trim().toLowerCase();
+
         if (inputLower.length === 0) return [];
-        if (all)
-            return allRecipes?.filter(
-                recipe =>
-                    recipe.title.toLowerCase().includes(inputLower) ||
-                    recipe.cuisine.toLowerCase().includes(inputLower) ||
-                    recipe.title.toLowerCase().includes(inputLower)
-            );
-        return recipes?.filter(
-            recipe =>
-                recipe.title.toLowerCase().includes(inputLower) ||
-                recipe.cuisine.toLowerCase().includes(inputLower) ||
-                recipe.title.toLowerCase().includes(inputLower)
-        );
+        if (all) return useRecipesFilter(allRecipes, inputLower);
+        return useRecipesFilter(recipes, inputLower);
     }, [input]);
 
     const exists = search && search.length !== 0;
@@ -76,6 +67,7 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
                 </FormProvider>
                 <Button size="sm" icon={<IconFilter />} />
             </div>
+
             {exists && (
                 <div className="flex row-span-3 ">
                     <Slider controller inside>

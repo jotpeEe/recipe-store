@@ -22,12 +22,12 @@ const Display: FC = () => {
 
     const items = ingredients?.length;
 
-    const buttons = ['Ingredients', 'steps', 'Reviews'];
+    const buttons = ['Ingredients', 'Steps', 'Reviews'];
 
     return (
         <>
             {(ingredients || steps) && (
-                <Animated className="col-span-3 gap-2 flex h-fit">
+                <Animated className="col-span-3 h-fit flex justify-center">
                     <Switch
                         setActive={setActive}
                         active={active}
@@ -41,9 +41,7 @@ const Display: FC = () => {
                     <div className="flex justify-between text-outlined">
                         <div className="">{servings} serve</div>
                         <div className="">
-                            {`${
-                                items !== 1 ? `${items} items` : `${items} item`
-                            } `}
+                            {items !== 1 ? `${items} items` : `${items} item`}
                         </div>
                     </div>
                     {ingredients &&
@@ -57,8 +55,11 @@ const Display: FC = () => {
                         active === 1 &&
                         steps?.map((text, index) => (
                             <AnimateOnLoad key={index} index={index}>
-                                <p className="max-w-[40ch]" key={index}>
-                                    {text}
+                                <p
+                                    className="max-w-[35ch] text-sm break-word"
+                                    key={index}
+                                >
+                                    {index + 1}. &nbsp; {text}
                                 </p>
                             </AnimateOnLoad>
                         ))}
