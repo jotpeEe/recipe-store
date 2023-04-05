@@ -1,32 +1,34 @@
-import { FC } from 'react';
+import {
+    type DetailedHTMLProps,
+    type FC,
+    type InputHTMLAttributes,
+} from 'react';
 
-import classNames from 'classnames';
+import cn from 'classnames';
 import { useFormContext } from 'react-hook-form';
 
 import ErrorMessage from './ErrorMessage';
 
-type FormInputProps = {
-    autoComplete?: 'on' | 'off';
+type InputProps = DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+> & {
+    className?: string;
     name: string;
     label?: string;
-    padding?: boolean;
-    placeholder?: string;
-    type?: 'text' | 'number' | 'checkbox' | 'email' | 'password';
-    element?: 'input' | 'textarea' | 'select';
     noValidation?: boolean;
     value?: string | number;
+    type?: 'text' | 'number' | 'password' | 'email';
 };
 
-const FormInput: FC<FormInputProps> = ({
-    element = 'input',
+const Input: FC<InputProps> = ({
+    className,
     label,
     name,
     value,
-    autoComplete = 'off',
-    placeholder,
-    padding = false,
-    type = 'text',
     noValidation,
+    type = 'text',
+    ...props
 }) => {
     const {
         register,
@@ -36,60 +38,31 @@ const FormInput: FC<FormInputProps> = ({
     return (
         <>
             <div
-                className={classNames(
-                    'text-sm flex w-full',
-                    type === 'checkbox'
-                        ? 'items-center w-full justify-end gap-2 flex-row-reverse'
-                        : 'flex-col justify-center items-start',
-                    padding && 'py-2'
+                className={cn(
+                    'flex w-fit flex-col items-start justify-center text-sm',
+                    className
                 )}
             >
                 {label && (
-                    <label
-                        htmlFor={name}
-                        className={classNames(
-                            type === 'checkbox'
-                                ? 'text-xs text-amber-500'
-                                : 'text-sm mb-2',
-                            padding && 'pr-9'
-                        )}
-                    >
+                    <label htmlFor={name} className="mb-2 text-sm">
                         {label}
                     </label>
                 )}
-                {element === 'textarea' && (
-                    <textarea
-                        defaultValue={value}
-                        autoComplete={autoComplete}
-                        placeholder={placeholder}
-                        rows={4}
-                        className={classNames(
-                            'p-3 rounded-lg border text-xs w-full resize-none',
-                            errors[name] && 'border-red-600'
-                        )}
-                        {...register(name)}
-                    />
-                )}
-                {element === 'input' && (
-                    <input
-                        type={type}
-                        defaultValue={value}
-                        autoComplete="off"
-                        placeholder={placeholder}
-                        className={classNames(
-                            'p-3 rounded-lg border text-xs',
-                            type === 'checkbox'
-                                ? 'w-4 h-4 accent-amber-500 text-white min-w-max'
-                                : 'w-full',
-                            errors[name] && 'border-red-600'
-                        )}
-                        {...register(name)}
-                    />
-                )}
+
+                <input
+                    type={type}
+                    defaultValue={value}
+                    className={cn(
+                        'w-full rounded-lg border p-3 text-xs',
+                        errors[name] && 'border-red-600'
+                    )}
+                    {...props}
+                    {...register(name)}
+                />
             </div>
             {!noValidation && <ErrorMessage error={errors[name]} />}
         </>
     );
 };
 
-export default FormInput;
+export default Input;
