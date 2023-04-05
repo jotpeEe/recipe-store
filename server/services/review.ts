@@ -115,7 +115,7 @@ export default class ReviewService {
             errorHandler(error);
             return {
                 status: 'error',
-                results: Reviews.length,
+                results: 0,
                 reviews: [],
             };
         }
