@@ -42,15 +42,15 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
     );
 
     const searchInput = watch('input') ?? '';
-    const input = useDebounce(searchInput);
+    // const input = useDebounce(searchInput);
 
     const search = useMemo(() => {
-        const inputLower = input.trim().toLowerCase();
+        const inputLower = searchInput.trim().toLowerCase();
 
         if (inputLower.length === 0) return [];
         if (all) return useRecipesFilter(allRecipes, inputLower);
         return useRecipesFilter(recipes, inputLower);
-    }, [input]);
+    }, [searchInput]);
 
     const exists = search && search.length !== 0;
 
