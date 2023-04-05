@@ -1,6 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-micro';
 import { getCookie, hasCookie, setCookie } from 'cookies-next';
-import { type NextApiRequest, type NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { cookies } from '@constants';
 import errorHandler from '@controllers';
