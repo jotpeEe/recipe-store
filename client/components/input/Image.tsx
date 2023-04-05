@@ -15,80 +15,115 @@ import { uploadImage } from '@lib';
 
 import ErrorMessage from './ErrorMessage';
 
-type ImageUploadProps = {
+type ImageInputProps = {
     name: string;
+    instantUpload?: boolean;
 };
 
-if (!CLDN_API_URL) throw new Error('Cloudinary endpoint not defined');
-
-const ImageInput: FC<ImageUploadProps> = ({ name }) => {
-    const uploadingImage = useAppSelector(state => state.status.imageUploading);
+const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
+    const inputFileRef = useRef<HTMLInputElement | null>(null);
 
     const {
+        register,
         control,
+        setError,
+        clearErrors,
         formState: { errors },
     } = useFormContext();
 
-    const { field } = useController({ name, control });
+    const { ref, ...rest } = register('image');
+
+    const { field } = useController({ name });
 
     const onImageUpload = useCallback(
-        async (e: SyntheticEvent<EventTarget>) => {
-            const target = e.target as HTMLInputElement;
-            if (!target.files || target.files.length === 0) return;
-            const newFile = Object.values(target.files).map(
-                (file: File) => file
-            );
-            const formData = new FormData();
-            formData.append('file', newFile[0]);
-            formData.append('upload_preset', 'recipe-store');
+        async (e: ChangeEvent<HTMLInputElement>) => {
+            if (!e.target.files || e.target.files[0].length === 0) return;
 
-            const data = await fetch(CLDN_API_URL, {
-                method: 'POST',
-                body: formData,
-            })
-                .then(res => res.json())
-                .catch(err => {
-                    console.log(err);
+            const file = e.target.files[0];
+            let isValid = true;
+
+            if (file.size > MAX_IMAGE_SIZE) {
+                setError('image', {
+                    type: 'custom',
+                    message: 'Max image size is 500kb',
                 });
+                isValid = false;
+            }
 
-            if (data.secure_url) {
-                field.onChange(data.secure_url);
+            if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+                setError('image', {
+                    type: 'custom',
+                    message:
+                        'Only .jpg, .jpeg, .png and .webp formats are supported',
+                });
+                isValid = false;
+            }
+
+            if (isValid) {
+                clearErrors('image');
+                const data = await uploadImage(file);
+                field.onChange(data);
             }
         },
         [field]
     );
 
+    const handleClick = useCallback((e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        if (inputFileRef.current) inputFileRef.current.click();
+    }, []);
+
     return (
-        <Controller
-            name={name}
-            defaultValue=""
-            control={control}
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            render={({ field: { name, onBlur, ref } }) => (
-                <>
-                    <div className="mb-2 flex justify-between items-center">
-                        <div>
+        <>
+            <div className="mb-2 flex items-center">
+                {instantUpload ? (
+                    <Controller
+                        name={name}
+                        control={control}
+                        render={({
+                            field: { name: fieldName, onBlur, ref: fieldRef },
+                        }) => (
                             <input
-                                className="text-xs text-amber-500 file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0  file:shadow-border file:text-xs file:bg-white file:text-gray-400 "
-                                type="file"
-                                name={name}
+                                ref={e => {
+                                    fieldRef(e);
+                                    inputFileRef.current = e;
+                                }}
+                                name={fieldName}
                                 onBlur={onBlur}
-                                ref={ref}
                                 onChange={onImageUpload}
+                                className="hidden"
+                                type="file"
                                 multiple={false}
-                                accept="image/jpg, image/png, image/jpeg"
+                                accept="image/jpg, image/png, image/jpeg, image/webp"
                             />
-                        </div>
-                        <div>
-                            {uploadingImage && (
-                                <Spinner color="text-yellow-400" />
-                            )}
-                        </div>
-                    </div>
-                    <ErrorMessage error={errors[name]} />
-                </>
-            )}
-        />
+                        )}
+                    />
+                ) : (
+                    <input
+                        {...rest}
+                        name={name}
+                        ref={e => {
+                            ref(e);
+                            inputFileRef.current = e;
+                        }}
+                        className="hidden"
+                        type="file"
+                        multiple={false}
+                        accept="image/jpg, image/png, image/jpeg, image/webp"
+                    />
+                )}
+                <Button
+                    variant="input"
+                    type="button"
+                    icon={<IconImage />}
+                    onClick={handleClick}
+                    size="sm"
+                >
+                    Add image
+                </Button>
+            </div>
+            <ErrorMessage error={errors[name]} />
+        </>
     );
 };
 
