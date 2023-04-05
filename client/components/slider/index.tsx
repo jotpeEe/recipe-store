@@ -7,15 +7,23 @@ import {
 } from 'react';
 
 import { SliderContext } from '@contexts';
+
+import BreadCrumbs from './BreadCrumbs';
 import SliderController from './Controller';
 
 type SliderProps = {
     children: ReactNode[];
+    breadcrumbs?: string[];
     controller?: boolean;
     inside?: boolean;
 };
 
-const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
+const Slider: FC<SliderProps> = ({
+    children,
+    controller,
+    inside,
+    breadcrumbs,
+}) => {
     const [step, setStep] = useState<number>(0);
     const steps = children.length;
 
@@ -44,9 +52,14 @@ const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
         step,
     };
 
+    useEffect(() => {
+        setStep(0);
+    }, [children.length]);
+
     return (
         <SliderContext.Provider value={controls}>
             <div className="overflow-hidden">
+                {breadcrumbs && <BreadCrumbs steps={breadcrumbs} />}
                 <ul className="flex">
                     {children.map((child, index) => (
                         <li

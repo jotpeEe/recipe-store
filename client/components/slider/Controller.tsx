@@ -59,6 +59,7 @@ const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
                 <Button
                     className="border-none bg-transparent"
                     circle
+                    variant="outlined"
                     rotate
                     icon={<IconArrow />}
                     onClick={previous}
@@ -68,6 +69,7 @@ const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
                 <Button
                     className="border-none bg-transparent"
                     circle
+                    variant="outlined"
                     icon={<IconArrow />}
                     onClick={next}
                     disabled={isLast}
