@@ -121,6 +121,27 @@ export default class RecipeService {
         }
     };
 
+    getCuisines = async () => {
+        try {
+            const cuisineQuery = RecipeModel.distinct('cuisine');
+
+            const cuisines = await cuisineQuery.lean();
+
+            return {
+                status: 'success',
+                results: cuisines.length,
+                cuisines,
+            };
+        } catch (error: any) {
+            errorHandler(error);
+            return {
+                status: 'error',
+                results: 0,
+                cuisines: [],
+            };
+        }
+    };
+
     getAllRecipes = async () => {
         try {
             const recipesQuery = RecipeModel.find({
