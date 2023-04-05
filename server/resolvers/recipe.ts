@@ -1,6 +1,7 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 
 import {
+    CuisineResponse,
     Input,
     ListResponse,
     PopulatedResponse,
@@ -29,6 +30,11 @@ export default class RecipeResolver {
     @Query(() => PopulatedResponse, { nullable: true })
     async getTempRecipe(@Ctx() ctx: Context) {
         return this.recipeService.getTempRecipe(ctx);
+    }
+
+    @Query(() => CuisineResponse)
+    async getCuisines() {
+        return this.recipeService.getCuisines();
     }
 
     @Mutation(() => Response)
