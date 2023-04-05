@@ -1,6 +1,6 @@
 import {
     ModelOptions,
-    Ref,
+    type Ref,
     Severity,
     getModelForClass,
     prop,

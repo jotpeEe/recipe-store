@@ -5,7 +5,7 @@ import {
     accessTokenPublicKey,
     refreshTokenPrivateKey,
     refreshTokenPublicKey,
-} from 'utils/constants';
+} from '@constants';
 
 const keysToAscii = (key: string) =>
     Buffer.from(key, 'base64').toString('ascii');
