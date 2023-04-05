@@ -39,42 +39,116 @@ export type RecipeComponentProps = {
     steps?: string[];
     ingredients?: IIngredient[];
     reviews?: IReview[];
+    withEdit?: boolean;
 };
 
 export const Recipe: FC<RecipeComponentProps> = props => {
-    const { title, image, prep, description, user } = props;
+    const { title, image, prep, description, user, id, ingredients, withEdit } =
+        props;
 
     const { name, photo } = user || {};
-    const numPrep = prep ? parseInt(prep, 10) : undefined;
 
+    const methods = useForm<UpdateInput>({
+        defaultValues: {
+            title,
+            prep,
+            description,
+            ingredients,
+        },
+    });
+    const {
+        handleSubmit,
+        reset,
+        control,
+        formState: { isDirty },
+    } = methods;
+
+    const { fields, append, remove } = useFieldArray<UpdateInput>({
+        control,
+        name: 'ingredients',
+    });
+
+    const loggedUser = useAppSelector(state => state.auth.user);
+
+    const isTheSameUser = user?.id === loggedUser?.id;
+
+    const isEnterPressed = useKeyPress('Enter');
+
+    const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient, {
+        onSuccess() {
+            queryClient.refetchQueries('GetRecipeById');
+        },
+        onError(error: any) {
+            if (error.response.errors[0].message === 'No access token found') {
+                router.push('/auth');
+            }
+        },
+    });
+
+    const onSubmit: SubmitHandler<UpdateInput> = useCallback(
+        input => {
+            if (id && isDirty) {
+                updateRecipe({ id, input });
+                reset();
+            }
+        },
+        [id, isDirty]
+    );
+
+    const numPrep = prep ? parseInt(prep, 10) : undefined;
     const loggedIn = hasCookie('logged_in');
 
     useEffect(() => {
         if (loggedIn) queryClient.refetchQueries('GetMe');
     }, []);
 
+    useEffect(() => {
+        if (isEnterPressed) handleSubmit(onSubmit)();
+    }, [isEnterPressed, fields]);
+
+    if (!user) return null;
+
     return (
-        <RecipeContext.Provider value={props}>
-            <div
-                className={classNames(
-                    'grid grid-cols-3 w-fit gap-y-8 p-8 h-fit shadow-card rounded-xl transition-transform duration-500 origin-top'
-                )}
-            >
-                <>
+        <RecipeContext.Provider
+            value={{
+                ...props,
+                isEnterPressed,
+                isTheSameUser,
+                withEdit,
+                onSubmit,
+                fields,
+                append,
+                remove,
+            }}
+        >
+            <FormProvider {...methods}>
+                <form
+                    className={classNames(
+                        'grid h-fit max-w-sm origin-top grid-cols-3 gap-y-8 rounded-xl p-8 shadow-card transition-transform duration-500'
+                    )}
+                >
                     {title && (
                         <RecipeTitle
                             className="col-span-3 h-fit"
-                            title={title}
                             imgSrc={image}
+                            edit={isEnterPressed}
+                            title={title}
                         />
                     )}
-                    {numPrep && (
+                    {numPrep && prep && (
                         <Animated className="col-span-3 flex items-center gap-4 transition">
-                            <div className="flex gap-1 items-center">
-                                <IconClock />
-                                <span className="min-w-[4rem] ">
-                                    {numPrep} min
-                                </span>
+                            <div className="flex items-center">
+                                <Edit
+                                    className="gap-1"
+                                    name={['prep']}
+                                    variant="number"
+                                    value={prep}
+                                >
+                                    <IconClock />
+                                    <span className="min-w-[4rem] text-xs ">
+                                        {numPrep} min
+                                    </span>
+                                </Edit>
                             </div>
                             <div className="flex items-center justify-center rounded-3xl bg-yellow-100 py-1 px-2 text-xs leading-normal">
                                 <IconStar />
@@ -84,24 +158,32 @@ export const Recipe: FC<RecipeComponentProps> = props => {
                     )}
                     {description && (
                         <Animated className="col-span-3">
-                            <p className="text-base max-w-[40ch] break-words ">
-                                {description}
-                            </p>
+                            <Edit
+                                name={['description']}
+                                variant="textarea"
+                                value={description}
+                            >
+                                <p className="max-w-[40ch] break-words text-sm ">
+                                    {description}
+                                </p>
+                            </Edit>
                         </Animated>
                     )}
                     {user && (
                         <Animated className="col-span-3 h-fit">
                             <UserInfo
+                                size="sm"
                                 title={name}
                                 imgSrc={photo}
                                 withFollow
                                 withLocation
+                                disabled={isTheSameUser}
                             />
                         </Animated>
                     )}
-                    <Display />
-                </>
-            </div>
+                    <Display fields={fields} />
+                </form>
+            </FormProvider>
         </RecipeContext.Provider>
     );
 };

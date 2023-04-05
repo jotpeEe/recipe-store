@@ -34,57 +34,89 @@ const Display: FC<DisplayProps> = ({ fields }) => {
 
     const items = ingredients?.length;
 
-    const buttons = ['Ingredients', 'Steps', 'Reviews'];
-
     return (
         <>
             {(ingredients || steps) && (
-                <Animated className="col-span-3 h-fit flex justify-center">
-                    <Switch
-                        setActive={setActive}
-                        active={active}
-                        array={buttons}
-                        size="sm"
-                    />
-                </Animated>
-            )}
-            {(ingredients || steps) && (
-                <div className="col-span-3 flex flex-col gap-4">
-                    <div className="flex justify-between text-outlined">
-                        <div className="">{servings} serve</div>
-                        <div className="">
-                            {items !== 1 ? `${items} items` : `${items} item`}
-                        </div>
-                    </div>
-                    {ingredients &&
-                        active === 0 &&
-                        ingredients?.map((ingredient, index) => (
-                            <AnimateOnLoad key={index} index={index}>
-                                <Ingredient {...{ ...ingredient, id: index }} />
-                            </AnimateOnLoad>
-                        ))}
-                    {steps &&
-                        active === 1 &&
-                        steps?.map((text, index) => (
-                            <AnimateOnLoad key={index} index={index}>
-                                <p
-                                    className="max-w-[35ch] text-sm break-word"
-                                    key={index}
-                                >
-                                    {index + 1}. &nbsp; {text}
-                                </p>
-                            </AnimateOnLoad>
-                        ))}
-                    {reviews && active === 2 && (
-                        <ReviewList
-                            addEnable
-                            reviews={reviews}
-                            id={id}
-                            recipeAuthor={user}
+                <>
+                    <Animated className="col-span-3 flex h-fit justify-center">
+                        <Switch
+                            setActive={setActive}
+                            active={active}
+                            array={['Ingredients', 'Steps', 'Reviews']}
+                            size="sm"
                             fullWidth
                         />
-                    )}
-                </div>
+                    </Animated>
+                    <div className="col-span-3 flex flex-col gap-4">
+                        <div className="flex justify-between text-sm text-outlined">
+                            <div className="flex items-center gap-1">
+                                <IconDish />
+                                {servings} serve
+                            </div>
+                            <div className="">
+                                {items !== 1
+                                    ? `${items} items`
+                                    : `${items} item`}
+                            </div>
+                        </div>
+                        {ingredients?.length !== 0 && active === 0 && (
+                            <ul className="flex flex-col gap-4">
+                                {ingredients?.map((ingredient, index) => (
+                                    <AnimateOnLoad
+                                        as="li"
+                                        key={index}
+                                        index={index}
+                                    >
+                                        <Ingredient
+                                            {...{
+                                                ...ingredient,
+                                                id: index,
+                                            }}
+                                        />
+                                    </AnimateOnLoad>
+                                ))}
+                            </ul>
+                        )}
+                        {fields.length !== 0 && active === 0 && (
+                            <ul className="flex flex-col gap-4">
+                                {slicedFields.map((item, index) => (
+                                    <AnimateOnLoad
+                                        as="li"
+                                        key={index}
+                                        index={index}
+                                    >
+                                        <IngredientInput
+                                            index={index}
+                                            item={item}
+                                        />
+                                    </AnimateOnLoad>
+                                ))}
+                            </ul>
+                        )}
+                        {steps &&
+                            steps?.length !== 0 &&
+                            active === 1 &&
+                            steps.map((text, index) => (
+                                <AnimateOnLoad key={index} index={index}>
+                                    <p
+                                        className="break-word rounded-xl bg-gray-200 px-3 py-1 text-sm"
+                                        key={index}
+                                    >
+                                        {text}
+                                    </p>
+                                </AnimateOnLoad>
+                            ))}
+                        {reviews && active === 2 && (
+                            <ReviewList
+                                addEnable
+                                reviews={reviews}
+                                id={id}
+                                recipeAuthor={user}
+                                fullWidth
+                            />
+                        )}
+                    </div>
+                </>
             )}
         </>
     );

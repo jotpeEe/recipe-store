@@ -4,10 +4,15 @@ import cn from 'classnames';
 
 import { type IIngredient } from '@lib/types';
 
-const Ingredient: FC<IIngredient> = ({ name, amount }) => {
+import Edit from './Edit';
+
+const IngredientInfo: FC<IIngredient> = ({ name, amount }) => {
     const [disabled, setDisabled] = useState(false);
 
-    const handleClick = () => setDisabled(prevState => !prevState);
+    const handleClick = useCallback(
+        () => setDisabled(prevState => !prevState),
+        [disabled]
+    );
 
     return (
         <div
@@ -24,5 +29,13 @@ const Ingredient: FC<IIngredient> = ({ name, amount }) => {
         </div>
     );
 };
+
+const Ingredient: FC<IIngredient & { id: number }> = ({ name, amount, id }) => (
+    <>
+        <Edit variant="array" name={['name', 'amount']} ingId={id} withButtons>
+            <IngredientInfo name={name} amount={amount} />
+        </Edit>
+    </>
+);
 
 export default Ingredient;

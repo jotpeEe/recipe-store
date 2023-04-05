@@ -14,11 +14,18 @@ type PanelProps = {
 };
 
 const Panel: FC<PanelProps> = ({ first = false }) => {
+    const [openPostModal, setOpenPostModal] = useState(false);
+
     const { step, goTo } = useSliderContext();
     const dispatch = useAppDispatch();
+
     const id = useAppSelector(state => state.recipe?.id);
 
-    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient);
+    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient, {
+        onSuccess() {
+            queryClient.refetchQueries('GetTempRecipe');
+        },
+    });
 
     const handleGoBackClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
@@ -27,14 +34,22 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
 
     const handleClearClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
+            setOpenPostModal(true);
+        }, [id]);
+
+    const onReset: MouseEventHandler<HTMLButtonElement> =
+        useCallback(async () => {
             if (id) {
-                deleteRecipe({ id });
+                await deleteRecipe({ id });
             }
-
             dispatch(setRecipe({}));
-
+            setOpenPostModal(false);
             goTo(0);
         }, [id]);
+
+    const onCancel: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+        setOpenPostModal(false);
+    }, []);
 
     return (
         <div className="absolute right-0 mr-[-8px] flex children:px-2 children:py-2">
@@ -51,6 +66,26 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
                     <button type="button" onClick={handleClearClick}>
                         <IconClear />
                     </button>
+                    <Modal
+                        openPostModal={openPostModal}
+                        setOpenPostModal={setOpenPostModal}
+                    >
+                        <>
+                            <p>Do you want to reset create form?</p>
+                            <div className="flex justify-end gap-2 pt-2">
+                                <Button
+                                    size="sm"
+                                    onClick={onCancel}
+                                    variant="outlined"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button size="sm" onClick={onReset}>
+                                    Reset
+                                </Button>
+                            </div>
+                        </>
+                    </Modal>
                 </>
             )}
         </div>
