@@ -8,6 +8,7 @@ import { IconPin } from '@icons';
 import Button from '../Button';
 
 type UserInfoProps = {
+    disabled?: boolean;
     title?: string;
     subtitle?: string;
     imgSrc?: string;
@@ -18,6 +19,7 @@ type UserInfoProps = {
 };
 
 const UserInfo: FC<UserInfoProps> = ({
+    disabled,
     title,
     subtitle,
     imgSrc = '/default.png',
@@ -60,7 +62,12 @@ const UserInfo: FC<UserInfoProps> = ({
             </div>
         </div>
         {withFollow && (
-            <Button size="sm" className="self-center ml-5 justify-self-end">
+            <Button
+                size="sm"
+                disabled={disabled}
+                className="ml-5 self-center justify-self-end"
+                type="button"
+            >
                 Follow
             </Button>
         )}

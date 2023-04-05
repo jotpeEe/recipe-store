@@ -1,16 +1,16 @@
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 
 import cn from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import {
-    IconList,
     IconHome,
-    IconProfile,
-    IconLogout,
-    IconReviews,
+    IconList,
     IconLogin,
+    IconLogout,
+    IconProfile,
+    IconReviews,
 } from '@components/icons';
 import { useLogout, useScrollUp } from '@hooks';
 

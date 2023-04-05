@@ -25,6 +25,8 @@ module.exports = {
                 list: '600px',
                 section: '35rem',
                 'header-p': '100px',
+                'image-sm': '35px',
+                image: '56px',
             },
             boxShadow: {
                 card: '0px 2px 8px 0px rgba(95, 126, 155, 0.3)',

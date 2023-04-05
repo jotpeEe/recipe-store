@@ -144,7 +144,7 @@ const ReviewList: FC<ReviewListProps> = ({
                     )}
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

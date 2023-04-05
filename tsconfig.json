@@ -50,6 +50,7 @@
         "**/*.ts",
         "**/*.tsx",
         "**/*.js",
+        "**/*.mjs",
         ".eslintrc.js"
     ],
     "exclude": ["node_modules", "**/*.json"]

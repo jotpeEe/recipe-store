@@ -16,7 +16,7 @@ p {
 }
 
 h2 {
-    font-size: 3rem;
+    font-size: clamp(2rem, 0.9rem + 1.8vw, 3.5rem);
     font-weight: 700;
     line-height: 1.2;
 }
@@ -28,7 +28,7 @@ h3 {
 }
 
 h4 {
-    font-size: 1.125rem;
+    font-size: clamp(1rem, 0.3rem + 1.8vw, 1.125rem);
     font-weight: 400;
 }
 

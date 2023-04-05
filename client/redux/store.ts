@@ -15,7 +15,7 @@ type IStore = {
         pageLoading: boolean;
         isSubmitting: boolean;
     };
-    recipe: IRecipe | Partial<IRecipe> | undefined;
+    recipe?: IRecipe | Partial<IRecipe> | undefined;
 };
 
 const store = configureStore({
