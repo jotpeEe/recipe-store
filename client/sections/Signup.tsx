@@ -1,41 +1,56 @@
-import { FC, useCallback } from 'react';
+import { type FC, useCallback, useEffect, useState } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { boolean, object, ref, string } from 'yup';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { type TypeOf, any, literal, object, string } from 'zod';
 
-import { Button, FormInput, ImageInput, SignUpInfo } from '@components';
-import { SignUpInput, useSignUpUserMutation } from '@generated/graphql';
+import { Button, Checkbox, ImageInput, Input, SignUpInfo } from '@components';
+import { useSignUpUserMutation } from '@generated/graphql';
+import { imageValidation, uploadImage } from '@lib';
 import { requestClient } from '@requests';
 
 const signupSchema = object({
     name: string()
-        .required('Name is required')
-        .min(3, 'Name must be more than 3 characters')
+        .min(1, 'Name is required')
         .max(16, 'Name must be less than 16 characters'),
-    email: string().required('Email is required').email('Email is invalid'),
-    photo: string().required('Photo is required'),
+    email: string().min(1, 'Email is required').email(),
+    photo: any().superRefine((f, ctx) => imageValidation(f, ctx)),
     password: string()
-        .required('Password is required')
-        .min(8, 'Password must be more than 8 characters')
-        .max(32, 'Password must be less than 32 characters'),
-    passwordConfirm: string()
-        .required('Confirm your password')
-        .oneOf([ref('password'), null], 'Passwords must match'),
-    terms: boolean().oneOf([true], 'Accept terms & conditions'),
+        .min(1, 'Password is required')
+        .min(6, 'Password must be more than 6 characters')
+        .max(32, {
+            message: 'Password must be less than 32 characters',
+        }),
+    passwordConfirm: string().min(1, 'Confirm password is required'),
+    terms: literal(true, {
+        errorMap: () => ({
+            message: 'Accept the terms and conditions',
+        }),
+    }),
+}).superRefine(({ passwordConfirm, password }, ctx) => {
+    if (passwordConfirm !== password) {
+        ctx.addIssue({
+            code: 'custom',
+            message: 'The passwords did not match',
+            path: ['passwordConfirm'],
+        });
+    }
 });
 
+type SignUpInput = TypeOf<typeof signupSchema>;
+
 /**
- * SignUp: The SignUp page of the web app
+ * SignUp: The SignUp component used with auth route of the app.
  * @return {JSX.Element} The JSX Code for the SignUp Page
  */
 
 const SignUp: FC = () => {
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const methods = useForm<SignUpInput>({
-        resolver: yupResolver(signupSchema),
+        resolver: zodResolver(signupSchema),
     });
 
     const { handleSubmit, reset, setError } = methods;
@@ -46,6 +61,7 @@ const SignUp: FC = () => {
             onSuccess() {
                 reset();
                 router.push('/profile');
+                setLoading(false);
             },
             onError(error: any) {
                 error.response.errors.forEach((e: any) => {
@@ -56,8 +72,21 @@ const SignUp: FC = () => {
         }
     );
 
+    useEffect(() => {
+        if (isLoading === true) {
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [isLoading]);
+
     const onSubmitHandler: SubmitHandler<SignUpInput> = useCallback(
-        values => signUpUser({ input: values }),
+        async values => {
+            setLoading(true);
+            const data: any = await uploadImage(values.photo?.[0]);
+            const input = { ...values, photo: data };
+            signUpUser({ input });
+        },
         []
     );
 
@@ -71,42 +100,37 @@ const SignUp: FC = () => {
                             onSubmit={handleSubmit(onSubmitHandler)}
                             noValidate
                         >
-                            <FormInput
+                            <Input
                                 label="Name"
                                 name="name"
                                 placeholder="Enter name"
                             />
-                            <FormInput
+                            <Input
                                 label="Email"
                                 name="email"
                                 placeholder="Enter email"
                                 type="email"
                             />
-                            <FormInput
+                            <Input
                                 label="Password"
                                 name="password"
                                 placeholder="Enter password"
                                 type="password"
                             />
-                            <FormInput
+                            <Input
                                 label="Confirm Password"
                                 name="passwordConfirm"
                                 placeholder="Confirm password"
                                 type="password"
                             />
-                            <FormInput
-                                label="Terms & Conditions"
-                                name="terms"
-                                type="checkbox"
-                                padding
-                            />
+                            <Checkbox label="Terms & Conditions" name="terms" />
                             <ImageInput name="photo" />
                             <Button
                                 type="submit"
                                 className="my-7"
                                 fullWidth
                                 arrow
-                                isLoading={isLoading}
+                                isLoading={loading}
                             >
                                 Sign up
                             </Button>

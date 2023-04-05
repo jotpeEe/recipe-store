@@ -15,9 +15,9 @@ const loginSchema = object({
         .min(1, 'Email address is required')
         .email('Email address is invalid'),
     password: string()
-        .required('Password is required')
-        .min(8, 'Password must be more than 8 characters')
-        .max(32, 'Password must be less than 32 characters'),
+        .min(1, 'Password is required')
+        .min(6, 'Password must be more than 6 characters')
+        .max(16, 'Password must be less than 16 characters'),
 });
 
 /**
@@ -28,7 +28,7 @@ const loginSchema = object({
 const Login: FC = () => {
     const router = useRouter();
 
-    const methods = useForm<LoginInput>({ resolver: yupResolver(loginSchema) });
+    const methods = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
 
     const { handleSubmit, setError } = methods;
 
@@ -68,13 +68,13 @@ const Login: FC = () => {
                         onSubmit={handleSubmit(onSubmitHandler)}
                         noValidate
                     >
-                        <FormInput
+                        <Input
                             label="Email"
                             name="email"
                             placeholder="Enter email"
                             type="email"
                         />
-                        <FormInput
+                        <Input
                             label="Password"
                             name="password"
                             placeholder="Enter password"
