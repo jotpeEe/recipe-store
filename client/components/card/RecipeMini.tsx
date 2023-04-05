@@ -22,19 +22,20 @@ type RecipeMiniProps = {
 const RecipeMini: FC<RecipeMiniProps> = ({ id, title, user, prep, image }) => {
     const { name, photo } = user ?? {};
     return (
-        <div className="pt-12 ">
+        <div className="pt-12 pl-1">
             <Image
+                loading="lazy"
                 width={80}
                 height={80}
                 alt="recipe photo"
                 src={image ?? '/default.png'}
-                className="rounded-full absolute -translate-y-8 translate-x-[210%] shadow-card shadow-gray-400"
-            ></Image>
-            <Card className=" min-w-[250px] border-gray-300 shadow-card shadow-gray-300 rounded-lg">
+                className="absolute z-10 h-20 w-20 -translate-y-8 translate-x-[210%] rounded-full border-none shadow-card shadow-gray-400"
+            />
+            <Card className="h-24 w-64 rounded-lg border-gray-300 shadow-card shadow-gray-300">
                 <div className="flex flex-col gap-6 p-3">
                     <Title
                         href={`/recipes/${id}`}
-                        className="text-[12px] max-w-[20ch] overflow-hidden text-ellipsis"
+                        className="max-w-[20ch] overflow-hidden text-ellipsis text-[12px]"
                     >
                         {title}
                     </Title>
@@ -47,9 +48,9 @@ const RecipeMini: FC<RecipeMiniProps> = ({ id, title, user, prep, image }) => {
                                 alt={`${name} user`}
                                 className="rounded-full"
                             ></Image>
-                            <p className="text-[12px] text-gray-400">{`by ${name}`}</p>
+                            <p className="w-32 overflow-hidden text-ellipsis whitespace-nowrap text-[12px] text-gray-400">{`by ${name}`}</p>
                         </div>
-                        <div className="flex gap-1 min-w-fit justify-center items-center text-gray-400">
+                        <div className="flex min-w-fit items-center justify-center gap-1 text-gray-400">
                             <IconClock />
                             <p className="text-[12px] text-gray-400">{`${prep} mins`}</p>
                         </div>
