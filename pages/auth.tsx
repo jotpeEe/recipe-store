@@ -11,7 +11,7 @@ import { queryClient } from '@requests';
  */
 
 const Auth: NextPage = () => (
-    <section className="m-auto w-screen md:max-w-3xl py-14 md:py-24">
+    <section className="m-auto w-screen py-14 md:max-w-3xl md:py-24">
         <Slider>
             <Login />
             <Signup />

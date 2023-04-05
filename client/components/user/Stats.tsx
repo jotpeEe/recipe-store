@@ -13,7 +13,7 @@ type ListItemProps = {
 };
 
 const ListItem: FC<ListItemProps> = ({ label, children }) => (
-    <li className="flex flex-col items-center font-semibold text-xl">
+    <li className="flex flex-col items-center text-xl font-semibold">
         <h6 className="text-xs font-normal text-outlined">{label}</h6>
         {children}
     </li>

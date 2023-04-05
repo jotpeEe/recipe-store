@@ -12,7 +12,7 @@ const CheckListItem: FC<{ children: ReactNode }> = ({ children }) => (
 );
 
 const SignUpInfo: FC = () => (
-    <div className="flex flex-col items-start p-8 [&>*]:pb-4 font-sans max-w-[35ch]">
+    <div className="flex max-w-[35ch] flex-col items-start p-8 font-sans [&>*]:pb-4">
         <h3 className="text-xl">Create an account</h3>
         <p className="">
             Let’s help you set up your account, it won’t take long.

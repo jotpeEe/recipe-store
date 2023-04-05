@@ -72,7 +72,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
             </div>
             <div
                 className={cn(
-                    'grid grid-cols-fill gap-12 max-h-list',
+                    'grid max-h-list grid-cols-fill gap-12',
                     RECIPE_LIMIT === limit
                         ? 'overflow-hidden'
                         : 'overflow-y-auto overflow-x-hidden'

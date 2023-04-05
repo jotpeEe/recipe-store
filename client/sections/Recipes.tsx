@@ -10,7 +10,7 @@ type RecipesProps = {
 
 const Recipes: FC<RecipesProps> = ({ recipes }) => (
     <Layout id="recipes">
-        <div className="grid lg:grid-cols-1to2 grid-cols-1 gap-20 ">
+        <div className="grid grid-cols-1 gap-20 lg:grid-cols-1to2 ">
             <SectionTitle
                 subtitle="Recipes"
                 title="The home store for all your recipes"

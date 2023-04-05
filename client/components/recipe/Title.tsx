@@ -24,7 +24,7 @@ const RecipeTitle: FC<RecipeTitleProps> = ({
                 height={110}
                 src={imgSrc}
                 alt="recipe image"
-                className="inline h-full w-auto m-[0 auto]"
+                className="m-[0 auto] inline h-full w-auto"
             />
         </div>
 

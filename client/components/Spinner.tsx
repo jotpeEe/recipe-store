@@ -17,7 +17,7 @@ const Spinner: FC<SpinnerProps> = ({
     <svg
         role="status"
         className={classNames(
-            'w-5 h-5 animate-spin dark:text-gray-600 fill-primary',
+            'h-5 w-5 animate-spin fill-primary dark:text-gray-600',
             `w-${width} h-${height} ${color} ${bgColor}`
         )}
         viewBox="0 0 100 101"

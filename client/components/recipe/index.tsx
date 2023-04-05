@@ -80,7 +80,7 @@ export const Recipe: FC<RecipeComponentProps> = props => {
                                     {numPrep} min
                                 </span>
                             </div>
-                            <div className="flex items-center justify-center text-xs leading-normal py-1 px-2 rounded-3xl bg-yellow-100">
+                            <div className="flex items-center justify-center rounded-3xl bg-yellow-100 py-1 px-2 text-xs leading-normal">
                                 <IconStar />
                                 <span className="pl-1">4.5</span>
                             </div>

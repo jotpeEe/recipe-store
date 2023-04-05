@@ -55,8 +55,8 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
     const exists = search && search.length !== 0;
 
     return (
-        <div className="grid grid-col-2 gap-6 grid-rows-4">
-            <div className="flex gap-4 h-full items-center max-w-[335px]">
+        <div className="grid-col-2 grid grid-rows-4 gap-6">
+            <div className="flex h-full max-w-[335px] items-center gap-4">
                 <FormProvider {...methods}>
                     <FormInput
                         name="input"
@@ -68,7 +68,7 @@ const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
             </div>
 
             {exists && (
-                <div className="flex row-span-3 ">
+                <div className="row-span-3 flex ">
                     <Slider controller inside>
                         {search?.map((recipe, index) => (
                             <AnimateOnLoad key={index} index={index}>

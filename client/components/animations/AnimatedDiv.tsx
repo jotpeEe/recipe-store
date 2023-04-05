@@ -17,7 +17,7 @@ const Animated: FC<AnimatedProps> = ({ children, className }) => {
     return (
         <div
             className={classNames(
-                'transition ease-in-out duration-300 origin-top',
+                'origin-top transition duration-300 ease-in-out',
                 active ? 'opacity-1' : 'opacity-0',
                 className
             )}

@@ -53,9 +53,9 @@ export const ProfilePage: NextPage = () => {
     return (
         <Layout>
             {!isLoading && (
-                <div className="grid lg:grid-cols-8 grid-cols-1 lg:grid-rows-8 grid-rows-8 gap-y-18 gap-x-12 relative overflow-hidden">
-                    <div className="grid sm:grid-cols-4 gap-12 lg:col-span-5 col-start-1 lg:mx-0 mx-auto">
-                        <div className="flex flex-col sm:col-span-2 gap-8 w-full">
+                <div className="lg:grid-rows-8 grid-rows-8 gap-y-18 relative grid grid-cols-1 gap-x-12 overflow-hidden lg:grid-cols-8">
+                    <div className="col-start-1 grid gap-12 sm:grid-cols-4 lg:col-span-5 ">
+                        <div className="flex w-full flex-col gap-8 sm:col-span-2">
                             <UserInfo
                                 title={name}
                                 subtitle="What are we cooking today?"
@@ -68,12 +68,12 @@ export const ProfilePage: NextPage = () => {
                             className="sm:col-span-2"
                         />
                     </div>
-                    <div className="lg:col-start-1 lg:col-end-6 row-span-6 children:pb-5">
+                    <div className="row-span-6 children:pb-5 lg:col-start-1 lg:col-end-6">
                         <h5>Your recipes</h5>
                         <RecipesList recipes={recipes} panel />
                     </div>
 
-                    <div className="lg:col-start-7 lg:col-span-2 col-start-1 lg:row-start-2 children:pb-5 ">
+                    <div className="col-start-1 children:pb-5 lg:col-span-2 lg:col-start-7 lg:row-start-2 ">
                         <h5>Reviews</h5>
                         <ReviewList reviews={reviews} />
                     </div>

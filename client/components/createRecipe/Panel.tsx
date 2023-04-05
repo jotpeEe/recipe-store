@@ -36,7 +36,7 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
         }, [id]);
 
     return (
-        <div className="flex absolute mr-[-8px] right-0 children:px-2 children:py-2">
+        <div className="absolute right-0 mr-[-8px] flex children:px-2 children:py-2">
             {!first && (
                 <>
                     <button

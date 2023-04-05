@@ -32,8 +32,8 @@ const Nav: FC = () => {
             },
             {
                 icon: (
-                    <div className="bg-primary h-16 w-16 flex-auto rounded-full -translate-y-2 border-white border-8">
-                        <div className="flex justify-center items-center h-full text-[24px] text-white">
+                    <div className="h-16 w-16 flex-auto -translate-y-2 rounded-full border-8 border-white bg-primary">
+                        <div className="flex h-full items-center justify-center text-[24px] text-white">
                             +
                         </div>
                     </div>
@@ -66,24 +66,24 @@ const Nav: FC = () => {
     return (
         <header
             className={cn(
-                'fixed h-14 w-full bottom-0 left-0 bg-white shadow-card shadow-gray-400 duration-200 transition ease-in-out z-[100]',
-                'sm:h-20 sm:top-0 sm:bottom-auto sm:bg-transparent sm:shadow-none',
+                'fixed bottom-0 left-0 z-[100] h-14 w-full bg-white shadow-card shadow-gray-400 transition duration-200 ease-in-out',
+                'sm:top-0 sm:bottom-auto sm:h-20 sm:bg-transparent sm:shadow-none',
                 !scroll && 'sm:-translate-y-full'
             )}
         >
             <div
                 className={cn(
-                    'flex justify-center items-center h-full max-w-7xl mx-auto px-6',
-                    'md:px-12 sm:justify-between '
+                    'mx-auto flex h-full max-w-7xl items-center justify-center px-6',
+                    'sm:justify-between md:px-12 '
                 )}
             >
-                <Link className="sm:block hidden z-40" href="/">
+                <Link className="z-40 hidden sm:block" href="/">
                     <Image src="/logo.png" width={63} height={27} alt="logo" />
                 </Link>
                 <nav
                     className={cn(
-                        'flex items-center justify-center w-full z-40',
-                        'sm:gap-3 sm:w-fit '
+                        'z-40 flex w-full items-center justify-center',
+                        'sm:w-fit sm:gap-3 '
                     )}
                 >
                     {nav.map(({ href, icon, name, auth }, index) => {
@@ -91,10 +91,10 @@ const Nav: FC = () => {
                             return (
                                 <Link
                                     className={cn(
-                                        'relative flex justify-center items-center flex-col ',
+                                        'relative flex flex-col items-center justify-center ',
                                         'sm:py-2 sm:px-5 sm:[&>*:first-child]:hidden',
                                         name
-                                            ? 'flex-auto max-w-[100px]'
+                                            ? 'max-w-[100px] flex-auto'
                                             : 'sm:hidden'
                                     )}
                                     key={index}
@@ -103,7 +103,7 @@ const Nav: FC = () => {
                                     {icon}
                                     <span
                                         className={cn(
-                                            'text-[10px] font-semibold whitespace-nowrap',
+                                            'whitespace-nowrap text-[10px] font-semibold',
                                             'sm:text-base'
                                         )}
                                     >
@@ -116,13 +116,13 @@ const Nav: FC = () => {
                     {loggedIn && (
                         <button
                             className={cn(
-                                'flex-auto max-w-[100px] flex justify-center sm:py-2 items-center flex-col',
-                                'sm:[&>*:first-child]:hidden sm:px-5'
+                                'flex max-w-[100px] flex-auto flex-col items-center justify-center sm:py-2',
+                                'sm:px-5 sm:[&>*:first-child]:hidden'
                             )}
                             onClick={handleClick}
                         >
                             <IconLogout />
-                            <span className="text-[10px] sm:text-base font-semibold whitespace-nowrap">
+                            <span className="whitespace-nowrap text-[10px] font-semibold sm:text-base">
                                 Log out
                             </span>
                         </button>
@@ -130,7 +130,7 @@ const Nav: FC = () => {
                 </nav>
             </div>
 
-            <div className="sm:block hidden bg-nav absolute backdrop-blur z-10 left-0 top-0 right-0 bottom-0 "></div>
+            <div className="absolute left-0 top-0 right-0 bottom-0 z-10 hidden bg-nav backdrop-blur sm:block "></div>
         </header>
     );
 };

@@ -33,15 +33,18 @@ const UserInfo: FC<UserInfoProps> = ({
             className
         )}
     >
-        <div className={cn('flex h-fill', size === 'sm' ? 'gap-2' : 'gap-5')}>
+        <div className={cn('h-fill flex', size === 'sm' ? 'gap-2' : 'gap-5')}>
             <Image
-                width={size === 'sm' ? 35 : 56}
-                height={size === 'sm' ? 35 : 56}
+                width={size === 'sm' ? 35 : 40}
+                height={size === 'sm' ? 35 : 40}
                 src={imgSrc}
                 alt="recipe image"
-                className="rounded-full"
+                className={cn(
+                    'w-auto rounded-full',
+                    size === 'sm' ? 'max-h-image-sm' : 'max-h-image'
+                )}
             />
-            <div className="flex flex-col justify-center items-start gap-0.5">
+            <div className="flex flex-col items-start justify-center gap-0.5">
                 <h5 className={cn(size === 'sm' && 'text-xs')}>{title}</h5>
                 <div className="flex gap-1">
                     {withLocation && <IconPin />}

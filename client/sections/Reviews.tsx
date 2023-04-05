@@ -16,7 +16,7 @@ const Reviews: React.FC = () => {
 
     return (
         <Layout id="reviews">
-            <div className="grid grid-col-1 self-start">
+            <div className="grid-col-1 grid self-start">
                 <SectionTitle
                     subtitle="Reviews"
                     title="Share your experience with others"

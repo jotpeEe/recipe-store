@@ -23,7 +23,7 @@ const Dot: FC<DotProps> = ({ id }) => {
     return (
         <button
             className={classNames(
-                'p-2 rounded-full',
+                'rounded-full p-1.5',
                 step === id ? 'bg-black' : 'bg-gray-300'
             )}
             onClick={() => goTo(id)}
@@ -41,11 +41,11 @@ const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
             className={classNames(
                 inside
                     ? 'absolute w-full -translate-y-[310%]'
-                    : 'flex justify-between items-center py-12 w-fill'
+                    : 'w-fill flex items-center justify-between py-12'
             )}
         >
             {!inside && (
-                <ul className="flex gap-2 h-fit">
+                <ul className="flex h-fit gap-2">
                     {[...Array(steps).keys()].map((i, idx) => (
                         <Dot key={idx} id={idx} />
                     ))}

@@ -13,9 +13,9 @@ const Ingredient: FC<IIngredient> = ({ name, amount }) => {
         <div
             onClick={handleClick}
             className={cn(
-                'relative py-2 rounded-lg flex select-none justify-between items-center after:h-[1px] transition after:w-full after:absolute after:bottom-0 after:transition after:right-0 ',
+                'relative flex w-full select-none items-center justify-between rounded-lg py-2 transition after:absolute after:bottom-0 after:right-0 after:h-[1px] after:w-full after:transition ',
                 disabled
-                    ? 'line-through text-gray-300 after:bg-gray-300'
+                    ? 'text-gray-300 line-through after:bg-gray-300'
                     : 'after:bg-primary'
             )}
         >

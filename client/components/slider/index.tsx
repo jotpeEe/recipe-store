@@ -57,12 +57,14 @@ const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
     return (
         <SliderContext.Provider value={controls}>
             <div className="overflow-hidden">
-                <ul className="flex p-1">
+                <ul className="flex">
                     {children.map((child, index) => (
                         <li
                             key={index}
-                            className="pl-1 shrink-0 pr-8 transition duration-300 ease"
-                            style={{ transform: `translateX(-${step * 100}%)` }}
+                            className="ease shrink-0 pr-8 transition duration-300"
+                            style={{
+                                transform: `translateX(-${step * 100}%)`,
+                            }}
                         >
                             {child}
                         </li>

@@ -62,10 +62,10 @@ const SignUp: FC = () => {
     );
 
     return (
-        <div className="flex justify-center items-center w-screen md:w-full mx-auto">
-            <div className="flex md:justify-between md:flex-row  md:items-start items-center flex-col">
+        <div className="mx-auto flex w-screen items-center justify-center py-2 md:w-full">
+            <div className="flex flex-col items-center  md:flex-row md:items-start md:justify-between">
                 <SignUpInfo />
-                <div className="flex flex-col justify-center items-start shadow-form rounded-3xl p-8 [&>div]:pb-7 [&>a]:pb-7">
+                <div className="flex flex-col items-start justify-center rounded-3xl p-8 shadow-form [&>div]:pb-7 [&>a]:pb-7">
                     <FormProvider {...methods}>
                         <form
                             onSubmit={handleSubmit(onSubmitHandler)}

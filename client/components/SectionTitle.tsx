@@ -21,10 +21,10 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
 }) => (
     <div
         className={classNames(
-            'flex flex-col lg:max-w-[40ch] md:max-w-xl md:text-left',
+            'flex flex-col md:max-w-xl md:text-left lg:max-w-[40ch]',
             center
-                ? 'text-center justify-center align-center'
-                : 'text-left justify-start align-start max-w-xl'
+                ? 'align-center justify-center text-center'
+                : 'align-start max-w-xl justify-start text-left'
         )}
     >
         <h5 className="pb-4">{subtitle}</h5>
@@ -32,7 +32,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
         <h4 className="pb-6">{description}</h4>
         {href && (
             <Button
-                className={`${center && 'md:mx-0 mx-auto'}`}
+                className={`${center && 'mx-auto md:mx-0'}`}
                 href={href}
                 arrow
             >

@@ -12,18 +12,18 @@ const Footer: FC<FooterProps> = () => {
 
     return (
         <>
-            <div className="w-full flex justify-center items-center before:w-10 before:h-px before:mr-2 before:bg-gray-300 after:w-10 after:h-px after:ml-2 after:bg-gray-300 text-gray-300">
+            <div className="flex w-full items-center justify-center text-gray-300 before:mr-2 before:h-px before:w-10 before:bg-gray-300 after:ml-2 after:h-px after:w-10 after:bg-gray-300">
                 <h6>Or {step === 0 ? 'log in' : 'sign up'} with</h6>
             </div>
-            <div className="w-full flex gap-7 justify-center">
-                <a href="" className="p-2.5 rounded-xl border">
+            <div className="flex w-full justify-center gap-7">
+                <a href="" className="rounded-xl border p-2.5">
                     <IconGoogle />
                 </a>
-                <a href="" className="p-2.5 rounded-xl border">
+                <a href="" className="rounded-xl border p-2.5">
                     <IconFacebook />
                 </a>
             </div>
-            <div className="w-full flex justify-center items-center">
+            <div className="flex w-full items-center justify-center">
                 <h6>
                     {step === 0 ? `Don't have account? ` : `Already a member? `}
                 </h6>{' '}
