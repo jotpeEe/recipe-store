@@ -1,18 +1,23 @@
+import cn from 'classnames';
+
+// Host, database, and graphql URLs.
+export const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL as string;
 export const GRAPHQL_ENDPOINT =
     process.env.NODE_ENV === 'production'
-        ? 'https://recipes.mklos.co/api/graphql'
+        ? cn(HOST_URL, '/api/graphql')
         : 'http://localhost:3000/api/graphql';
 
 export const MONGODB_URI =
     process.env.NODE_ENV === 'production'
-        ? (process.env.MONGODB_LOCAL_URI as string)
-        : (process.env.MONGODB_LOCAL_URI_DEVELOP as string);
+        ? (process.env.MONGODB_URL as string)
+        : (process.env.MONGODB_URL_DEV as string);
 
 export const REDIS_URL =
     process.env.NODE_ENV === 'production'
-        ? (process.env.REDIS_LOCAL_URL as string)
+        ? (process.env.REDIS_URL as string)
         : 'redis://localhost:6379';
 
+// Getting env variables for tokens used on server side.
 export const accessTokenPrivateKey = process.env
     .ACCESS_TOKEN_PRIVATE_KEY as string;
 
@@ -25,8 +30,7 @@ export const accessTokenPublicKey = process.env
 export const refreshTokenPublicKey = process.env
     .REFRESH_TOKEN_PUBLIC_KEY as string;
 
-export const RECIPE_LIMIT = 7;
-
+// All types of cookies used on server side.
 export const cookies = {
     ACCESS_TOKEN: 'access_token',
     REFRESH_TOKEN: 'refresh_token',
@@ -34,5 +38,18 @@ export const cookies = {
     LOGGED_IN: 'logged_in',
 };
 
+// Recipe list settings.
+export const RECIPE_LIMIT = 7;
+
+// Image input settings.
 export const CLDN_API_URL =
     'https://api.cloudinary.com/v1_1/dxkgc7cab/image/upload';
+
+export const MAX_IMAGE_SIZE = 500000;
+export const ACCEPTED_IMAGE_TYPES = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+    undefined,
+];
