@@ -16,11 +16,23 @@ const CreateRecipe: NextPage = () => {
     const dispatch = useAppDispatch();
     const width = useWindowSize();
 
+    const { data: cuisines } = useGetCuisinesQuery(
+        requestClient,
+        {},
+        {
+            enabled: first,
+            // sort case-insensitive
+            select: res =>
+                res.getCuisines.cuisines.sort((a, b) =>
+                    a.toLowerCase().localeCompare(b.toLowerCase())
+                ),
+        }
+    );
+
     const { data, isLoading } = useGetTempRecipeQuery(
         requestClient,
         {},
         {
-            refetchOnMount: true,
             enabled: first,
             select: res => {
                 const {
@@ -28,10 +40,10 @@ const CreateRecipe: NextPage = () => {
                     __typename: tn,
                     ...recipe
                 } = res.temp?.recipe ?? {};
-                return recipe;
+                return { recipe, id };
             },
-            onSuccess(recipe) {
-                dispatch(setRecipe(recipe));
+            onSuccess(res) {
+                dispatch(setRecipe({ id: res.id, ...res.recipe }));
             },
         }
     );
@@ -43,9 +55,11 @@ const CreateRecipe: NextPage = () => {
     return (
         <SectionLayout flex>
             <div className="w-[270px]">
-                <Slider>
-                    <StepOne defaultValues={data} />
-                    <StepTwo />
+                <Slider
+                    breadcrumbs={['Add info', 'Add ingredients', 'Add steps']}
+                >
+                    <StepOne defaultValues={data?.recipe} cuisines={cuisines} />
+                    <StepTwo id={data?.id} />
                     <StepThree />
                 </Slider>
             </div>
