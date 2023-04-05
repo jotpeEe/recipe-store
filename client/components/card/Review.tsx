@@ -28,7 +28,7 @@ const ReviewCard: React.FC<ReviewProps> = ({
     createdAt,
 }) => {
     const { name, photo } = user ?? {};
-    const { id, title, image } = recipe ?? {};
+    const { id } = recipe ?? {};
 
     const formattedDate = useMemo(() => {
         const date = new Date(createdAt);
@@ -36,23 +36,23 @@ const ReviewCard: React.FC<ReviewProps> = ({
     }, [createdAt]);
 
     return (
-        <Card className="flex">
-            <div className="flex flex-col p-8 max-w-md text-center shadow-card rounded-xl [&>*]:py-2">
-                <Title href={`/recipes/${id}`}>
-                    <RecipeTitle imgSrc={image} title={title} />
-                </Title>
-                <p className="text-lg text-left">{text}</p>
+        <Card className="flex pl-1 pt-1">
+            <div className="flex h-fit w-60 max-w-md flex-col rounded-xl p-4 text-center shadow-card [&>*]:py-2">
                 <UserInfo
                     className="my-4"
                     title={name}
                     imgSrc={photo}
+                    size="sm"
                     subtitle={formattedDate}
                 />
+                <p className="text-left text-xs">{text}</p>
+                {/* <Title href={`/recipes/${id}`}>
+                    <RecipeTitle size="sm" imgSrc={image} title={title} />
+                </Title> */}
                 <Link
                     href={`/recipes/${id}`}
-                    className="flex justify-start gap-4 items-center w-fit "
+                    className="w-fill flex items-center justify-end gap-4 text-xs"
                 >
-                    Go to recipe
                     <IconNext />
                 </Link>
             </div>
