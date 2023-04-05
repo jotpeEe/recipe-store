@@ -9,7 +9,7 @@ import resolvers from '@resolvers';
 import { connectDB } from '@utils';
 
 const cors = Cors({
-    origin: ['http://localhost:3000', 'https://recipes.mklos.co'],
+    origin: ['http://localhost:3000', 'https://recipes.mklos.dev'],
     credentials: true,
 });
 

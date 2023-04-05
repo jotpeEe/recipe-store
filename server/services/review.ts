@@ -1,5 +1,4 @@
 import { ValidationError } from 'apollo-server-micro';
-import { Reviews } from 'client/features';
 
 import errorHandler from '@controllers';
 import { RecipeModel, ReviewModel } from '@models';

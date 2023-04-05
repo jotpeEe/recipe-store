@@ -1,4 +1,4 @@
-import { Hero, Recipes, Reviews } from 'client/features';
+import { Hero, Recipes, Reviews } from '@sections';
 import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
 

@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 
-import { GRAPHQL_ENDPOINT } from 'utils/constants';
+import { GRAPHQL_ENDPOINT } from '@constants';
 
 if (!GRAPHQL_ENDPOINT) throw new Error('GRAPHQL_ENDPOINT not defined');
 
