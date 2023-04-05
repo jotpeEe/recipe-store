@@ -43,18 +43,11 @@ const AnimateOnMount: FC<AnimateOnMountProps> = ({
     }, []);
 
     return (
-        <div
-            className={classNames(
-                'transition-all',
-                active ? 'opacity-100' : 'opacity-0 translate-y-4'
-            )}
-            style={{
-                transitionDelay: `${delay}ms`,
-            }}
-        >
-            {children}
-        </div>
+        <>
+            {as === 'div' && <div {...props}>{children}</div>}
+            {as === 'li' && <li {...props}>{children}</li>}
+        </>
     );
 };
 
-export default AnimateOnLoad;
+export default AnimateOnMount;
