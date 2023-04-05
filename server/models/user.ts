@@ -45,7 +45,7 @@ export class User {
     @prop({ required: true })
     passwordConfirm: string | undefined;
 
-    @prop({ default: 'default.jpeg' })
+    @prop({ default: '/default.png' })
     photo: string;
 
     @prop({ required: true })
