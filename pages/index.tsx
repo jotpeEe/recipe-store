@@ -28,10 +28,6 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <Head>
-                <title>RecipeSpot</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
             <Hero />
             <Recipes recipes={recipes} />
             <Reviews />
