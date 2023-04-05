@@ -8,7 +8,7 @@ type FooterProps = {
 };
 
 const Footer: FC<FooterProps> = () => {
-    const { step, next, previous } = useSlider();
+    const { step, next, previous } = useSliderContext();
 
     return (
         <>

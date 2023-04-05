@@ -40,7 +40,7 @@ type RecipeInfoInput = TypeOf<typeof recipeInfoSchema>;
 const StepOne: FC<OneProps> = ({ defaultValues }) => {
     const dispatch = useAppDispatch();
     const id = useAppSelector(state => state.recipe?.id);
-    const { step, next } = useSlider();
+    const { step, next } = useSliderContext();
 
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient);
     const { mutate: createRecipe } = useCreateRecipeMutation(requestClient, {

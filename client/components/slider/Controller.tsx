@@ -18,7 +18,7 @@ type DotProps = {
 };
 
 const Dot: FC<DotProps> = ({ id }) => {
-    const { step, goTo } = useSlider();
+    const { step, goTo } = useSliderContext();
 
     return (
         <button
@@ -32,7 +32,7 @@ const Dot: FC<DotProps> = ({ id }) => {
 };
 
 const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
-    const { step, next, previous } = useSlider();
+    const { step, next, previous } = useSliderContext();
     const isFirst = step === 0;
     const isLast = step === steps - 1;
 

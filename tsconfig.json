@@ -11,6 +11,7 @@
         "module": "esnext",
         "baseUrl": ".",
         "paths": {
+            "@contexts": ["client/contexts"],
             "@components": ["client/components"],
             "@components/*": ["client/components/*"],
             "@constants": ["constants"],

@@ -6,7 +6,7 @@ import {
     useState,
 } from 'react';
 
-// eslint-disable-next-line import/no-cycle
+import { SliderContext } from '@contexts';
 import SliderController from './Controller';
 
 type SliderProps = {
@@ -14,16 +14,6 @@ type SliderProps = {
     controller?: boolean;
     inside?: boolean;
 };
-
-const SliderContext = createContext<
-    | {
-          next: () => void;
-          previous: () => void;
-          goTo: (stepNumber: number) => void;
-          step: number;
-      }
-    | undefined
->(undefined);
 
 const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
     const [step, setStep] = useState<number>(0);
@@ -79,13 +69,4 @@ const Slider: FC<SliderProps> = ({ children, controller, inside }) => {
     );
 };
 
-const useSlider = () => {
-    const context = useContext(SliderContext);
-
-    if (!context) {
-        throw new Error('useSlider must be used within a Slider');
-    }
-    return context;
-};
-
-export { useSlider, Slider };
+export default Slider;

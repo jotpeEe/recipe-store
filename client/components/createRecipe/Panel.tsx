@@ -14,6 +14,7 @@ type PanelProps = {
 };
 
 const Panel: FC<PanelProps> = ({ first = false }) => {
+    const { step, goTo } = useSliderContext();
     const dispatch = useAppDispatch();
     const id = useAppSelector(state => state.recipe?.id);
 
@@ -21,8 +22,8 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
 
     const handleGoBackClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
-            window.location.reload();
-        }, []);
+            goTo(step - 1);
+        }, [step]);
 
     const handleClearClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
@@ -32,7 +33,7 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
 
             dispatch(setRecipe({}));
 
-            window.location.reload();
+            goTo(0);
         }, [id]);
 
     return (

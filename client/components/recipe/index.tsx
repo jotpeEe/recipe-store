@@ -41,10 +41,6 @@ export type RecipeComponentProps = {
     reviews?: IReview[];
 };
 
-const RecipeContext = createContext<RecipeComponentProps | undefined>(
-    undefined
-);
-
 export const Recipe: FC<RecipeComponentProps> = props => {
     const { title, image, prep, description, user } = props;
 
@@ -108,13 +104,4 @@ export const Recipe: FC<RecipeComponentProps> = props => {
             </div>
         </RecipeContext.Provider>
     );
-};
-
-export const useRecipe = () => {
-    const context = useContext(RecipeContext);
-
-    if (!context) {
-        throw new Error('useRecipe must be used within a Recipe');
-    }
-    return context;
 };

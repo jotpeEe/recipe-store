@@ -25,7 +25,7 @@ const StepTwo: FC = () => {
     const data = useAppSelector(state => state.recipe);
 
     const { id, ...recipe } = data ?? {};
-    const { step, next } = useSlider();
+    const { step, next } = useSliderContext();
 
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient);
 
