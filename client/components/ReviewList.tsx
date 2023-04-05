@@ -91,39 +91,43 @@ const ReviewList: FC<ReviewListProps> = ({
     }, []);
 
     return (
-        <div className={cn(fullWidth ? 'w-full' : 'w-fit')}>
-            {reviews && reviews?.length > 4 && (
-                <button
-                    onClick={handleClick}
-                    className="flex items-center gap-3 bg-primary rounded-3xl w-full mb-4 shadow-card shadow-gray-400"
-                >
-                    <div className="rounded-full bg-white px-2 text-gray-500 font-medium ml-1 my-1">
-                        {clicked ? '-' : '+'}
+        <>
+            {reviews?.length !== 0 && (
+                <div className={cn(fullWidth ? 'w-full' : 'w-fit')}>
+                    {reviews && reviews?.length > 4 && (
+                        <button
+                            onClick={handleClick}
+                            className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary shadow-card shadow-gray-400"
+                        >
+                            <div className="my-1 ml-1 rounded-full bg-white px-2 font-medium text-gray-500">
+                                {clicked ? '-' : '+'}
+                            </div>
+                            <h5 className="text-xs text-white">
+                                {clicked ? 'Show less' : 'Show more'}
+                            </h5>
+                        </button>
+                    )}
+                    <div
+                        className={cn(
+                            'max-h-[400px]',
+                            clicked ? 'overflow-y-auto' : 'overflow-hidden'
+                        )}
+                    >
+                        {slicedReviews?.map((review, index) => (
+                            <AnimateOnLoad key={index} index={index}>
+                                <ReviewMini review={review} />
+                            </AnimateOnLoad>
+                        ))}
                     </div>
-                    <h5 className="text-xs text-white">
-                        {clicked ? 'Show less' : 'Show more'}
-                    </h5>
-                </button>
+                </div>
             )}
-            <div
-                className={cn(
-                    'max-h-[400px]',
-                    clicked ? 'overflow-y-auto' : 'overflow-hidden'
-                )}
-            >
-                {slicedReviews?.map((review, index) => (
-                    <AnimateOnLoad key={index} index={index}>
-                        <ReviewMini review={review} />
-                    </AnimateOnLoad>
-                ))}
-            </div>
             {addEnable && !isTheSameUser && (
                 <div className="w-full">
                     <button
                         onClick={handleCommentClick}
-                        className="flex items-center gap-3 bg-primary rounded-3xl w-full mb-4 shadow-card shadow-gray-400"
+                        className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary shadow-card shadow-gray-400"
                     >
-                        <div className="rounded-full bg-white px-2 text-gray-500 font-medium ml-1 my-1">
+                        <div className="my-1 ml-1 rounded-full bg-white px-2 font-medium text-gray-500">
                             +
                         </div>
                         <h5 className="text-xs text-white">Add comment</h5>
@@ -131,10 +135,9 @@ const ReviewList: FC<ReviewListProps> = ({
                     {open && (
                         <FormProvider {...methods}>
                             <form onSubmit={handleSubmit(onSubmit)}>
-                                <FormInput
+                                <TextArea
                                     name="input"
                                     placeholder="Enter comment"
-                                    element="textarea"
                                 />
                                 <Button type="submit" size="sm">
                                     Add
