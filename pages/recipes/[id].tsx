@@ -14,7 +14,7 @@ type RecipeInfoProps = {
 const RecipeInfo: NextPage<RecipeInfoProps> = ({ id }) => {
     if (!id) return null;
 
-    const { data: recipe } = useGetRecipeByIdQuery(
+    const { data: recipe, isLoading } = useGetRecipeByIdQuery(
         requestClient,
         { id },
         { select: data => data.getRecipe.recipe }
@@ -30,9 +30,11 @@ const RecipeInfo: NextPage<RecipeInfoProps> = ({ id }) => {
         }
     );
 
+    if (isLoading) return null;
+
     return (
         <div className="flex justify-center py-32">
-            <Recipe {...{ ...recipe, reviews }} />
+            <Recipe {...{ ...recipe, reviews }} withEdit={true} />
         </div>
     );
 };
