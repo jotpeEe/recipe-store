@@ -55,21 +55,19 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     }, [recipes, limit, active]);
 
     const handleClick = useCallback(() => {
-        setLimit(prevLimit => prevLimit + 4);
+        if (recipes) setLimit(recipes?.length);
     }, []);
 
     return (
         <div className={`${className} children:mb-4`}>
-            <div className="overflow-hidden">
-                <ul className="flex gap-3 w-fit overflow-x-scroll scrollbar-none">
-                    <Switch
-                        array={cuisine}
-                        active={active}
-                        setActive={setActive}
-                        size="sm"
-                    />
-                </ul>
-            </div>
+            <ul className="scrollbar-none flex w-fit gap-3 overflow-x-scroll">
+                <Switch
+                    array={cuisine}
+                    active={active}
+                    setActive={setActive}
+                    size="sm"
+                />
+            </ul>
             <div
                 className={cn(
                     'grid max-h-list grid-cols-fill gap-12',
@@ -92,7 +90,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
                         <Button
                             onClick={handleClick}
                             className="self-center"
-                            outlined
+                            variant="outlined"
                             size="sm"
                         >
                             View more recipes
