@@ -7,8 +7,8 @@ class LoginInput {
     @Field(() => String)
     email: string;
 
-    @MinLength(8, { message: 'Invalid email or password' })
-    @MaxLength(32, { message: 'Invalid email or password' })
+    @MinLength(6, { message: 'Invalid email or password' })
+    @MaxLength(16, { message: 'Invalid email or password' })
     @Field(() => String)
     password: string;
 }

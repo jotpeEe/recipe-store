@@ -5,12 +5,12 @@ import { type Ingredient, IngredientInput } from './ingredient';
 
 @InputType()
 class Input {
-    @MinLength(8, { message: 'Title must be at least 8 characters long' })
+    @MinLength(1, { message: 'Title is required' })
     @Field(() => String)
     title: string;
 
-    @MinLength(10, {
-        message: 'Description must be at least 10 characters long',
+    @MinLength(1, {
+        message: 'Description is required',
     })
     @Field(() => String)
     description: string;
