@@ -1,24 +1,22 @@
-import { FC, useEffect } from 'react';
+import { type FC, useEffect, useMemo } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { object, string, TypeOf } from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
+import { Button, ImageInput, Input, Select, TextArea } from '@components';
+import { useSliderContext } from '@contexts';
 import {
+    type CreateRecipeMutation,
     useCreateRecipeMutation,
     useUpdateRecipeMutation,
-    CreateRecipeMutation,
 } from '@generated/graphql';
 import { useAppDispatch, useAppSelector } from '@hooks';
-import { letters, numbers } from '@lib/regex';
+import { imageValidation, letters } from '@lib';
 import { type IRecipe } from '@lib/types';
-import { setInfo, setId } from '@redux';
-import { requestClient } from '@requests';
+import { setId, setInfo } from '@redux';
+import { queryClient, requestClient } from '@requests';
 
-import Button from '../Button';
-import FormInput from '../input/Form';
-import ImageInput from '../input/Image';
-import { useSlider } from '../slider';
 import Panel from './Panel';
 
 type OneProps = {

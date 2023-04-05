@@ -1,10 +1,10 @@
 import {
-    getModelForClass,
     ModelOptions,
-    prop,
+    Ref,
     Severity,
+    getModelForClass,
+    prop,
 } from '@typegoose/typegoose';
-import type { Ref } from '@typegoose/typegoose';
 
 import { Recipe } from './recipe';
 import { User } from './user';

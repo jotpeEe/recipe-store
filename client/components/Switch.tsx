@@ -1,4 +1,6 @@
-import { FC, MouseEvent, useCallback } from 'react';
+import { type FC, type MouseEvent, useCallback } from 'react';
+
+import classNames from 'classnames';
 
 import Button from '@components/Button';
 

@@ -1,10 +1,13 @@
-import { FC, MouseEventHandler, useCallback } from 'react';
+import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
+import Button from '@components/Button';
+import Modal from '@components/Modal';
+import { useSliderContext } from '@contexts';
 import { useDeleteRecipeMutation } from '@generated/graphql';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { IconArrow, IconClear } from '@icons';
 import { setRecipe } from '@redux';
-import { requestClient } from '@requests';
+import { queryClient, requestClient } from '@requests';
 
 type PanelProps = {
     first?: boolean;

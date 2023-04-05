@@ -1,12 +1,12 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 
 import {
-    ReviewPopulatedResponse,
     ReviewListResponse,
+    ReviewPopulatedResponse,
     ReviewResponse,
 } from '@schemas/review';
 import ReviewService from '@services/review';
-import type { Context } from 'server/types/context';
+import { type Context } from 'server/types/context';
 
 @Resolver()
 export default class ReviewResolver {

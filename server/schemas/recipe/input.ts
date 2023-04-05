@@ -1,7 +1,7 @@
 import { MinLength } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 
-import { Ingredient, IngredientInput } from './ingredient';
+import { type Ingredient, IngredientInput } from './ingredient';
 
 @InputType()
 class Input {

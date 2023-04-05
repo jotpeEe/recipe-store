@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { IRecipe, IUser } from '@lib/types';
+import { type IRecipe, type IUser } from '@lib/types';
 
 import authReducer from './reducers/authSlice';
 import recipeSlice from './reducers/recipeSlice';

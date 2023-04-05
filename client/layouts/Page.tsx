@@ -1,11 +1,13 @@
 import { useRef } from 'react';
 
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import { useRefreshAccessTokenQuery, useGetMeQuery } from '@generated/graphql';
+import { useGetMeQuery, useRefreshAccessTokenQuery } from '@generated/graphql';
 import { useAppDispatch } from '@hooks';
-import { IUser } from '@lib/types';
+import { type IUser } from '@lib/types';
 import { setPageLoading, setUser } from '@redux';
 import { queryClient, requestClient } from '@requests';
 

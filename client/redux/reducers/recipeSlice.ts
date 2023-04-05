@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { IRecipe } from '@lib/types';
+import { type IRecipe } from '@lib/types';
 
 export const initialState: Partial<IRecipe> = {};
 

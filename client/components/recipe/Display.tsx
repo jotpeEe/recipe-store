@@ -1,17 +1,29 @@
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
 
-import Animated from '@components/animations/AnimatedDiv';
-import AnimateOnLoad from '@components/animations/AnimateOnLoad';
-import ReviewList from '@components/ReviewList';
-import Switch from '@components/Switch';
+import { type FieldArrayWithId } from 'react-hook-form';
 
-// eslint-disable-next-line import/no-cycle
-import { useRecipe } from '.';
+import { AnimateOnLoad, AnimatedDiv as Animated } from '@components/animations';
+import { IngredientInput } from '@components/input';
+import { useRecipeContext } from '@contexts';
+import { type UpdateInput } from '@generated/graphql';
+import { IconDish } from '@icons';
+
+import ReviewList from '../ReviewList';
+import Switch from '../Switch';
 import Ingredient from './Ingredient';
 
-const Display: FC = () => {
+type DisplayProps = {
+    fields: FieldArrayWithId<UpdateInput, 'ingredients', 'id'>[];
+};
+
+const Display: FC<DisplayProps> = ({ fields }) => {
     const { id, step, ingredients, servings, steps, reviews, user } =
-        useRecipe();
+        useRecipeContext();
+
+    const slicedFields = useMemo(
+        () => fields.slice(ingredients ? ingredients.length : 0),
+        [ingredients, fields]
+    );
 
     const [active, setActive] = useState<number>(0);
 

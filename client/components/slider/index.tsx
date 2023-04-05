@@ -1,10 +1,9 @@
 import {
-    ReactNode,
-    createContext,
-    useState,
-    useContext,
+    type FC,
+    type ReactNode,
     useCallback,
-    FC,
+    useEffect,
+    useState,
 } from 'react';
 
 // eslint-disable-next-line import/no-cycle

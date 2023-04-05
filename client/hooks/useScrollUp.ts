@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const useScrollUp = () => {
     const NAV_HEIGHT = 100;

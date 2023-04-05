@@ -1,6 +1,7 @@
-import { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 
-import { IconCheck } from '../icons';
+import { IconCheck } from '@icons';
+
 import Footer from './Footer';
 
 const CheckListItem: FC<{ children: ReactNode }> = ({ children }) => (

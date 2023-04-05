@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { type FC, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 

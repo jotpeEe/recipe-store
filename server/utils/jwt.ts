@@ -1,11 +1,11 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 
 import {
     accessTokenPrivateKey,
     accessTokenPublicKey,
     refreshTokenPrivateKey,
     refreshTokenPublicKey,
-} from '@constants';
+} from 'utils/constants';
 
 const keysToAscii = (key: string) =>
     Buffer.from(key, 'base64').toString('ascii');

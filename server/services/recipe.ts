@@ -1,9 +1,9 @@
 import { ValidationError } from 'apollo-server-micro';
 
 import errorHandler from '@controllers';
-import { Recipe, RecipeModel } from '@models';
-import { Input } from '@schemas/recipe';
-import { Context } from 'server/types/context';
+import { type Recipe, RecipeModel } from '@models';
+import { type Input } from '@schemas/recipe';
+import { type Context } from 'server/types/context';
 
 export default class RecipeService {
     createRecipe = async (

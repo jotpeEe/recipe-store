@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
 
-import { Slider, StepOne, StepTwo, StepThree, Preview } from '@components';
-import { useGetTempRecipeQuery } from '@generated/graphql';
+import { Slider } from '@components';
+import { Preview, StepOne, StepThree, StepTwo } from '@components/createRecipe';
+import { useGetCuisinesQuery, useGetTempRecipeQuery } from '@generated/graphql';
 import { useAppDispatch, useWindowSize } from '@hooks';
 import { SectionLayout } from '@layouts';
 import { setRecipe } from '@redux';

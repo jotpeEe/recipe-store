@@ -1,10 +1,11 @@
-import { FC, MouseEventHandler, useCallback } from 'react';
+import { type FC, type MouseEventHandler, useCallback } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { object, string, TypeOf } from 'yup';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { type TypeOf, object, string } from 'yup';
 
+import { Button, TextArea } from '@components';
 import {
     useCreateRecipeMutation,
     useDeleteRecipeMutation,
@@ -15,8 +16,6 @@ import type { IRecipe } from '@lib/types';
 import { addStep, setRecipe } from '@redux';
 import { requestClient } from '@requests';
 
-import Button from '../Button';
-import FormInput from '../input/Form';
 import Panel from './Panel';
 
 const stepSchema = object({

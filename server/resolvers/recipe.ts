@@ -8,7 +8,7 @@ import {
     UpdateInput,
 } from '@schemas/recipe';
 import RecipeService from '@services/recipe';
-import type { Context } from 'server/types/context';
+import { type Context } from 'server/types/context';
 
 @Resolver()
 export default class RecipeResolver {

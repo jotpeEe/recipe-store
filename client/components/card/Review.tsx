@@ -4,8 +4,7 @@ import format from 'date-fns/format';
 
 import { IconNext } from '@icons';
 
-import { Card, Title, Link } from '../CardWithLinks';
-import RecipeTitle from '../recipe/Title';
+import { Card, Link } from '../CardWithLinks';
 import UserInfo from '../user/Info';
 
 type ReviewProps = {

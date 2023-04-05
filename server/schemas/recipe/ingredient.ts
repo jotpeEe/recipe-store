@@ -1,4 +1,4 @@
-import { Field, ObjectType, InputType } from 'type-graphql';
+import { Field, InputType, ObjectType } from 'type-graphql';
 
 @InputType()
 export class IngredientInput {

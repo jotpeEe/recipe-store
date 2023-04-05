@@ -1,4 +1,4 @@
-import { Slider, SectionTitle, ReviewCard } from '@components';
+import { ReviewCard, SectionTitle, Slider } from '@components';
 import { useGetLastReviewsQuery } from '@generated/graphql';
 import { SectionLayout as Layout } from '@layouts';
 import { requestClient } from '@requests';

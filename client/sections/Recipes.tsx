@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { SectionTitle, RecipesList } from '@components';
+import { RecipesList, SectionTitle } from '@components';
 import { SectionLayout as Layout } from '@layouts';
-import { IRecipe } from '@lib/types';
+import { type IRecipe } from '@lib/types';
 
 type RecipesProps = {
     recipes: Partial<IRecipe>[] | undefined;

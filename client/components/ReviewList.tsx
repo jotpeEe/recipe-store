@@ -1,19 +1,19 @@
-import { FC, MouseEventHandler, useCallback, useState } from 'react';
+import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 import { hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { useCreateReviewMutation } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
-import { IReview } from '@lib/types';
+import { type IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
 import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';
 import ReviewMini from './card/ReviewMini';
-import FormInput from './input/Form';
+import { TextArea } from './input';
 
 type ReviewListProps = {
     reviews?: IReview[];

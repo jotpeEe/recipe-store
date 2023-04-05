@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import Image from 'next/image';
 
-import { Card, Title } from '@components/CardWithLinks';
 import { IconClock } from '@components/icons';
+
+import { Card, Title } from '../CardWithLinks';
 
 type RecipeMiniProps = {
     t__typename?: 'PopulatedData' | undefined;

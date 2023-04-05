@@ -1,17 +1,16 @@
-import { FC, MouseEventHandler, useCallback } from 'react';
+import { type FC, type MouseEventHandler, useCallback } from 'react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { object, string, TypeOf } from 'yup';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { type TypeOf, object, string } from 'yup';
 
+import { Button, Input } from '@components';
+import { useSliderContext } from '@contexts';
 import { useUpdateRecipeMutation } from '@generated/graphql';
 import { useAppDispatch, useAppSelector } from '@hooks';
 import { addIngredient, setInfo } from '@redux';
 import { requestClient } from '@requests';
 
-import Button from '../Button';
-import FormInput from '../input/Form';
-import { useSlider } from '../slider';
 import Panel from './Panel';
 
 const ingredientSchema = object({

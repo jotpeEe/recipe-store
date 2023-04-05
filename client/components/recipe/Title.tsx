@@ -1,10 +1,11 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import classNames from 'classnames';
 import Image from 'next/image';
 
-import Animated from '@components/animations/AnimatedDiv';
+import { AnimatedDiv as Animated } from '@components/animations';
 
+import Edit from './Edit';
 type RecipeTitleProps = {
     className?: string;
     title?: string;

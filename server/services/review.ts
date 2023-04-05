@@ -1,9 +1,9 @@
 import { ValidationError } from 'apollo-server-micro';
+import { Reviews } from 'client/features';
 
 import errorHandler from '@controllers';
 import { RecipeModel, ReviewModel } from '@models';
-import { Reviews } from '@sections';
-import { Context } from 'server/types/context';
+import { type Context } from 'server/types/context';
 
 export default class ReviewService {
     createReview = async (

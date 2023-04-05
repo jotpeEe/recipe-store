@@ -4,14 +4,14 @@ import {
     ValidationError,
 } from 'apollo-server-micro';
 import { setCookie } from 'cookies-next';
-import { OptionsType } from 'cookies-next/lib/types';
+import { type OptionsType } from 'cookies-next/lib/types';
 
 import { cookies } from '@constants';
 import errorHandler from '@controllers';
-import { UserModel, User } from '@models';
-import { LoginInput } from '@schemas/user';
+import { type User, UserModel } from '@models';
+import { type LoginInput } from '@schemas/user';
 import { redisClient, signJwt, verifyJwt } from '@utils';
-import { Context } from 'server/types/context';
+import { type Context } from 'server/types/context';
 
 const accessTokenExpiresIn = 15;
 const refreshTokenExpiresIn = 60;

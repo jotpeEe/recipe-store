@@ -1,11 +1,18 @@
-import { FC, useCallback, SyntheticEvent } from 'react';
+import {
+    type ChangeEvent,
+    type FC,
+    type MouseEvent,
+    useCallback,
+    useRef,
+} from 'react';
 
 import { Controller, useController, useFormContext } from 'react-hook-form';
 
-import { CLDN_API_URL } from '@constants';
-import { useAppSelector } from '@hooks';
+import Button from '@components/Button';
+import { IconImage } from '@components/icons';
+import { ACCEPTED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@constants';
+import { uploadImage } from '@lib';
 
-import Spinner from '../Spinner';
 import ErrorMessage from './ErrorMessage';
 
 type ImageUploadProps = {

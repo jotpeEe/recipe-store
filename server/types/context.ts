@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { type NextApiRequest, type NextApiResponse } from 'next';
 
-import { User } from '../models/user';
+import { type User } from '../models/user';
 
 export type Context = {
     req: NextApiRequest;

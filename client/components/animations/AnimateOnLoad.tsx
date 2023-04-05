@@ -1,14 +1,39 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import {
+    type FC,
+    type PropsWithChildren,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 
 import classNames from 'classnames';
 
-const AnimateOnLoad: FC<{ index: number; children: ReactNode }> = ({
+type AnimateOnMountProps = PropsWithChildren & {
+    index: number;
+    as?: 'li' | 'div';
+};
+
+const AnimateOnMount: FC<AnimateOnMountProps> = ({
     index,
     children,
+    as = 'div',
 }) => {
     // set initial delay
     const [delay, setDelay] = useState(index * 100);
     const [active, setActive] = useState(false);
+
+    const props = useMemo(
+        () => ({
+            className: classNames(
+                'transition-all',
+                active ? 'opacity-100' : 'translate-y-4 opacity-0'
+            ),
+            style: {
+                transitionDelay: `${delay}ms`,
+            },
+        }),
+        [active, delay]
+    );
 
     useEffect(() => {
         setActive(true);

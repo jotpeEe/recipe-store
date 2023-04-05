@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { MONGODB_URI } from '@constants';
+import { MONGODB_URI } from 'utils/constants';
 
 if (!MONGODB_URI) throw new Error('MONGODB_URI not defined');
 

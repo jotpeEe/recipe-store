@@ -1,12 +1,11 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import classNames from 'classnames';
 
+import { useSliderContext } from '@contexts';
 import { IconArrow } from '@icons';
 
 import Button from '../Button';
-// eslint-disable-next-line import/no-cycle
-import { useSlider } from './index';
 
 type SliderControllerProps = {
     inside?: boolean;

@@ -1,7 +1,7 @@
 import {
-    Dispatch,
-    MouseEventHandler,
-    SetStateAction,
+    type Dispatch,
+    type MouseEventHandler,
+    type SetStateAction,
     useCallback,
 } from 'react';
 

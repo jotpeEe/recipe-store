@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from 'classnames';
 
 type SectionProps = {
     children: React.ReactNode;

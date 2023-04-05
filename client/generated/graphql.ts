@@ -1,11 +1,11 @@
 /* eslint-disable no-use-before-define */
-import { GraphQLClient } from 'graphql-request';
-import { RequestInit } from 'graphql-request/dist/types.dom';
+import { type GraphQLClient } from 'graphql-request';
+import { type RequestInit } from 'graphql-request/dist/types.dom';
 import {
+    type UseMutationOptions,
+    type UseQueryOptions,
     useMutation,
     useQuery,
-    UseMutationOptions,
-    UseQueryOptions,
 } from 'react-query';
 
 export type Maybe<T> = T | null;

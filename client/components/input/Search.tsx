@@ -1,18 +1,17 @@
-import { FC, useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import AnimateOnLoad from '@components/animations/AnimateOnLoad';
+import { AnimateOnLoad } from '@components/animations';
+import Button from '@components/Button';
 import RecipeMini from '@components/card/RecipeMini';
 import { useGetAllRecipesQuery } from '@generated/graphql';
 import { useRecipesFilter } from '@hooks';
 import { IconFilter } from '@icons';
 import { requestClient } from '@requests';
-import useDebounce from 'client/hooks/useDebounce';
 
-import Button from '../Button';
-import { Slider } from '../slider';
-import FormInput from './Form';
+import Slider from '../slider';
+import FormInput from './Input';
 
 type SearchInputProps = {
     all?: boolean;

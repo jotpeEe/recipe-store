@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
-import { useSlider } from '..';
-import { IconGoogle, IconFacebook } from '../icons';
+import { useSliderContext } from '@contexts';
+import { IconFacebook, IconGoogle } from '@icons';
 
 type FooterProps = {
     type: 'login' | 'signup';

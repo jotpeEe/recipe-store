@@ -1,10 +1,10 @@
 import {
-    getModelForClass,
-    prop,
-    pre,
     ModelOptions,
     Severity,
+    getModelForClass,
     index,
+    pre,
+    prop,
 } from '@typegoose/typegoose';
 import bcrypt from 'bcryptjs';
 

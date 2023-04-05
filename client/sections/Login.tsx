@@ -1,13 +1,13 @@
-import { FC, useCallback } from 'react';
+import { type FC, useCallback } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
-import { object, string } from 'yup';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { object, string } from 'zod';
 
-import { Button, FormInput, AuthFooter } from '@components';
-import { LoginInput, useLoginUserMutation } from '@generated/graphql';
+import { AuthFooter, Button, Input } from '@components';
+import { type LoginInput, useLoginUserMutation } from '@generated/graphql';
 import { requestClient } from '@requests';
 
 const loginSchema = object({
