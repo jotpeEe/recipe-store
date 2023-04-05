@@ -43,6 +43,13 @@ export type Scalars = {
     DateTime: any;
 };
 
+export type CuisineResponse = {
+    __typename?: 'CuisineResponse';
+    cuisines: Array<Scalars['String']>;
+    results: Scalars['Float'];
+    status: Scalars['String'];
+};
+
 export type Ingredient = {
     __typename?: 'Ingredient';
     amount: Scalars['String'];
@@ -167,6 +174,7 @@ export type PopulatedResponse = {
 export type Query = {
     __typename?: 'Query';
     getAllRecipes: ListResponse;
+    getCuisines: CuisineResponse;
     getLastReviews: ReviewListResponse;
     getMe: UserResponse;
     getRecipe: PopulatedResponse;
@@ -386,6 +394,18 @@ export type GetAllRecipesQuery = {
                 photo: string;
             };
         }>;
+    };
+};
+
+export type GetCuisinesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCuisinesQuery = {
+    __typename?: 'Query';
+    getCuisines: {
+        __typename?: 'CuisineResponse';
+        status: string;
+        results: number;
+        cuisines: Array<string>;
     };
 };
 
@@ -809,6 +829,31 @@ export const useGetAllRecipesQuery = <
         fetcher<GetAllRecipesQuery, GetAllRecipesQueryVariables>(
             client,
             GetAllRecipesDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetCuisinesDocument = `
+    query getCuisines {
+  getCuisines {
+    status
+    results
+    cuisines
+  }
+}
+    `;
+export const useGetCuisinesQuery = <TData = GetCuisinesQuery, TError = unknown>(
+    client: GraphQLClient,
+    variables?: GetCuisinesQueryVariables,
+    options?: UseQueryOptions<GetCuisinesQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetCuisinesQuery, TError, TData>(
+        variables === undefined ? ['getCuisines'] : ['getCuisines', variables],
+        fetcher<GetCuisinesQuery, GetCuisinesQueryVariables>(
+            client,
+            GetCuisinesDocument,
             variables,
             headers
         ),
