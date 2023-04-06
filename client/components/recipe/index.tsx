@@ -1,4 +1,4 @@
-import { type FC, useCallback, useEffect } from 'react';
+import { type FC, useCallback, useEffect, useMemo } from 'react';
 
 import classNames from 'classnames';
 import { hasCookie } from 'cookies-next';
@@ -58,7 +58,6 @@ const Recipe: FC<RecipeComponentProps> = props => {
     });
     const {
         handleSubmit,
-        reset,
         control,
         formState: { isDirty },
     } = methods;
@@ -87,12 +86,11 @@ const Recipe: FC<RecipeComponentProps> = props => {
 
     const onSubmit: SubmitHandler<UpdateInput> = useCallback(
         input => {
-            if (id && isDirty) {
+            if (id) {
                 updateRecipe({ id, input });
-                reset();
             }
         },
-        [id, isDirty]
+        [id]
     );
 
     const numPrep = prep ? parseInt(prep, 10) : undefined;
@@ -103,8 +101,10 @@ const Recipe: FC<RecipeComponentProps> = props => {
     }, []);
 
     useEffect(() => {
-        if (isEnterPressed) handleSubmit(onSubmit)();
-    }, [isEnterPressed, fields]);
+        if (isEnterPressed && isDirty) {
+            handleSubmit(onSubmit)();
+        }
+    }, [isEnterPressed, fields, isDirty]);
 
     if (!user) return null;
 

@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import cn from 'classnames';
-import { useFormContext } from 'react-hook-form';
+import { type SubmitHandler, useFormContext } from 'react-hook-form';
 
 import Button from '@components/Button';
 import { IconClear, IconEdit } from '@components/icons';
@@ -37,10 +37,17 @@ const Edit: FC<EditProps> = ({
 }) => {
     const [open, setOpen] = useState(false);
 
-    const { register } = useFormContext<UpdateInput>();
+    const { register, handleSubmit, resetField } =
+        useFormContext<UpdateInput>();
 
-    const { withEdit, isEnterPressed, isTheSameUser, fields, remove } =
-        useRecipeContext();
+    const {
+        withEdit,
+        isEnterPressed,
+        isTheSameUser,
+        fields,
+        remove,
+        onSubmit,
+    } = useRecipeContext();
 
     useEffect(() => {
         if (open) setOpen(isEnterPressed);
@@ -147,6 +154,7 @@ const Edit: FC<EditProps> = ({
                                 onClick={e => {
                                     e.preventDefault();
                                     remove(ingId);
+                                    handleSubmit(onSubmit)();
                                 }}
                             />
                         </div>
