@@ -7,7 +7,7 @@ import {
     UserResponse,
 } from '@schemas/user';
 import UserService from '@services/user';
-import { Context } from 'server/types/context';
+import { type Context } from 'server/types/context';
 
 @Resolver()
 export default class UserResolver {
