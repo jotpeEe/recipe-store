@@ -4,7 +4,7 @@ export { Card, Title, Link } from './CardWithLinks';
 export { UserInfo, UserStats } from './user';
 export { Checkbox, ErrorMessage, Input, ImageInput, TextArea } from './input';
 export { default as Nav } from './Nav';
-export { Recipe } from './recipe';
+export { default as Recipe } from './recipe';
 export { RecipeCard, RecipeMiniCard, ReviewCard, ReviewMiniCard } from './card';
 export { default as RecipeTitle } from './recipe/Title';
 export { default as RecipesList } from './RecipesList';

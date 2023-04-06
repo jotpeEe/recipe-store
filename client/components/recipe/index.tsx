@@ -42,7 +42,7 @@ export type RecipeComponentProps = {
     withEdit?: boolean;
 };
 
-export const Recipe: FC<RecipeComponentProps> = props => {
+const Recipe: FC<RecipeComponentProps> = props => {
     const { title, image, prep, description, user, id, ingredients, withEdit } =
         props;
 
@@ -187,3 +187,5 @@ export const Recipe: FC<RecipeComponentProps> = props => {
         </RecipeContext.Provider>
     );
 };
+
+export default Recipe;
