@@ -19,78 +19,132 @@ import { queryClient, requestClient } from '@requests';
 
 import Panel from './Panel';
 
-type OneProps = {
-    defaultValues: Partial<IRecipe> | undefined;
+type StepOneProps = {
+    defaultValues?: Partial<IRecipe>;
+    cuisines?: string[];
 };
 
-const recipeInfoSchema = object({
-    title: string().required().min(8),
-    description: string()
-        .required()
-        .min(10, 'Must be at least 10 characters long'),
-    prep: string().required().matches(numbers, 'Time must be a number'),
-    cuisine: string()
-        .required()
-        .matches(letters, 'Cuisine must include only letters'),
-    image: string(),
-});
+const recipeInfoSchema = z
+    .object({
+        title: z.string().min(1, 'Title is required'),
+        description: z
+            .string()
+            .min(1, 'Description is required')
+            .min(10, 'Must be at least 10 characters long'),
+        prep: z.string().min(1, 'Prep time estimation is required'),
+        cuisine: z
+            .string()
+            .refine(value => value !== 'Choose', 'Cuisine is required'),
+        image: z.any().superRefine((f, ctx) => imageValidation(f, ctx)),
+        newCuisine: z
+            .any()
+            .refine(
+                value => letters.test(value),
+                'Cuisine must include only letters'
+            ),
+    })
+    .superRefine(({ cuisine, newCuisine }, ctx) => {
+        if (cuisine === 'Other' && !newCuisine) {
+            ctx.addIssue({
+                code: 'custom',
+                message: 'Specify the type of cuisine',
+                path: ['newCuisine'],
+            });
+        }
+    });
 
-type RecipeInfoInput = TypeOf<typeof recipeInfoSchema>;
+type RecipeInfoInput = z.TypeOf<typeof recipeInfoSchema>;
 
-const StepOne: FC<OneProps> = ({ defaultValues }) => {
+const StepOne: FC<StepOneProps> = ({ defaultValues, cuisines }) => {
     const dispatch = useAppDispatch();
     const id = useAppSelector(state => state.recipe?.id);
+    const initialRecipe = useAppSelector(state => state.recipe);
     const { step, next } = useSliderContext();
 
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient);
     const { mutate: createRecipe } = useCreateRecipeMutation(requestClient, {
         onSuccess(data: CreateRecipeMutation) {
+            queryClient.refetchQueries('GetTempRecipe');
             dispatch(setId(data.createRecipe.recipe.id));
         },
     });
 
     const methods = useForm<RecipeInfoInput>({
         defaultValues,
-        resolver: yupResolver(recipeInfoSchema),
+        resolver: zodResolver(recipeInfoSchema),
     });
     const { handleSubmit, watch, reset } = methods;
 
     const title = watch('title');
     const description = watch('description');
     const prep = watch('prep');
-    const cuisine = watch('cuisine');
+    const select = watch('cuisine');
+    const newCuisine = watch('newCuisine');
     const image = watch('image');
 
-    const recipe = {
-        title,
-        description,
-        prep,
-        cuisine,
-        image,
-    };
+    const cuisine = useMemo(
+        () =>
+            newCuisine
+                ? newCuisine
+                      ?.slice(0, 1)
+                      .toUpperCase()
+                      .concat(newCuisine.slice(1, newCuisine.length))
+                : select
+                      ?.slice(0, 1)
+                      .toUpperCase()
+                      .concat(select.slice(1, select.length)),
+        [newCuisine, select]
+    );
+
+    const recipe = useMemo(
+        () => ({
+            title,
+            description,
+            prep,
+            cuisine,
+            image,
+        }),
+        [title, description, prep, cuisine, image]
+    );
 
     useEffect(() => {
         if (step === 0) dispatch(setInfo(recipe));
-    }, [recipe]);
-
-    const onSubmit: SubmitHandler<
-        RecipeInfoInput | Partial<IRecipe>
-    > = values => {
-        if (step === 0) {
-            if (id) updateRecipe({ input: { ...values, step }, id });
-            if (!id)
-                createRecipe({
-                    input: { ...values, step, temp: true } as IRecipe,
-                });
+        if (initialRecipe) {
+            const size = Object.keys(initialRecipe).length;
+            if (size === 0 || size === 1) reset();
         }
+    }, [recipe, defaultValues]);
 
-        reset();
-        next();
-        dispatch(setInfo({ ...values, step: step + 1 }));
+    const onSubmit: SubmitHandler<RecipeInfoInput> = async values => {
+        const { newCuisine: smthg, ...rest } = values;
+
+        const input = {
+            ...rest,
+            cuisine,
+            step,
+        };
+
+        if (step === 0) {
+            if (id) {
+                updateRecipe({
+                    input,
+                    id,
+                });
+            } else {
+                createRecipe({
+                    input: {
+                        ...input,
+                        temp: true,
+                    } as IRecipe,
+                });
+            }
+            next();
+            dispatch(setInfo({ ...values, cuisine, step: step + 1 }));
+        }
     };
 
     return (
-        <li>
+        <>
             <FormProvider {...methods}>
                 <form
                     className="relative"
@@ -103,36 +157,39 @@ const StepOne: FC<OneProps> = ({ defaultValues }) => {
                         Let’s setup default informations <br />
                         about the recipe.
                     </p>
-                    <FormInput
+                    <Input
                         label="Title"
                         name="title"
                         placeholder="Enter title"
                         type="text"
                     />
-                    <FormInput
+                    <Select
+                        label="Cuisine (ex. Thai, Polish)"
+                        name="cuisine"
+                        options={cuisines ?? ['']}
+                        placeholder="Enter cuisine"
+                    />
+                    {select === 'Other' && (
+                        <Input name="newCuisine" placeholder="Enter cuisine" />
+                    )}
+                    <Input
+                        label="Prep time"
+                        name="prep"
+                        placeholder="ex. 35 min"
+                        type="number"
+                    />
+                    <TextArea
                         label="Description"
                         name="description"
                         placeholder="Enter description"
-                        element="textarea"
                     />
-                    <FormInput
-                        label="Prep time"
-                        name="prep"
-                        placeholder="Enter prep time"
-                        type="text"
-                    />
-                    <FormInput
-                        label="Cuisine (ex. Thai, Polish)"
-                        name="cuisine"
-                        placeholder="Enter cuisine"
-                    />
-                    <ImageInput name="image" />
+                    <ImageInput name="image" instantUpload />
                     <Button className="my-7" type="submit" fullWidth arrow>
                         Next
                     </Button>
                 </form>
             </FormProvider>
-        </li>
+        </>
     );
 };
 

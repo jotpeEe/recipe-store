@@ -1,9 +1,9 @@
 import { type FC, type MouseEventHandler, useCallback } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
-import { type TypeOf, object, string } from 'yup';
+import { z } from 'zod';
 
 import { Button, TextArea } from '@components';
 import {
@@ -18,13 +18,11 @@ import { requestClient } from '@requests';
 
 import Panel from './Panel';
 
-const stepSchema = object({
-    step: string()
-        .required('Step is required')
-        .min(10, 'Must be at least 10 characters long'),
+const stepSchema = z.object({
+    step: z.string().min(1, 'Step is required'),
 });
 
-type StepInput = TypeOf<typeof stepSchema>;
+type StepInput = z.TypeOf<typeof stepSchema>;
 
 const StepThree: FC = () => {
     const dispatch = useAppDispatch();
@@ -36,9 +34,14 @@ const StepThree: FC = () => {
 
     const { mutate: createRecipe } = useCreateRecipeMutation(requestClient);
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient);
-    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient);
+    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient, {
+        onSuccess() {
+            dispatch(setRecipe({}));
+            router.push('/profile');
+        },
+    });
 
-    const methods = useForm<StepInput>({ resolver: yupResolver(stepSchema) });
+    const methods = useForm<StepInput>({ resolver: zodResolver(stepSchema) });
     const { reset, handleSubmit } = methods;
 
     const onSubmit: SubmitHandler<StepInput> = useCallback(
@@ -72,14 +75,10 @@ const StepThree: FC = () => {
                 createRecipe({ input: { ...pureRecipe } as IRecipe });
                 deleteRecipe({ id });
             }
-
-            dispatch(setRecipe({}));
-
-            router.push('/profile');
         }, [id, recipe]);
 
     return (
-        <li>
+        <li className="w-[260px] pl-1">
             <FormProvider {...methods}>
                 <form
                     className="relative"
@@ -93,12 +92,10 @@ const StepThree: FC = () => {
                         to the recipe.
                     </p>
                     <div className="[&>button:last-of-type]:mt-24 [&>button]:mb-4">
-                        <FormInput
-                            element="textarea"
+                        <TextArea
                             label="Description"
                             name="step"
                             placeholder="Enter step description"
-                            type="text"
                         />
                         <Button type="submit" size="sm">
                             add

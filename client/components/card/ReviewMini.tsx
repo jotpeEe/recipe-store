@@ -4,7 +4,8 @@ import cn from 'classnames';
 import format from 'date-fns/format';
 import Image from 'next/image';
 
-import { Button, UserInfo } from '@components';
+import Button from '@components/Button';
+import { UserInfo } from '@components/user';
 import { type IReviewMini } from '@lib/types';
 
 const ReviewMini: FC<IReviewMini> = ({ className, review }) => {

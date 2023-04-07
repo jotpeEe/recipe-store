@@ -1,8 +1,8 @@
 import { type FC, type MouseEventHandler, useCallback } from 'react';
 
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
-import { type TypeOf, object, string } from 'yup';
+import { z } from 'zod';
 
 import { Button, Input } from '@components';
 import { useSliderContext } from '@contexts';
@@ -13,24 +13,24 @@ import { requestClient } from '@requests';
 
 import Panel from './Panel';
 
-const ingredientSchema = object({
-    name: string().required('Name is required'),
-    amount: string().required('Amount is required'),
+const ingredientSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    amount: z.string().min(1, 'Amount is required'),
 });
 
-type IngredientInput = TypeOf<typeof ingredientSchema>;
+type IngredientInput = z.TypeOf<typeof ingredientSchema>;
 
-const StepTwo: FC = () => {
+const StepTwo: FC<{ id?: string }> = ({ id }) => {
     const dispatch = useAppDispatch();
     const data = useAppSelector(state => state.recipe);
 
-    const { id, ...recipe } = data ?? {};
+    const { ...recipe } = data ?? {};
     const { step, next } = useSliderContext();
 
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient);
 
     const methods = useForm<IngredientInput>({
-        resolver: yupResolver(ingredientSchema),
+        resolver: zodResolver(ingredientSchema),
     });
     const { handleSubmit, reset } = methods;
 
@@ -88,16 +88,16 @@ const StepTwo: FC = () => {
                         to the recipe.
                     </p>
                     <div className="[&>button:last-of-type]:mt-24 [&>button]:mb-4">
-                        <FormInput
+                        <Input
                             label="Name"
                             name="name"
                             placeholder="Enter name"
                             type="text"
                         />
-                        <FormInput
+                        <Input
                             label="Amount"
                             name="amount"
-                            placeholder="Enter amount"
+                            placeholder="ex. 35g"
                             type="text"
                         />
                         <Button type="submit" size="sm">

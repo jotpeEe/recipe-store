@@ -19,7 +19,6 @@
         "@reduxjs/toolkit": "^1.9.1",
         "@typegoose/typegoose": "^9.13.2",
         "apollo-server-micro": "^3.11.1",
-        "axios": "^1.2.3",
         "bcryptjs": "^2.4.3",
         "class-validator": "^0.14.0",
         "classnames": "^2.3.2",
@@ -42,7 +41,6 @@
         "reflect-metadata": "^0.1.13",
         "sharp": "^0.31.2",
         "type-graphql": "^1.1.1",
-        "yup": "^0.32.11",
         "zod": "^3.21.4"
     },
     "devDependencies": {

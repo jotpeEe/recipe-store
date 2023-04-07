@@ -1,4 +1,3 @@
-import { Hero, Recipes, Reviews } from '@sections';
 import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from 'react-query';
 
@@ -6,6 +5,7 @@ import { useGetAllRecipesQuery } from '@generated/graphql';
 import { useAppDispatch } from '@hooks';
 import { setPageLoading } from '@redux';
 import { queryClient, requestClient } from '@requests';
+import { Hero, Recipes, Reviews } from '@sections';
 
 /**
  * Home: The Landing page of the web app

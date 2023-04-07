@@ -82,7 +82,7 @@ const Display: FC<DisplayProps> = ({ fields }) => {
                                 {slicedFields.map((item, index) => (
                                     <AnimateOnLoad
                                         as="li"
-                                        key={index}
+                                        key={item.id}
                                         index={index}
                                     >
                                         <IngredientInput

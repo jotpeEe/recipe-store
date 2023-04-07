@@ -37,7 +37,7 @@ const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
 
     const onImageUpload = useCallback(
         async (e: ChangeEvent<HTMLInputElement>) => {
-            if (!e.target.files || e.target.files[0].length === 0) return;
+            if (!e.target.files || e.target.files.length === 0) return;
 
             const file = e.target.files[0];
             let isValid = true;
