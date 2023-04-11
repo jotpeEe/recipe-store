@@ -1,5 +1,6 @@
 const Image = () => (
     <svg
+        data-testid="icon"
         width="19"
         height="18"
         viewBox="0 0 19 18"
