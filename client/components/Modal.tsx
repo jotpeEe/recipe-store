@@ -8,25 +8,25 @@ type IModal = {
     children: React.ReactNode;
 };
 
-let modalRoot = document.getElementById('modal-root');
-if (!modalRoot) {
-    modalRoot = document.createElement('div');
-    modalRoot.setAttribute('id', 'modal-root');
-    document.body.appendChild(modalRoot);
-}
-
-// create div with id modal-root at the top of the body
-
 const Modal: FC<IModal> = ({ openModal, setOpenModal, children }) => {
     const el = document.createElement('div');
 
+    // create div with id modal-root at the top of the body, useEffect for client side only
     useEffect(() => {
+        let modalRoot = document.getElementById('modal-root');
+
+        if (!modalRoot && openModal) {
+            modalRoot = document.createElement('div');
+            modalRoot.setAttribute('id', 'modal-root');
+            document.body.appendChild(modalRoot);
+        }
+
         modalRoot?.appendChild(el);
 
         return () => {
             modalRoot?.removeChild(el);
         };
-    }, []);
+    }, [openModal]);
 
     if (!openModal) return null;
 

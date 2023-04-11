@@ -14,7 +14,7 @@ type PanelProps = {
 };
 
 const Panel: FC<PanelProps> = ({ first = false }) => {
-    const [openPostModal, setOpenPostModal] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
 
     const { step, goTo } = useSliderContext();
     const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
 
     const handleClearClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
-            setOpenPostModal(true);
+            setOpenModal(true);
         }, [id]);
 
     const onReset: MouseEventHandler<HTMLButtonElement> =
@@ -43,12 +43,12 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
                 await deleteRecipe({ id });
             }
             dispatch(setRecipe({}));
-            setOpenPostModal(false);
+            setOpenModal(false);
             goTo(0);
         }, [id]);
 
     const onCancel: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
-        setOpenPostModal(false);
+        setOpenModal(false);
     }, []);
 
     return (
@@ -66,10 +66,7 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
                     <button type="button" onClick={handleClearClick}>
                         <IconClear />
                     </button>
-                    <Modal
-                        openPostModal={openPostModal}
-                        setOpenPostModal={setOpenPostModal}
-                    >
+                    <Modal openModal={openModal} setOpenModal={setOpenModal}>
                         <>
                             <p>Do you want to reset create form?</p>
                             <div className="flex justify-end gap-2 pt-2">
