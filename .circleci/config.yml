@@ -1,0 +1,33 @@
+version: 2.1
+
+orbs:
+    node: circleci/node@4.6.0
+
+jobs:
+    build:
+        working_directory: ~/projects/WebDev/recipe-store
+        docker:
+            - image: cimg/node:19.8.1
+        environment:
+            NODE_ENV: production
+        steps:
+            - checkout
+            - node/install-packages:
+                  pkg-manager: yarn
+            - run:
+                  name: Run tests
+                  command: yarn run test
+
+workflows:
+    build:
+        jobs:
+            - build
+              # filters:
+              #     branches:
+              #         only: main
+              #     pull_request:
+              #         types: [closed]
+              #         branches:
+              #             only: main
+              #         filters:
+              #             status: 'success'
