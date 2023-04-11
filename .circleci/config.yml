@@ -8,8 +8,6 @@ jobs:
         working_directory: ~/projects/WebDev/recipe-store
         docker:
             - image: cimg/node:19.8.1
-        # environment:
-        #     NODE_ENV: production
         steps:
             - checkout
             - node/install-packages:
@@ -21,13 +19,7 @@ jobs:
 workflows:
     build:
         jobs:
-            - build
-              # filters:
-              #     branches:
-              #         only: main
-              #     pull_request:
-              #         types: [closed]
-              #         branches:
-              #             only: main
-              #         filters:
-              #             status: 'success'
+            - build:
+                  filters:
+                      branches:
+                          only: main

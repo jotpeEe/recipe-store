@@ -13,7 +13,10 @@ const config = {
     // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 
     moduleNameMapper: {
-        '^@components(.*)$': '<rootDir>/utils/components',
+        '^@components/(.*)$': '<rootDir>/client/components/$1',
+        '^@contexts/(.*)$': '<rootDir>/client/contexts/$1',
+        '^@icons(.*)$': '<rootDir>/client/components/icons',
+        '^@constants/(.*)$': '<rootDir>/client/constants/$1',
     },
     testEnvironment: 'jest-environment-jsdom',
 };

@@ -2,7 +2,7 @@ import { type FC, type MouseEvent, useCallback } from 'react';
 
 import classNames from 'classnames';
 
-import Button from '@components/Button';
+import Button from './Button';
 
 type SwitchProps = {
     array: string[] | undefined;
