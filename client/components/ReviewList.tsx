@@ -1,14 +1,13 @@
 import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
-import cn from 'classnames';
-import { hasCookie } from 'cookies-next';
-import { useRouter } from 'next/router';
-import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
-
 import { useCreateReviewMutation } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
 import { type IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
+import cn from 'classnames';
+import { hasCookie } from 'cookies-next';
+import { useRouter } from 'next/router';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';

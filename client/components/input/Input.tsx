@@ -26,6 +26,7 @@ const Input: FC<InputProps> = ({
     label,
     name,
     value,
+    required,
     noValidation,
     type = 'text',
     ...props
@@ -44,7 +45,7 @@ const Input: FC<InputProps> = ({
                 )}
             >
                 {label && (
-                    <label htmlFor={name} className="mb-2 text-sm">
+                    <label id={`${name}-label`} className="mb-2 text-sm">
                         {label}
                     </label>
                 )}
@@ -57,7 +58,11 @@ const Input: FC<InputProps> = ({
                         errors[name] && 'border-red-600'
                     )}
                     {...props}
-                    {...register(name)}
+                    {...register(name, {
+                        required: required && 'This field is required',
+                    })}
+                    aria-labelledby={`${name}-label`}
+                    aria-invalid={errors?.[name] ? 'true' : 'false'}
                 />
             </div>
             {!noValidation && <ErrorMessage error={errors[name]} />}

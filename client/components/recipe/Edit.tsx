@@ -8,14 +8,13 @@ import {
     useState,
 } from 'react';
 
-import cn from 'classnames';
-import { type SubmitHandler, useFormContext } from 'react-hook-form';
-
 import Button from '@components/Button';
 import { IconClear, IconEdit } from '@components/icons';
 import { Input, TextArea } from '@components/input';
 import { useRecipeContext } from '@contexts';
 import { type UpdateInput } from '@generated/graphql';
+import cn from 'classnames';
+import { type SubmitHandler, useFormContext } from 'react-hook-form';
 
 type EditProps = PropsWithChildren & {
     className?: string;

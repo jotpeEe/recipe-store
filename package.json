@@ -11,7 +11,7 @@
         "start": "next start",
         "lint": "next lint --fix",
         "generate": "graphql-codegen --config codegen.yml",
-        "test": "jest"
+        "test": "jest --watch"
     },
     "dependencies": {
         "@fontsource/poppins": "^4.5.10",

@@ -8,7 +8,7 @@ import Modal from '@components/Modal';
 afterEach(cleanup);
 
 describe('Modal', () => {
-    it('should not render when openModal is false', () => {
+    it('should not render content when openModal is false', () => {
         const { queryByTestId } = render(
             <Modal openModal={false} setOpenModal={() => {}}>
                 <div data-testid="modal-content">Modal Content</div>
@@ -17,7 +17,7 @@ describe('Modal', () => {
         expect(queryByTestId('modal-content')).not.toBeInTheDocument();
     });
 
-    it('should render the modal when openModal is true', () => {
+    it('should render content when openModal is true', () => {
         const { getByTestId } = render(
             <Modal openModal={true} setOpenModal={() => {}}>
                 <div data-testid="modal-content">Modal Content</div>
