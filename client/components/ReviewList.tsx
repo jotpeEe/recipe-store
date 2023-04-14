@@ -1,13 +1,14 @@
 import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
+import cn from 'classnames';
+import { hasCookie } from 'cookies-next';
+import { useRouter } from 'next/router';
+import { FormProvider, useForm } from 'react-hook-form';
+
 import { useCreateReviewMutation } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
 import { type IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
-import cn from 'classnames';
-import { hasCookie } from 'cookies-next';
-import { useRouter } from 'next/router';
-import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';
@@ -45,7 +46,7 @@ const ReviewList: FC<ReviewListProps> = ({
     const isTheSameUser = recipeAuthor?.id === user?.id;
 
     const methods = useForm<ReviewInput>();
-    const { handleSubmit, reset } = methods;
+    const { reset, getValues } = methods;
 
     const REVIEW_LIMIT = 4;
     const [limit, setLimit] = useState(REVIEW_LIMIT);
@@ -70,24 +71,31 @@ const ReviewList: FC<ReviewListProps> = ({
         [clicked, reviews]
     );
 
-    const handleCommentClick: MouseEventHandler<HTMLButtonElement> =
-        useCallback(
-            async e => {
-                e.preventDefault();
-                if (!loggedIn) router.push('/auth');
-                if (!user && loggedIn)
-                    await queryClient
-                        .refetchQueries('GetMe')
-                        .then(() => setOpen(state => !state));
-                if (user) setOpen(state => !state);
-            },
-            [user, loggedIn]
-        );
+    const onAddCommentClick: MouseEventHandler<HTMLButtonElement> = useCallback(
+        async e => {
+            e.preventDefault();
+            if (!loggedIn) router.push('/auth');
+            if (!user && loggedIn)
+                await queryClient
+                    .refetchQueries('GetMe')
+                    .then(() => setOpen(state => !state));
+            if (user) setOpen(state => !state);
+        },
+        [user, loggedIn]
+    );
 
-    const onSubmit: SubmitHandler<ReviewInput> = useCallback(values => {
-        const { input } = values;
-        if (id) createReview({ input, id });
-    }, []);
+    const handleSubmitClick: MouseEventHandler<HTMLButtonElement> = useCallback(
+        e => {
+            e.preventDefault();
+            const { input } = getValues();
+            if (id && input.length !== 0)
+                createReview({
+                    input,
+                    id,
+                });
+        },
+        [id]
+    );
 
     return (
         <>
@@ -123,7 +131,7 @@ const ReviewList: FC<ReviewListProps> = ({
             {addEnable && !isTheSameUser && (
                 <div className="w-full">
                     <button
-                        onClick={handleCommentClick}
+                        onClick={onAddCommentClick}
                         className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary shadow-card shadow-gray-400"
                     >
                         <div className="my-1 ml-1 rounded-full bg-white px-2 font-medium text-gray-500">
@@ -133,15 +141,13 @@ const ReviewList: FC<ReviewListProps> = ({
                     </button>
                     {open && (
                         <FormProvider {...methods}>
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <TextArea
-                                    name="input"
-                                    placeholder="Enter comment"
-                                />
-                                <Button type="submit" size="sm">
-                                    Add
-                                </Button>
-                            </form>
+                            <TextArea
+                                name="input"
+                                placeholder="Enter comment"
+                            />
+                            <Button onClick={handleSubmitClick} size="sm">
+                                Add
+                            </Button>
                         </FormProvider>
                     )}
                 </div>
