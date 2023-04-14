@@ -1,4 +1,4 @@
-import { type FC, useCallback, useEffect, useMemo } from 'react';
+import { type FC, useCallback, useEffect } from 'react';
 
 import classNames from 'classnames';
 import { hasCookie } from 'cookies-next';

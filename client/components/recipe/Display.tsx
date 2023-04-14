@@ -1,11 +1,12 @@
 import { type FC, useEffect, useMemo, useState } from 'react';
 
+import { type FieldArrayWithId } from 'react-hook-form';
+
 import { AnimateOnLoad, AnimatedDiv as Animated } from '@components/animations';
 import { IngredientInput } from '@components/input';
 import { useRecipeContext } from '@contexts';
 import { type UpdateInput } from '@generated/graphql';
 import { IconDish } from '@icons';
-import { type FieldArrayWithId } from 'react-hook-form';
 
 import ReviewList from '../ReviewList';
 import Switch from '../Switch';
