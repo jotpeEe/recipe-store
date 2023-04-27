@@ -4,6 +4,7 @@ export { Card, Title, Link } from './CardWithLinks';
 export { UserInfo, UserStats } from './user';
 export { Checkbox, ErrorMessage, Input, ImageInput, TextArea } from './input';
 export { default as Nav } from './Nav';
+export { default as Modal } from './Modal';
 export { default as Recipe } from './recipe';
 export { RecipeCard, RecipeMiniCard, ReviewCard, ReviewMiniCard } from './card';
 export { default as RecipeTitle } from './recipe/Title';

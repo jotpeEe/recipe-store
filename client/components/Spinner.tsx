@@ -15,6 +15,7 @@ const Spinner: FC<SpinnerProps> = ({
     bgColor,
 }) => (
     <svg
+        data-testid="spinner"
         role="status"
         className={classNames(
             'h-5 w-5 animate-spin fill-primary dark:text-gray-600',

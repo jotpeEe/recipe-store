@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { IconArrow } from '@icons';
 
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     children?: ReactNode;

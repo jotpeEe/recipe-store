@@ -1,7 +1,5 @@
 import { type FC, useMemo } from 'react';
 
-import { FormProvider, useForm } from 'react-hook-form';
-
 import { AnimateOnLoad } from '@components/animations';
 import Button from '@components/Button';
 import RecipeMini from '@components/card/RecipeMini';
@@ -9,6 +7,7 @@ import { useGetAllRecipesQuery } from '@generated/graphql';
 import { useRecipesFilter } from '@hooks';
 import { IconFilter } from '@icons';
 import { requestClient } from '@requests';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import Slider from '../slider';
 import FormInput from './Input';

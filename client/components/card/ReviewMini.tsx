@@ -1,12 +1,11 @@
 import { type FC, useMemo } from 'react';
 
-import cn from 'classnames';
-import format from 'date-fns/format';
-import Image from 'next/image';
-
 import Button from '@components/Button';
 import { UserInfo } from '@components/user';
 import { type IReviewMini } from '@lib/types';
+import cn from 'classnames';
+import format from 'date-fns/format';
+import Image from 'next/image';
 
 const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
     const { createdAt, text, pos, neg, user } = review;

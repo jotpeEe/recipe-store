@@ -18,6 +18,7 @@ type InputProps = DetailedHTMLProps<
     label?: string;
     noValidation?: boolean;
     value?: string | number;
+    error?: boolean | undefined;
     type?: 'text' | 'number' | 'password' | 'email';
 };
 
@@ -26,6 +27,8 @@ const Input: FC<InputProps> = ({
     label,
     name,
     value,
+    error,
+    required,
     noValidation,
     type = 'text',
     ...props
@@ -39,12 +42,12 @@ const Input: FC<InputProps> = ({
         <>
             <div
                 className={cn(
-                    'flex w-fit flex-col items-start justify-center text-sm',
+                    'flex w-full flex-col items-start justify-center text-sm',
                     className
                 )}
             >
                 {label && (
-                    <label htmlFor={name} className="mb-2 text-sm">
+                    <label id={`${name}-label`} className="mb-2 text-sm">
                         {label}
                     </label>
                 )}
@@ -54,10 +57,14 @@ const Input: FC<InputProps> = ({
                     defaultValue={value}
                     className={cn(
                         'w-full rounded-lg border p-3 text-xs',
-                        errors[name] && 'border-red-600'
+                        errors[name] || (error && 'border-red-600')
                     )}
                     {...props}
-                    {...register(name)}
+                    {...register(name, {
+                        required: required && 'This field is required',
+                    })}
+                    aria-labelledby={`${name}-label`}
+                    aria-invalid={errors?.[name] || error ? 'true' : 'false'}
                 />
             </div>
             {!noValidation && <ErrorMessage error={errors[name]} />}

@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import cn from 'classnames';
-import { type SubmitHandler, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import Button from '@components/Button';
 import { IconClear, IconEdit } from '@components/icons';

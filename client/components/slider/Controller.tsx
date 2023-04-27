@@ -1,9 +1,8 @@
 import { type FC } from 'react';
 
-import classNames from 'classnames';
-
 import { useSliderContext } from '@contexts';
 import { IconArrow } from '@icons';
+import classNames from 'classnames';
 
 import Button from '../Button';
 
