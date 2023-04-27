@@ -14,9 +14,16 @@ const config = {
 
     moduleNameMapper: {
         '^@components/(.*)$': '<rootDir>/client/components/$1',
+        '^@components(.*)$': '<rootDir>/client/components',
+        '^@constants/(.*)$': '<rootDir>/utils/constants/$1',
+        '^@constants(.*)$': '<rootDir>/utils/constants',
         '^@contexts/(.*)$': '<rootDir>/client/contexts/$1',
+        '^@contexts(.*)$': '<rootDir>/client/contexts',
         '^@icons(.*)$': '<rootDir>/client/components/icons',
-        '^@constants/(.*)$': '<rootDir>/client/constants/$1',
+        '^@hooks(.*)$': '<rootDir>/client/hooks',
+        '^@lib(.*)$': '<rootDir>/client/lib',
+        '^@generated/graphql': '<rootDir>/client/generated/graphql',
+        '^@redux(.*)$': '<rootDir>/client/redux',
     },
     testEnvironment: 'jest-environment-jsdom',
 };
