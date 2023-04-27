@@ -11,6 +11,7 @@ module.exports = {
                 '1to2': '1fr minmax(0, 2fr)',
                 slider: 'repeat(12, minmax(0, 1fr)',
                 fill: 'repeat(auto-fill, minmax(125px, 1fr))',
+                panel: 'repeat(auto-fill, minmax(125px, 270px))',
             },
             colors: {
                 primary: '#129575',
