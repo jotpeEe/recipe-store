@@ -1,12 +1,12 @@
 /* eslint-disable no-use-before-define */
-import { type GraphQLClient } from 'graphql-request';
-import { type RequestInit } from 'graphql-request/dist/types.dom';
 import {
     type UseMutationOptions,
     type UseQueryOptions,
     useMutation,
     useQuery,
-} from 'react-query';
+} from '@tanstack/react-query';
+import { type GraphQLClient } from 'graphql-request';
+import { type RequestInit } from 'graphql-request/dist/types.dom';
 
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -69,7 +69,7 @@ export type Input = {
     prep: Scalars['String'];
     servings?: InputMaybe<Scalars['Float']>;
     step?: InputMaybe<Scalars['Float']>;
-    steps?: InputMaybe<Array<Scalars['String']>>;
+    steps?: InputMaybe<Array<StepInput>>;
     temp?: InputMaybe<Scalars['Boolean']>;
     title: Scalars['String'];
 };
@@ -94,14 +94,14 @@ export type LoginResponse = {
 
 export type Mutation = {
     __typename?: 'Mutation';
-    createRecipe: Response;
+    createRecipe: PopulatedResponse;
     createReview: ReviewResponse;
     deleteRecipe: PopulatedResponse;
     deleteReview: ReviewPopulatedResponse;
     deleteUser: Scalars['Boolean'];
     loginUser: LoginResponse;
     signupUser: UserResponse;
-    updateRecipe: Response;
+    updateRecipe: PopulatedResponse;
     updateReview: ReviewResponse;
 };
 
@@ -158,7 +158,7 @@ export type PopulatedData = {
     reviews: Array<ReviewData>;
     servings?: Maybe<Scalars['Float']>;
     step: Scalars['Float'];
-    steps: Array<Scalars['String']>;
+    steps: Array<Step>;
     temp: Scalars['Boolean'];
     title: Scalars['String'];
     updatedAt: Scalars['DateTime'];
@@ -177,25 +177,22 @@ export type Query = {
     getCuisines: CuisineResponse;
     getLastReviews: ReviewListResponse;
     getMe: UserResponse;
-    getRecipe: PopulatedResponse;
+    getMyReviews: ReviewListResponse;
+    getRecipeById: PopulatedResponse;
     getRecipes: ListResponse;
-    getReviewsByAuthor: ReviewListResponse;
-    getReviewsByRecipe: ReviewListResponse;
+    getReviewsBy: ReviewListResponse;
     getTempRecipe?: Maybe<PopulatedResponse>;
     logoutUser: Scalars['Boolean'];
     refreshAccessToken: LoginResponse;
 };
 
-export type QueryGetRecipeArgs = {
+export type QueryGetRecipeByIdArgs = {
     id: Scalars['String'];
 };
 
-export type QueryGetReviewsByAuthorArgs = {
-    author: Scalars['String'];
-};
-
-export type QueryGetReviewsByRecipeArgs = {
-    id: Scalars['String'];
+export type QueryGetReviewsByArgs = {
+    author?: InputMaybe<Scalars['String']>;
+    id?: InputMaybe<Scalars['String']>;
 };
 
 export type RecipeData = {
@@ -210,17 +207,11 @@ export type RecipeData = {
     prep: Scalars['String'];
     servings?: Maybe<Scalars['Float']>;
     step: Scalars['Float'];
-    steps: Array<Scalars['String']>;
+    steps: Array<Step>;
     temp: Scalars['Boolean'];
     title: Scalars['String'];
     updatedAt: Scalars['DateTime'];
     user: Scalars['String'];
-};
-
-export type Response = {
-    __typename?: 'Response';
-    recipe: RecipeData;
-    status: Scalars['String'];
 };
 
 export type ReviewData = {
@@ -278,6 +269,17 @@ export type SignUpInput = {
     terms: Scalars['Boolean'];
 };
 
+export type Step = {
+    __typename?: 'Step';
+    label?: Maybe<Scalars['String']>;
+    text: Scalars['String'];
+};
+
+export type StepInput = {
+    label?: InputMaybe<Scalars['String']>;
+    text: Scalars['String'];
+};
+
 export type UpdateInput = {
     cuisine?: InputMaybe<Scalars['String']>;
     description?: InputMaybe<Scalars['String']>;
@@ -287,7 +289,7 @@ export type UpdateInput = {
     reviews?: InputMaybe<Array<Scalars['String']>>;
     servings?: InputMaybe<Scalars['Float']>;
     step?: InputMaybe<Scalars['Float']>;
-    steps?: InputMaybe<Array<Scalars['String']>>;
+    steps?: InputMaybe<Array<StepInput>>;
     title?: InputMaybe<Scalars['String']>;
 };
 
@@ -317,22 +319,28 @@ export type CreateRecipeMutationVariables = Exact<{
 export type CreateRecipeMutation = {
     __typename?: 'Mutation';
     createRecipe: {
-        __typename?: 'Response';
+        __typename?: 'PopulatedResponse';
         status: string;
-        recipe: {
-            __typename?: 'RecipeData';
+        recipe?: {
+            __typename?: 'PopulatedData';
             title: string;
             description: string;
             prep: string;
             cuisine: string;
             servings?: number | null;
             image: string;
-            createdAt: any;
-            updatedAt: any;
-            user: string;
-            temp: boolean;
             id: string;
-        };
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+            }>;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+            }>;
+        } | null;
     };
 };
 
@@ -368,9 +376,11 @@ export type DeleteUserMutation = {
     deleteUser: boolean;
 };
 
-export type GetAllRecipesQueryVariables = Exact<{ [key: string]: never }>;
+export type GetAllRecipesAndLastReviewsQueryVariables = Exact<{
+    [key: string]: never;
+}>;
 
-export type GetAllRecipesQuery = {
+export type GetAllRecipesAndLastReviewsQuery = {
     __typename?: 'Query';
     getAllRecipes: {
         __typename?: 'ListResponse';
@@ -389,9 +399,40 @@ export type GetAllRecipesQuery = {
             id: string;
             user: {
                 __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+        }>;
+    };
+    getLastReviews: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            id: string;
+            recipeAuthor: {
+                __typename?: 'UserData';
                 _id: string;
                 name: string;
                 photo: string;
+            };
+            recipe: {
+                __typename?: 'RecipeData';
+                title: string;
+                image: string;
+                id: string;
+            };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
             };
         }>;
     };
@@ -418,23 +459,58 @@ export type GetMeQuery = {
         status: string;
         user: {
             __typename?: 'UserData';
-            _id: string;
-            id: string;
             email: string;
             name: string;
-            role: string;
             photo: string;
-            updatedAt: any;
-            createdAt: any;
+            id: string;
         };
     };
 };
 
-export type GetMyRecipesQueryVariables = Exact<{ [key: string]: never }>;
+export type GetProfileDataQueryQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetMyRecipesQuery = {
+export type GetProfileDataQueryQuery = {
     __typename?: 'Query';
-    getRecipes: {
+    getMyReviews: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            id: string;
+            recipe: {
+                __typename?: 'RecipeData';
+                description: string;
+                id: string;
+            };
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+            };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+        }>;
+    };
+    getMe: {
+        __typename?: 'UserResponse';
+        status: string;
+        user: {
+            __typename?: 'UserData';
+            name: string;
+            photo: string;
+            id: string;
+        };
+    };
+    getAllRecipes: {
         __typename?: 'ListResponse';
         status: string;
         results: number;
@@ -445,7 +521,12 @@ export type GetMyRecipesQuery = {
             image: string;
             cuisine: string;
             id: string;
-            user: { __typename?: 'UserData'; name: string; photo: string };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
         }>;
     };
 };
@@ -456,7 +537,7 @@ export type GetRecipeByIdQueryVariables = Exact<{
 
 export type GetRecipeByIdQuery = {
     __typename?: 'Query';
-    getRecipe: {
+    getRecipeById: {
         __typename?: 'PopulatedResponse';
         recipe?: {
             __typename?: 'PopulatedData';
@@ -466,12 +547,16 @@ export type GetRecipeByIdQuery = {
             prep: string;
             servings?: number | null;
             image: string;
-            steps: Array<string>;
             id: string;
             ingredients: Array<{
                 __typename?: 'Ingredient';
                 name: string;
                 amount: string;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
             }>;
             user: {
                 __typename?: 'UserData';
@@ -481,18 +566,8 @@ export type GetRecipeByIdQuery = {
             };
         } | null;
     };
-};
-
-export type GetReviewsByAuthorQueryVariables = Exact<{
-    author: Scalars['String'];
-}>;
-
-export type GetReviewsByAuthorQuery = {
-    __typename?: 'Query';
-    getReviewsByAuthor: {
+    getReviewsBy: {
         __typename?: 'ReviewListResponse';
-        status: string;
-        results: number;
         reviews: Array<{
             __typename?: 'ReviewPopulatedData';
             text: string;
@@ -506,37 +581,44 @@ export type GetReviewsByAuthorQuery = {
                 name: string;
                 photo: string;
             };
-            user: { __typename?: 'UserData'; name: string; photo: string };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
         }>;
     };
 };
 
-export type GetReviewsByRecipeQueryVariables = Exact<{
-    id: Scalars['String'];
-}>;
+export type GetTempRecipeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetReviewsByRecipeQuery = {
+export type GetTempRecipeQuery = {
     __typename?: 'Query';
-    getReviewsByRecipe: {
-        __typename?: 'ReviewListResponse';
+    temp?: {
+        __typename?: 'PopulatedResponse';
         status: string;
-        results: number;
-        reviews: Array<{
-            __typename?: 'ReviewPopulatedData';
-            text: string;
-            pos: Array<string>;
-            neg: Array<string>;
-            createdAt: any;
+        recipe?: {
+            __typename?: 'PopulatedData';
+            title: string;
+            description: string;
+            prep: string;
+            cuisine: string;
+            servings?: number | null;
+            image: string;
             id: string;
-            recipe: { __typename?: 'RecipeData'; id: string };
-            recipeAuthor: {
-                __typename?: 'UserData';
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+            }>;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
                 name: string;
-                photo: string;
-            };
-            user: { __typename?: 'UserData'; name: string; photo: string };
-        }>;
-    };
+                amount: string;
+            }>;
+        } | null;
+    } | null;
 };
 
 export type LoginUserMutationVariables = Exact<{
@@ -580,11 +662,14 @@ export type SignUpUserMutation = {
     };
 };
 
-export type GetTempRecipeQueryVariables = Exact<{ [key: string]: never }>;
+export type UpdateRecipeMutationVariables = Exact<{
+    id: Scalars['String'];
+    input: UpdateInput;
+}>;
 
-export type GetTempRecipeQuery = {
-    __typename?: 'Query';
-    temp?: {
+export type UpdateRecipeMutation = {
+    __typename?: 'Mutation';
+    updateRecipe: {
         __typename?: 'PopulatedResponse';
         status: string;
         recipe?: {
@@ -595,51 +680,18 @@ export type GetTempRecipeQuery = {
             cuisine: string;
             servings?: number | null;
             image: string;
-            steps: Array<string>;
             id: string;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+            }>;
             ingredients: Array<{
                 __typename?: 'Ingredient';
                 name: string;
                 amount: string;
             }>;
         } | null;
-    } | null;
-};
-
-export type UpdateRecipeMutationVariables = Exact<{
-    id: Scalars['String'];
-    input: UpdateInput;
-}>;
-
-export type UpdateRecipeMutation = {
-    __typename?: 'Mutation';
-    updateRecipe: {
-        __typename?: 'Response';
-        status: string;
-        recipe: { __typename?: 'RecipeData'; id: string };
-    };
-};
-
-export type GetLastReviewsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetLastReviewsQuery = {
-    __typename?: 'Query';
-    getLastReviews: {
-        __typename?: 'ReviewListResponse';
-        status: string;
-        results: number;
-        reviews: Array<{
-            __typename?: 'ReviewPopulatedData';
-            text: string;
-            createdAt: any;
-            recipe: {
-                __typename?: 'RecipeData';
-                title: string;
-                image: string;
-                id: string;
-            };
-            user: { __typename?: 'UserData'; name: string; photo: string };
-        }>;
     };
 };
 
@@ -655,10 +707,14 @@ export const CreateRecipeDocument = `
       cuisine
       servings
       image
-      createdAt
-      updatedAt
-      user
-      temp
+      steps {
+        label
+        text
+      }
+      ingredients {
+        name
+        amount
+      }
     }
   }
 }
@@ -789,8 +845,8 @@ export const useDeleteUserMutation = <TError = unknown, TContext = unknown>(
             )(),
         options
     );
-export const GetAllRecipesDocument = `
-    query GetAllRecipes {
+export const GetAllRecipesAndLastReviewsDocument = `
+    query GetAllRecipesAndLastReviews {
   getAllRecipes {
     status
     results
@@ -805,7 +861,33 @@ export const GetAllRecipesDocument = `
       createdAt
       updatedAt
       user {
+        id: _id
+        name
+        photo
+      }
+    }
+  }
+  getLastReviews {
+    status
+    results
+    reviews {
+      id: _id
+      text
+      pos
+      neg
+      createdAt
+      recipeAuthor {
         _id
+        name
+        photo
+      }
+      recipe {
+        id: _id
+        title
+        image
+      }
+      user {
+        id: _id
         name
         photo
       }
@@ -813,25 +895,23 @@ export const GetAllRecipesDocument = `
   }
 }
     `;
-export const useGetAllRecipesQuery = <
-    TData = GetAllRecipesQuery,
+export const useGetAllRecipesAndLastReviewsQuery = <
+    TData = GetAllRecipesAndLastReviewsQuery,
     TError = unknown
 >(
     client: GraphQLClient,
-    variables?: GetAllRecipesQueryVariables,
-    options?: UseQueryOptions<GetAllRecipesQuery, TError, TData>,
+    variables?: GetAllRecipesAndLastReviewsQueryVariables,
+    options?: UseQueryOptions<GetAllRecipesAndLastReviewsQuery, TError, TData>,
     headers?: RequestInit['headers']
 ) =>
-    useQuery<GetAllRecipesQuery, TError, TData>(
+    useQuery<GetAllRecipesAndLastReviewsQuery, TError, TData>(
         variables === undefined
-            ? ['GetAllRecipes']
-            : ['GetAllRecipes', variables],
-        fetcher<GetAllRecipesQuery, GetAllRecipesQueryVariables>(
-            client,
-            GetAllRecipesDocument,
-            variables,
-            headers
-        ),
+            ? ['GetAllRecipesAndLastReviews']
+            : ['GetAllRecipesAndLastReviews', variables],
+        fetcher<
+            GetAllRecipesAndLastReviewsQuery,
+            GetAllRecipesAndLastReviewsQueryVariables
+        >(client, GetAllRecipesAndLastReviewsDocument, variables, headers),
         options
     );
 export const GetCuisinesDocument = `
@@ -864,14 +944,10 @@ export const GetMeDocument = `
   getMe {
     status
     user {
-      _id
-      id
+      id: _id
       email
       name
-      role
       photo
-      updatedAt
-      createdAt
     }
   }
 }
@@ -892,9 +968,41 @@ export const useGetMeQuery = <TData = GetMeQuery, TError = unknown>(
         ),
         options
     );
-export const GetMyRecipesDocument = `
-    query GetMyRecipes {
-  getRecipes {
+export const GetProfileDataQueryDocument = `
+    query GetProfileDataQuery {
+  getMyReviews {
+    status
+    results
+    reviews {
+      id: _id
+      text
+      recipe {
+        id: _id
+        description
+      }
+      recipeAuthor {
+        name
+        photo
+      }
+      user {
+        id: _id
+        name
+        photo
+      }
+      pos
+      neg
+      createdAt
+    }
+  }
+  getMe {
+    status
+    user {
+      id: _id
+      name
+      photo
+    }
+  }
+  getAllRecipes {
     status
     results
     recipes {
@@ -904,6 +1012,7 @@ export const GetMyRecipesDocument = `
       image
       cuisine
       user {
+        id: _id
         name
         photo
       }
@@ -911,22 +1020,22 @@ export const GetMyRecipesDocument = `
   }
 }
     `;
-export const useGetMyRecipesQuery = <
-    TData = GetMyRecipesQuery,
+export const useGetProfileDataQueryQuery = <
+    TData = GetProfileDataQueryQuery,
     TError = unknown
 >(
     client: GraphQLClient,
-    variables?: GetMyRecipesQueryVariables,
-    options?: UseQueryOptions<GetMyRecipesQuery, TError, TData>,
+    variables?: GetProfileDataQueryQueryVariables,
+    options?: UseQueryOptions<GetProfileDataQueryQuery, TError, TData>,
     headers?: RequestInit['headers']
 ) =>
-    useQuery<GetMyRecipesQuery, TError, TData>(
+    useQuery<GetProfileDataQueryQuery, TError, TData>(
         variables === undefined
-            ? ['GetMyRecipes']
-            : ['GetMyRecipes', variables],
-        fetcher<GetMyRecipesQuery, GetMyRecipesQueryVariables>(
+            ? ['GetProfileDataQuery']
+            : ['GetProfileDataQuery', variables],
+        fetcher<GetProfileDataQueryQuery, GetProfileDataQueryQueryVariables>(
             client,
-            GetMyRecipesDocument,
+            GetProfileDataQueryDocument,
             variables,
             headers
         ),
@@ -934,7 +1043,7 @@ export const useGetMyRecipesQuery = <
     );
 export const GetRecipeByIdDocument = `
     query GetRecipeById($id: String!) {
-  getRecipe(id: $id) {
+  getRecipeById(id: $id) {
     recipe {
       id: _id
       cuisine
@@ -947,12 +1056,36 @@ export const GetRecipeByIdDocument = `
         amount
       }
       image
-      steps
+      steps {
+        label
+        text
+      }
       user {
         id: _id
         name
         photo
       }
+    }
+  }
+  getReviewsBy(id: $id) {
+    reviews {
+      id: _id
+      text
+      recipe {
+        id: _id
+      }
+      recipeAuthor {
+        name
+        photo
+      }
+      user {
+        id: _id
+        name
+        photo
+      }
+      pos
+      neg
+      createdAt
     }
   }
 }
@@ -976,91 +1109,46 @@ export const useGetRecipeByIdQuery = <
         ),
         options
     );
-export const GetReviewsByAuthorDocument = `
-    query getReviewsByAuthor($author: String!) {
-  getReviewsByAuthor(author: $author) {
+export const GetTempRecipeDocument = `
+    query GetTempRecipe {
+  temp: getTempRecipe {
     status
-    results
-    reviews {
+    recipe {
       id: _id
-      text
-      recipe {
-        id: _id
+      title
+      description
+      prep
+      cuisine
+      servings
+      image
+      steps {
+        label
+        text
       }
-      recipeAuthor {
+      ingredients {
         name
-        photo
+        amount
       }
-      user {
-        name
-        photo
-      }
-      pos
-      neg
-      createdAt
     }
   }
 }
     `;
-export const useGetReviewsByAuthorQuery = <
-    TData = GetReviewsByAuthorQuery,
+export const useGetTempRecipeQuery = <
+    TData = GetTempRecipeQuery,
     TError = unknown
 >(
     client: GraphQLClient,
-    variables: GetReviewsByAuthorQueryVariables,
-    options?: UseQueryOptions<GetReviewsByAuthorQuery, TError, TData>,
+    variables?: GetTempRecipeQueryVariables,
+    options?: UseQueryOptions<GetTempRecipeQuery, TError, TData>,
     headers?: RequestInit['headers']
 ) =>
-    useQuery<GetReviewsByAuthorQuery, TError, TData>(
-        ['getReviewsByAuthor', variables],
-        fetcher<GetReviewsByAuthorQuery, GetReviewsByAuthorQueryVariables>(
+    useQuery<GetTempRecipeQuery, TError, TData>(
+        variables === undefined
+            ? ['GetTempRecipe']
+            : ['GetTempRecipe', variables],
+        fetcher<GetTempRecipeQuery, GetTempRecipeQueryVariables>(
             client,
-            GetReviewsByAuthorDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const GetReviewsByRecipeDocument = `
-    query getReviewsByRecipe($id: String!) {
-  getReviewsByRecipe(id: $id) {
-    status
-    results
-    reviews {
-      id: _id
-      text
-      recipe {
-        id: _id
-      }
-      recipeAuthor {
-        name
-        photo
-      }
-      user {
-        name
-        photo
-      }
-      pos
-      neg
-      createdAt
-    }
-  }
-}
-    `;
-export const useGetReviewsByRecipeQuery = <
-    TData = GetReviewsByRecipeQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables: GetReviewsByRecipeQueryVariables,
-    options?: UseQueryOptions<GetReviewsByRecipeQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetReviewsByRecipeQuery, TError, TData>(
-        ['getReviewsByRecipe', variables],
-        fetcher<GetReviewsByRecipeQuery, GetReviewsByRecipeQueryVariables>(
-            client,
-            GetReviewsByRecipeDocument,
+            GetTempRecipeDocument,
             variables,
             headers
         ),
@@ -1187,9 +1275,9 @@ export const useSignUpUserMutation = <TError = unknown, TContext = unknown>(
             )(),
         options
     );
-export const GetTempRecipeDocument = `
-    query GetTempRecipe {
-  temp: getTempRecipe {
+export const UpdateRecipeDocument = `
+    mutation UpdateRecipe($id: String!, $input: UpdateInput!) {
+  updateRecipe(id: $id, input: $input) {
     status
     recipe {
       id: _id
@@ -1199,42 +1287,14 @@ export const GetTempRecipeDocument = `
       cuisine
       servings
       image
-      steps
+      steps {
+        label
+        text
+      }
       ingredients {
         name
         amount
       }
-    }
-  }
-}
-    `;
-export const useGetTempRecipeQuery = <
-    TData = GetTempRecipeQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables?: GetTempRecipeQueryVariables,
-    options?: UseQueryOptions<GetTempRecipeQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetTempRecipeQuery, TError, TData>(
-        variables === undefined
-            ? ['GetTempRecipe']
-            : ['GetTempRecipe', variables],
-        fetcher<GetTempRecipeQuery, GetTempRecipeQueryVariables>(
-            client,
-            GetTempRecipeDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const UpdateRecipeDocument = `
-    mutation UpdateRecipe($id: String!, $input: UpdateInput!) {
-  updateRecipe(id: $id, input: $input) {
-    status
-    recipe {
-      id: _id
     }
   }
 }
@@ -1263,47 +1323,5 @@ export const useUpdateRecipeMutation = <TError = unknown, TContext = unknown>(
                 variables,
                 headers
             )(),
-        options
-    );
-export const GetLastReviewsDocument = `
-    query getLastReviews {
-  getLastReviews {
-    status
-    results
-    reviews {
-      text
-      recipe {
-        id: _id
-        title
-        image
-      }
-      user {
-        name
-        photo
-      }
-      createdAt
-    }
-  }
-}
-    `;
-export const useGetLastReviewsQuery = <
-    TData = GetLastReviewsQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables?: GetLastReviewsQueryVariables,
-    options?: UseQueryOptions<GetLastReviewsQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetLastReviewsQuery, TError, TData>(
-        variables === undefined
-            ? ['getLastReviews']
-            : ['getLastReviews', variables],
-        fetcher<GetLastReviewsQuery, GetLastReviewsQueryVariables>(
-            client,
-            GetLastReviewsDocument,
-            variables,
-            headers
-        ),
         options
     );
