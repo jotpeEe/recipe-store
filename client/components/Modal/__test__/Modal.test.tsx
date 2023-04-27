@@ -8,9 +8,11 @@ import Modal from '@components/Modal';
 afterEach(cleanup);
 
 describe('Modal', () => {
+    const handleOpen = jest.fn();
+
     it('should not render content when openModal is false', () => {
         const { queryByTestId } = render(
-            <Modal openModal={false} setOpenModal={() => {}}>
+            <Modal openModal={false} setOpenModal={handleOpen}>
                 <div data-testid="modal-content">Modal Content</div>
             </Modal>
         );
@@ -19,7 +21,7 @@ describe('Modal', () => {
 
     it('should render content when openModal is true', () => {
         const { getByTestId } = render(
-            <Modal openModal={true} setOpenModal={() => {}}>
+            <Modal openModal={true} setOpenModal={handleOpen}>
                 <div data-testid="modal-content">Modal Content</div>
             </Modal>
         );
