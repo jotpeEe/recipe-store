@@ -2,13 +2,12 @@ import { useRef } from 'react';
 
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useGetMeQuery, useRefreshAccessTokenQuery } from '@generated/graphql';
 import { useAppDispatch } from '@hooks';
 import { type IUser } from '@lib/types';
-import { setPageLoading, setUser } from '@redux';
+import { setUser } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
 const Nav = dynamic(() => import('../components/Nav'), { ssr: false });
@@ -34,7 +33,7 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
                 router.push('/auth');
             },
             onSuccess() {
-                queryClient.refetchQueries('getMe');
+                queryClient.refetchQueries({ queryKey: ['getMe'] });
             },
         }
     );
@@ -44,13 +43,11 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
         {},
         {
             onSuccess: data => {
-                dispatch(setPageLoading(false));
                 dispatch(setUser(data.getMe.user as IUser));
             },
             retry: 1,
             enabled: !!enableAuth,
             onError(error: any) {
-                dispatch(setPageLoading(false));
                 error.response.errors.forEach((err: any) => {
                     if (err.message.includes('No access token found')) {
                         query.refetch({ throwOnError: true });

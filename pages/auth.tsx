@@ -1,9 +1,9 @@
+import { dehydrate } from '@tanstack/react-query';
 import { type GetServerSideProps, type NextPage } from 'next';
-import { dehydrate } from 'react-query';
 
 import { Slider } from '@components';
+import { Login, Signup } from '@features';
 import { queryClient } from '@requests';
-import { Login, Signup } from '@sections';
 
 /**
  * Home: The Landing page of the web app

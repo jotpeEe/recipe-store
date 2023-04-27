@@ -72,7 +72,7 @@ const Recipe: FC<RecipeProps> = props => {
 
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient, {
         onSuccess() {
-            queryClient.refetchQueries('GetRecipeById');
+            queryClient.refetchQueries({ queryKey: ['GetRecipeById'] });
         },
         onError(error: any) {
             if (error.response.errors[0].message === 'No access token found') {
@@ -94,7 +94,7 @@ const Recipe: FC<RecipeProps> = props => {
     const loggedIn = hasCookie('logged_in');
 
     useEffect(() => {
-        if (loggedIn) queryClient.refetchQueries('GetMe');
+        if (loggedIn) queryClient.refetchQueries({ queryKey: ['GetMe'] });
     }, []);
 
     useEffect(() => {

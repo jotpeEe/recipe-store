@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { dehydrate } from '@tanstack/react-query';
 import type { GetServerSideProps, NextPage } from 'next';
-import { dehydrate } from 'react-query';
 
 import { RecipesList, SearchInput, UserInfo, UserStats } from '@components';
 import ReviewList from '@components/ReviewList';

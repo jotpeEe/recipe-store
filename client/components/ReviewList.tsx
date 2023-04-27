@@ -54,7 +54,7 @@ const ReviewList: FC<ReviewListProps> = ({
 
     const { mutate: createReview } = useCreateReviewMutation(requestClient, {
         onSuccess() {
-            queryClient.refetchQueries('getReviewsByRecipe');
+            queryClient.refetchQueries({ queryKey: ['getReviewsByRecipe'] });
             reset();
             setOpen(state => !state);
         },
@@ -77,7 +77,7 @@ const ReviewList: FC<ReviewListProps> = ({
             if (!loggedIn) router.push('/auth');
             if (!user && loggedIn)
                 await queryClient
-                    .refetchQueries('GetMe')
+                    .refetchQueries({ queryKey: ['GetMe'] })
                     .then(() => setOpen(state => !state));
             if (user) setOpen(state => !state);
         },

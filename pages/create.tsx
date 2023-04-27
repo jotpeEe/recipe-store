@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { GetServerSideProps, NextPage } from 'next';
-import { dehydrate } from 'react-query';
+import { dehydrate } from '@tanstack/react-query';
 
 import { Slider } from '@components';
 import { Preview, StepOne, StepThree, StepTwo } from '@components/createRecipe';

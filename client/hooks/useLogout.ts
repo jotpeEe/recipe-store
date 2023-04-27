@@ -5,9 +5,9 @@ import {
     useCallback,
 } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { hasCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
-import { useQueryClient } from 'react-query';
 
 import { useLogoutUserQuery } from '@generated/graphql';
 import { resetUser } from '@redux';
