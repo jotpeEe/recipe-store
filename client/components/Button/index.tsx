@@ -34,7 +34,7 @@ const Button: FC<ButtonProps> = ({
     outlined,
     rotate,
     size = 'lg',
-    type,
+    type = 'button',
     hidden,
     variant = 'normal',
     ...props
@@ -62,7 +62,7 @@ const Button: FC<ButtonProps> = ({
         fullWidth ? 'w-full' : 'w-fit',
         rotate && 'rotate-180',
         hidden && 'opacity-0',
-        className && `${className}`
+        className && className
     );
 
     return (

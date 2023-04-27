@@ -1,8 +1,9 @@
 import { type FC, useCallback, useMemo, useState } from 'react';
 
+import cn from 'classnames';
+
 import { RECIPE_LIMIT } from '@constants';
 import { type IRecipe } from '@lib/types';
-import cn from 'classnames';
 
 import AnimateOnLoad from './animations/AnimateOnLoad';
 import Button from './Button';
