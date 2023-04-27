@@ -9,10 +9,11 @@ import '@testing-library/jest-dom';
 const submitForm = async () => {
     const input: HTMLInputElement = screen.getByLabelText('Test Input');
     const button = screen.getByText('Submit');
+    const user = userEvent.setup();
 
     expect(input).toHaveAttribute('aria-invalid', 'false');
 
-    await userEvent.click(button);
+    await user.click(button);
 
     return input;
 };
