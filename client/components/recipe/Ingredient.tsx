@@ -2,11 +2,12 @@ import { type FC, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 
-import { type IIngredient } from '@lib/types';
-
 import Edit from './Edit';
 
-const IngredientInfo: FC<IIngredient> = ({ name, amount }) => {
+const IngredientInfo: FC<{ name: string; amount: string }> = ({
+    name,
+    amount,
+}) => {
     const [disabled, setDisabled] = useState(false);
 
     const handleClick = useCallback(
@@ -30,7 +31,11 @@ const IngredientInfo: FC<IIngredient> = ({ name, amount }) => {
     );
 };
 
-const Ingredient: FC<IIngredient & { id: number }> = ({ name, amount, id }) => (
+const Ingredient: FC<{ name: string; amount: string; id: number }> = ({
+    name,
+    amount,
+    id,
+}) => (
     <>
         <Edit variant="array" name={['name', 'amount']} ingId={id} withButtons>
             <IngredientInfo name={name} amount={amount} />

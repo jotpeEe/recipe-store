@@ -1,8 +1,9 @@
 import { type FC } from 'react';
 
-import { IconPin } from '@icons';
 import cn from 'classnames';
 import Image from 'next/image';
+
+import { IconPin } from '@icons';
 
 import Button from '../Button';
 

@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 import ErrorMessage from './ErrorMessage';
 
 type SelectProps = {
-    options: string[];
+    options: string[] | undefined;
     name: string;
     label?: string;
     noValidation?: boolean;
@@ -48,7 +48,7 @@ const Select: FC<SelectProps> = ({
                     <option className="text-xs font-bold" value="Choose">
                         Choose cuisine
                     </option>
-                    {options.map((option, index) => (
+                    {options?.map((option, index) => (
                         <option key={index} value={option}>
                             {option}
                         </option>

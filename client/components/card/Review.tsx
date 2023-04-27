@@ -3,30 +3,12 @@ import { useMemo } from 'react';
 import format from 'date-fns/format';
 
 import { IconNext } from '@icons';
+import { type IReview } from '@lib/types';
 
 import { Card, Link } from '../CardWithLinks';
 import UserInfo from '../user/Info';
 
-type ReviewProps = {
-    text: string;
-    recipe: {
-        id: string;
-        title: string;
-        image: string;
-    };
-    user: {
-        name: string;
-        photo: string;
-    };
-    createdAt: string;
-};
-
-const ReviewCard: React.FC<ReviewProps> = ({
-    text,
-    recipe,
-    user,
-    createdAt,
-}) => {
+const ReviewCard: React.FC<IReview> = ({ text, recipe, user, createdAt }) => {
     const { name, photo } = user ?? {};
     const { id } = recipe ?? {};
 

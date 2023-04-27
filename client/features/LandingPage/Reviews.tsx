@@ -1,17 +1,12 @@
+import { type FC } from 'react';
+
 import { ReviewCard, SectionTitle, Slider } from '@components';
-import { useGetLastReviewsQuery } from '@generated/graphql';
 import { SectionLayout as Layout } from '@layouts';
-import { requestClient } from '@requests';
+import { type IReview } from '@lib/types';
 
-const Reviews: React.FC = () => {
-    const { data: reviews } = useGetLastReviewsQuery(
-        requestClient,
-        {},
-        {
-            select: res => res.getLastReviews.reviews,
-        }
-    );
-
+const Reviews: FC<{
+    reviews: IReview[] | undefined;
+}> = ({ reviews }) => {
     if (!reviews) return null;
 
     return (

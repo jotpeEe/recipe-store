@@ -16,35 +16,32 @@ import { RecipeContext } from '@contexts';
 import { type UpdateInput, useUpdateRecipeMutation } from '@generated/graphql';
 import { useAppSelector, useKeyPress } from '@hooks';
 import { IconClock, IconStar } from '@icons';
-import { type IIngredient, type IReview } from '@lib/types';
+import type { IRecipe, IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
 import Display from './Display';
 import Edit from './Edit';
 import RecipeTitle from './Title';
 
-export type RecipeComponentProps = {
-    id?: string;
-    title?: string;
-    image?: string;
-    prep?: string;
-    description?: string;
-    step?: number;
-    user?: {
-        id: string;
-        name: string;
-        photo: string;
-    };
-    servings?: number | null | undefined;
-    steps?: string[];
-    ingredients?: IIngredient[];
+export type RecipeProps = Partial<IRecipe> & {
     reviews?: IReview[];
+    step?: number;
     withEdit?: boolean;
+    hideMobile?: boolean;
 };
 
-const Recipe: FC<RecipeComponentProps> = props => {
-    const { title, image, prep, description, user, id, ingredients, withEdit } =
-        props;
+const Recipe: FC<RecipeProps> = props => {
+    const {
+        title,
+        image,
+        prep,
+        description,
+        user,
+        id,
+        ingredients,
+        withEdit,
+        hideMobile,
+    } = props;
 
     const { name, photo } = user || {};
 

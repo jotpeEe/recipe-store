@@ -24,7 +24,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
         () =>
             recipes?.reduce(
                 (acc, cv) => {
-                    if (cv.cuisine) {
+                    if (cv?.cuisine) {
                         if (acc.find(element => element === cv.cuisine))
                             return acc;
                         acc.push(cv.cuisine);
@@ -45,7 +45,7 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
             if (filter === 'All') return recipes.slice(0, limit);
 
             const list = recipes
-                .filter(recipe => recipe.cuisine === filter)
+                .filter(recipe => recipe?.cuisine === filter)
                 .slice(0, limit);
 
             return list;

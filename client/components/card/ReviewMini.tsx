@@ -1,13 +1,26 @@
-import { type FC, useMemo } from 'react';
+import {
+    type DetailedHTMLProps,
+    type FC,
+    type HTMLAttributes,
+    useMemo,
+} from 'react';
 
-import Button from '@components/Button';
-import { UserInfo } from '@components/user';
-import { type IReviewMini } from '@lib/types';
 import cn from 'classnames';
 import format from 'date-fns/format';
 import Image from 'next/image';
 
-const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
+import Button from '@components/Button';
+import { UserInfo } from '@components/user';
+import { type IReview } from '@lib/types';
+
+type ReviewMiniProps = DetailedHTMLProps<
+    HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+> & {
+    review: IReview;
+};
+
+const ReviewMini: FC<ReviewMiniProps> = ({ className, review, ...props }) => {
     const { createdAt, text, pos, neg, user } = review;
     const { name, photo } = user;
 
@@ -17,7 +30,7 @@ const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
     }, [createdAt]);
 
     return (
-        <div className={cn('children:pb-2', className)}>
+        <div {...props} className={cn('children:pb-2', className)}>
             <UserInfo
                 size="sm"
                 imgSrc={photo}
@@ -25,7 +38,7 @@ const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
                 subtitle={formattedDate}
             />
             <p className="max-w-[40ch] text-xs">{text}</p>
-            {(pos.length !== 0 || neg.length !== 0) && (
+            {(pos?.length !== 0 || neg?.length !== 0) && (
                 <div className="flex gap-2">
                     <Button disabled size="xs">
                         <Image
@@ -35,7 +48,7 @@ const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
                             alt="recipe image"
                             className="rounded-full"
                         />
-                        <p className="text-xs">{pos.length}</p>
+                        <p className="text-xs">{pos?.length}</p>
                     </Button>
                     <Button disabled outlined size="xs">
                         <Image
@@ -45,7 +58,7 @@ const ReviewMini: FC<IReviewMini> = ({ className, review }) => {
                             alt="recipe image"
                             className="rounded-full"
                         />
-                        <p className="text-xs">{neg.length}</p>
+                        <p className="text-xs">{neg?.length}</p>
                     </Button>
                 </div>
             )}

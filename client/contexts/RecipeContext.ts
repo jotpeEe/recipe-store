@@ -1,23 +1,15 @@
 import { createContext, useContext } from 'react';
 
-import type {
-    FieldArrayWithId,
-    SubmitHandler,
-    UseFieldArrayAppend,
-    UseFieldArrayRemove,
-} from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 
-import { type RecipeComponentProps } from '@components/recipe';
+import { type RecipeProps } from '@components/recipe';
 import { type UpdateInput } from '@generated/graphql';
 
 export const RecipeContext = createContext<
-    | (RecipeComponentProps & {
+    | (RecipeProps & {
           isEnterPressed: boolean;
           isTheSameUser: boolean;
-          fields: FieldArrayWithId<UpdateInput, 'ingredients', 'id'>[];
           onSubmit: SubmitHandler<UpdateInput>;
-          append: UseFieldArrayAppend<UpdateInput, 'ingredients'>;
-          remove: UseFieldArrayRemove;
           withEdit: boolean | undefined;
       })
     | undefined

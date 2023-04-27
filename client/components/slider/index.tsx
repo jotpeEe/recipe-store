@@ -6,6 +6,8 @@ import {
     useState,
 } from 'react';
 
+import cn from 'classnames';
+
 import { SliderContext } from '@contexts';
 
 import BreadCrumbs from './BreadCrumbs';
@@ -14,12 +16,14 @@ import SliderController from './Controller';
 type SliderProps = {
     children: ReactNode[];
     breadcrumbs?: string[];
+    className?: string;
     controller?: boolean;
     inside?: boolean;
 };
 
 const Slider: FC<SliderProps> = ({
     children,
+    className,
     controller,
     inside,
     breadcrumbs,
@@ -58,13 +62,13 @@ const Slider: FC<SliderProps> = ({
 
     return (
         <SliderContext.Provider value={controls}>
-            <div className="overflow-hidden">
+            <div className={cn('overflow-hidden', className)}>
                 {breadcrumbs && <BreadCrumbs steps={breadcrumbs} />}
                 <ul className="flex">
                     {children.map((child, index) => (
                         <li
                             key={index}
-                            className="ease shrink-0 pr-8 transition duration-300"
+                            className="ease w-full shrink-0 pr-8 transition duration-300"
                             style={{
                                 transform: `translateX(-${step * 100}%)`,
                             }}
