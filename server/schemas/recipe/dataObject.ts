@@ -1,6 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 
 import { Ingredient } from './ingredient';
+import { Step } from './step';
 
 @ObjectType()
 class DataObject {
@@ -37,8 +38,8 @@ class DataObject {
     @Field(() => Number)
     step: number;
 
-    @Field(() => [String])
-    steps: string[];
+    @Field(() => [Step])
+    steps: Step[];
 
     @Field(() => Date)
     createdAt: Date;

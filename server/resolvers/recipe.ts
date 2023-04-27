@@ -5,7 +5,6 @@ import {
     Input,
     ListResponse,
     PopulatedResponse,
-    Response,
     UpdateInput,
 } from '@schemas/recipe';
 import RecipeService from '@services/recipe';
@@ -17,14 +16,14 @@ export default class RecipeResolver {
         this.recipeService = new RecipeService();
     }
 
-    @Mutation(() => Response)
+    @Mutation(() => PopulatedResponse)
     async createRecipe(@Arg('input') input: Input, @Ctx() ctx: Context) {
         return this.recipeService.createRecipe(input, ctx);
     }
 
     @Query(() => PopulatedResponse)
-    async getRecipe(@Arg('id') id: string) {
-        return this.recipeService.getRecipe(id);
+    async getRecipeById(@Arg('id') id: string) {
+        return this.recipeService.getRecipeById(id);
     }
 
     @Query(() => PopulatedResponse, { nullable: true })
@@ -37,7 +36,7 @@ export default class RecipeResolver {
         return this.recipeService.getCuisines();
     }
 
-    @Mutation(() => Response)
+    @Mutation(() => PopulatedResponse)
     async updateRecipe(
         @Arg('id') id: string,
         @Arg('input') input: UpdateInput,

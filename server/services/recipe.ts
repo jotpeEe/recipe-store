@@ -37,7 +37,7 @@ export default class RecipeService {
         res,
         deserializeUser,
     }: Context): Promise<{
-        recipe: Recipe | null;
+        recipe: Recipe | undefined;
         status: 'error' | 'success';
     }> => {
         try {
@@ -48,19 +48,20 @@ export default class RecipeService {
                 temp: true,
             }).populate('user');
 
-            const recipe = await recipeQuery.lean();
+            const response = await recipeQuery.lean();
+            const recipe = response || undefined;
 
             return { status: 'success', recipe };
         } catch (error: any) {
             errorHandler(error);
             return {
                 status: 'error',
-                recipe: null,
+                recipe: undefined,
             };
         }
     };
 
-    getRecipe = async (id: string) => {
+    getRecipeById = async (id: string) => {
         try {
             const recipe = await RecipeModel.findById(id)
                 .populate('user')

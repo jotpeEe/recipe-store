@@ -68,16 +68,21 @@ export default class ReviewService {
         }
     };
 
-    getReviewsByAuthor = async (author: string) => {
+    getReviewsBy = async (id?: string, author?: string) => {
         try {
-            const reviews = await ReviewModel.find({
-                recipeAuthor: author,
-            })
+            let input;
+            if (id) input = { recipe: id };
+            if (author) input = { recipeAuthor: author };
+
+            const reviews = await ReviewModel.find({ ...input })
                 .populate(['user', 'recipeAuthor', 'recipe'])
+                .sort({ createdAt: -1 })
                 .lean();
 
             if (!reviews)
-                return new ValidationError('No review with that id exists');
+                return new ValidationError(
+                    'No review with that recipe id exists'
+                );
 
             return {
                 status: 'success',
@@ -94,9 +99,12 @@ export default class ReviewService {
         }
     };
 
-    getReviewsByRecipe = async (id: string) => {
+    getMyReviews = async ({ req, res, deserializeUser }: Context) => {
         try {
-            const reviews = await ReviewModel.find({ recipe: id })
+            const user = await deserializeUser(req, res);
+            const reviews = await ReviewModel.find({
+                recipeAuthor: user?._id,
+            })
                 .populate(['user', 'recipeAuthor', 'recipe'])
                 .sort({ createdAt: -1 })
                 .lean();
@@ -110,6 +118,7 @@ export default class ReviewService {
                 status: 'success',
                 results: reviews.length,
                 reviews,
+                userId: user?._id,
             };
         } catch (error: any) {
             errorHandler(error);

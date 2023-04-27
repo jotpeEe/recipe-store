@@ -6,7 +6,7 @@ import {
     prop,
 } from '@typegoose/typegoose';
 
-import { type Ingredient } from '@schemas/recipe';
+import { type Ingredient, type Step } from '@schemas/recipe';
 
 import { User } from './user';
 
@@ -49,7 +49,7 @@ export class Recipe {
     step: number;
 
     @prop()
-    steps: string[];
+    steps: Step[];
 
     @prop()
     reviews: string[];

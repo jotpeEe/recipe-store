@@ -7,4 +7,5 @@ export { default as ListResponse } from './listResponse';
 export { default as PopulatedData } from './populatedData';
 export { default as PopulatedResponse } from './populatedResponse';
 export { default as Response } from './response';
+export { Step, StepInput } from './step';
 export { default as UpdateInput } from './updateInput';

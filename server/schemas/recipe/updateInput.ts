@@ -2,6 +2,7 @@ import { MinLength } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 
 import { type Ingredient, IngredientInput } from './ingredient';
+import { type Step, StepInput } from './step';
 
 @InputType()
 class UpdateInput {
@@ -33,8 +34,8 @@ class UpdateInput {
     @Field(() => [String], { nullable: true })
     reviews?: string[];
 
-    @Field(() => [String], { nullable: true })
-    steps?: string[];
+    @Field(() => [StepInput], { nullable: true })
+    steps?: Step[];
 
     @Field(() => Number, { nullable: true })
     step?: number;

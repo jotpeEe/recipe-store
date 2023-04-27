@@ -24,13 +24,16 @@ export default class ReviewResolver {
     }
 
     @Query(() => ReviewListResponse)
-    async getReviewsByAuthor(@Arg('author') author: string) {
-        return this.reviewService.getReviewsByAuthor(author);
+    async getReviewsBy(
+        @Arg('id', { nullable: true }) id?: string,
+        @Arg('author', { nullable: true }) author?: string
+    ) {
+        return this.reviewService.getReviewsBy(id, author);
     }
 
     @Query(() => ReviewListResponse)
-    async getReviewsByRecipe(@Arg('id') id: string) {
-        return this.reviewService.getReviewsByRecipe(id);
+    async getMyReviews(@Ctx() ctx: Context) {
+        return this.reviewService.getMyReviews(ctx);
     }
 
     @Query(() => ReviewListResponse)
