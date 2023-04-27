@@ -2,6 +2,7 @@ version: '3.7'
 services:
     mongo:
         image: mongo
+        restart: "no"
         ports:
             - '6000:27017'
         volumes:
@@ -11,6 +12,7 @@ services:
 
     cache:
         image: redis:7-alpine
+        restart: "no"
         ports:
             - '6379:6379'
         command: redis-server --save 20 1 --loglevel warning
