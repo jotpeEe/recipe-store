@@ -31,7 +31,7 @@ const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
         formState: { errors },
     } = useFormContext();
 
-    const { ref, ...rest } = register('image');
+    const { ref, ...rest } = register(name);
 
     const { field } = useController({ name });
 
@@ -95,6 +95,7 @@ const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
                                 type="file"
                                 multiple={false}
                                 accept="image/jpg, image/png, image/jpeg, image/webp"
+                                data-testid="image-input"
                             />
                         )}
                     />

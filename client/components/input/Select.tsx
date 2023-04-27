@@ -53,9 +53,7 @@ const Select: FC<SelectProps> = ({
                             {option}
                         </option>
                     ))}
-                    <option className="text-xs font-bold" value="Other">
-                        Other
-                    </option>
+                    <option value="Other">Other</option>
                 </select>
                 {!noValidation && <ErrorMessage error={errors[name]} />}
             </div>

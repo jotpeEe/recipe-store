@@ -10,7 +10,11 @@ import {
 import { IconWarning } from '@icons';
 
 type ErrorMessageProps = {
-    error: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
+    error:
+        | FieldError
+        | Merge<FieldError, FieldErrorsImpl<any>>
+        | { message: string }
+        | undefined;
 };
 
 const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {

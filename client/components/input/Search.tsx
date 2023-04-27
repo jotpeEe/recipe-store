@@ -1,19 +1,17 @@
 import { type FC, useMemo } from 'react';
 
+import { FormProvider, useForm } from 'react-hook-form';
+
 import { AnimateOnLoad } from '@components/animations';
 import Button from '@components/Button';
 import RecipeMini from '@components/card/RecipeMini';
-import { useGetAllRecipesQuery } from '@generated/graphql';
 import { useRecipesFilter } from '@hooks';
 import { IconFilter } from '@icons';
-import { requestClient } from '@requests';
-import { FormProvider, useForm } from 'react-hook-form';
 
 import Slider from '../slider';
 import FormInput from './Input';
 
 type SearchInputProps = {
-    all?: boolean;
     recipes:
         | {
               __typename?: 'PopulatedData' | undefined;
@@ -30,24 +28,16 @@ type SearchInputProps = {
         | undefined;
 };
 
-const SearchInput: FC<SearchInputProps> = ({ recipes, all }) => {
+const SearchInput: FC<SearchInputProps> = ({ recipes }) => {
     const methods = useForm();
     const { watch } = methods;
 
-    const { data: allRecipes } = useGetAllRecipesQuery(
-        requestClient,
-        {},
-        { select: data => data.getAllRecipes.recipes }
-    );
-
     const searchInput = watch('input') ?? '';
-    // const input = useDebounce(searchInput);
 
     const search = useMemo(() => {
         const inputLower = searchInput.trim().toLowerCase();
 
         if (inputLower.length === 0) return [];
-        if (all) return useRecipesFilter(allRecipes, inputLower);
         return useRecipesFilter(recipes, inputLower);
     }, [searchInput]);
 
