@@ -16,6 +16,7 @@
             "@components/*": ["client/components/*"],
             "@constants": ["utils/constants"],
             "@controllers": ["server/controllers/error"],
+            "@features": ["client/features"],
             "@sections": ["client/sections"],
             "@generated/*": ["client/generated/*"],
             "@hooks": ["client/hooks"],
