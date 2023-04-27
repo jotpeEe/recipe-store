@@ -9,10 +9,15 @@ mutation CreateRecipe($input: Input!) {
             cuisine
             servings
             image
-            createdAt
-            updatedAt
-            user
-            temp
+            steps {
+                label
+                text
+            }
+            ingredients {
+                name
+                amount
+            }
         }
+
     }
 }

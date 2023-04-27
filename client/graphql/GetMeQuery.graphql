@@ -2,14 +2,10 @@ query GetMe {
     getMe {
         status
         user {
-            _id
-            id
+            id: _id
             email
             name
-            role
             photo
-            updatedAt
-            createdAt
         }
     }
 }
