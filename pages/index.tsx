@@ -11,24 +11,22 @@ import { queryClient, requestClient } from '@requests';
  */
 
 const Home: NextPage = () => {
-    const dispatch = useAppDispatch();
-
-    const { data: recipes } = useGetAllRecipesQuery(
+    const { data } = useGetAllRecipesAndLastReviewsQuery(
         requestClient,
         {},
         {
-            select: data => data.getAllRecipes.recipes,
-            onError() {
-                dispatch(setPageLoading(false));
-            },
+            select: res => ({
+                recipes: res.getAllRecipes.recipes,
+                reviews: res.getLastReviews.reviews,
+            }),
         }
     );
 
     return (
         <>
             <Hero />
-            <Recipes recipes={recipes} />
-            <Reviews />
+            <Recipes recipes={data?.recipes} />
+            <Reviews reviews={data?.reviews} />
         </>
     );
 };
