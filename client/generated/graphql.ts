@@ -76,7 +76,7 @@ export type Input = {
 
 export type ListResponse = {
     __typename?: 'ListResponse';
-    recipes: Array<PopulatedData>;
+    recipes: Array<RecipePopulatedData>;
     results: Scalars['Float'];
     status: Scalars['String'];
 };
@@ -145,29 +145,9 @@ export type MutationUpdateReviewArgs = {
     input: Scalars['String'];
 };
 
-export type PopulatedData = {
-    __typename?: 'PopulatedData';
-    _id: Scalars['String'];
-    createdAt: Scalars['DateTime'];
-    cuisine: Scalars['String'];
-    description: Scalars['String'];
-    id?: Maybe<Scalars['String']>;
-    image: Scalars['String'];
-    ingredients: Array<Ingredient>;
-    prep: Scalars['String'];
-    reviews: Array<ReviewData>;
-    servings?: Maybe<Scalars['Float']>;
-    step: Scalars['Float'];
-    steps: Array<Step>;
-    temp: Scalars['Boolean'];
-    title: Scalars['String'];
-    updatedAt: Scalars['DateTime'];
-    user: UserData;
-};
-
 export type PopulatedResponse = {
     __typename?: 'PopulatedResponse';
-    recipe?: Maybe<PopulatedData>;
+    recipe?: Maybe<RecipePopulatedData>;
     status: Scalars['String'];
 };
 
@@ -212,6 +192,26 @@ export type RecipeData = {
     title: Scalars['String'];
     updatedAt: Scalars['DateTime'];
     user: Scalars['String'];
+};
+
+export type RecipePopulatedData = {
+    __typename?: 'RecipePopulatedData';
+    _id: Scalars['String'];
+    createdAt: Scalars['DateTime'];
+    cuisine: Scalars['String'];
+    description: Scalars['String'];
+    id?: Maybe<Scalars['String']>;
+    image: Scalars['String'];
+    ingredients: Array<Ingredient>;
+    prep: Scalars['String'];
+    reviews: Array<ReviewPopulatedData>;
+    servings?: Maybe<Scalars['Float']>;
+    step: Scalars['Float'];
+    steps: Array<Step>;
+    temp: Scalars['Boolean'];
+    title: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+    user: UserData;
 };
 
 export type ReviewData = {
@@ -322,7 +322,7 @@ export type CreateRecipeMutation = {
         __typename?: 'PopulatedResponse';
         status: string;
         recipe?: {
-            __typename?: 'PopulatedData';
+            __typename?: 'RecipePopulatedData';
             title: string;
             description: string;
             prep: string;
@@ -363,7 +363,7 @@ export type DeleteRecipeMutation = {
     deleteRecipe: {
         __typename?: 'PopulatedResponse';
         status: string;
-        recipe?: { __typename?: 'PopulatedData'; id: string } | null;
+        recipe?: { __typename?: 'RecipePopulatedData'; id: string } | null;
     };
 };
 
@@ -387,7 +387,7 @@ export type GetAllRecipesAndLastReviewsQuery = {
         status: string;
         results: number;
         recipes: Array<{
-            __typename?: 'PopulatedData';
+            __typename?: 'RecipePopulatedData';
             title: string;
             description: string;
             prep: string;
@@ -462,6 +462,11 @@ export type GetMeQuery = {
             email: string;
             name: string;
             photo: string;
+            _id: string;
+            createdAt: any;
+            role: string;
+            terms: boolean;
+            updatedAt: any;
             id: string;
         };
     };
@@ -515,7 +520,7 @@ export type GetProfileDataQueryQuery = {
         status: string;
         results: number;
         recipes: Array<{
-            __typename?: 'PopulatedData';
+            __typename?: 'RecipePopulatedData';
             title: string;
             prep: string;
             image: string;
@@ -540,7 +545,7 @@ export type GetRecipeByIdQuery = {
     getRecipeById: {
         __typename?: 'PopulatedResponse';
         recipe?: {
-            __typename?: 'PopulatedData';
+            __typename?: 'RecipePopulatedData';
             cuisine: string;
             title: string;
             description: string;
@@ -599,7 +604,7 @@ export type GetTempRecipeQuery = {
         __typename?: 'PopulatedResponse';
         status: string;
         recipe?: {
-            __typename?: 'PopulatedData';
+            __typename?: 'RecipePopulatedData';
             title: string;
             description: string;
             prep: string;
@@ -673,7 +678,7 @@ export type UpdateRecipeMutation = {
         __typename?: 'PopulatedResponse';
         status: string;
         recipe?: {
-            __typename?: 'PopulatedData';
+            __typename?: 'RecipePopulatedData';
             title: string;
             description: string;
             prep: string;
@@ -948,6 +953,11 @@ export const GetMeDocument = `
       email
       name
       photo
+      _id
+      createdAt
+      role
+      terms
+      updatedAt
     }
   }
 }

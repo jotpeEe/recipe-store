@@ -6,6 +6,11 @@ query GetMe {
             email
             name
             photo
+            _id
+            createdAt
+            role
+            terms
+            updatedAt
         }
     }
 }
