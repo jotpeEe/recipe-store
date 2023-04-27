@@ -1,54 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { dehydrate } from '@tanstack/react-query';
 import type { GetServerSideProps, NextPage } from 'next';
 
 import { RecipesList, SearchInput, UserInfo, UserStats } from '@components';
 import ReviewList from '@components/ReviewList';
-import {
-    useGetMyRecipesQuery,
-    useGetReviewsByAuthorQuery,
-} from '@generated/graphql';
-import { useAppDispatch, useAppSelector } from '@hooks';
+import { useGetProfileDataQueryQuery } from '@generated/graphql';
 import { SectionLayout as Layout } from '@layouts';
-import { setPageLoading } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
 export const ProfilePage: NextPage = () => {
-    const [fetch, setFetch] = useState(false);
-    const dispatch = useAppDispatch();
-
-    const user = useAppSelector(state => state?.auth?.user);
-
-    const { data: recipes, isLoading } = useGetMyRecipesQuery(
+    const { data, isLoading } = useGetProfileDataQueryQuery(
         requestClient,
         {},
         {
-            select: data => data.getRecipes.recipes,
-            onError() {
-                dispatch(setPageLoading(false));
-            },
+            select: res => ({
+                reviews: res.getMyReviews.reviews,
+                user: res.getMe.user,
+                recipes: res.getAllRecipes.recipes,
+            }),
         }
     );
 
-    const { data: reviews } = useGetReviewsByAuthorQuery(
-        requestClient,
-        {
-            author: user?._id as string,
-        },
-        { enabled: fetch, select: data => data.getReviewsByAuthor.reviews }
+    const myRecipes = useMemo(
+        () => data?.recipes.filter(recipe => recipe.user.id === data.user.id),
+        [data]
     );
-
-    const { photo, name } = user ?? {};
-
-    useEffect(() => {
-        queryClient.refetchQueries('GetTempRecipe');
-    }, []);
-
-    useEffect(() => {
-        if (user) setFetch(true);
-        if (!user) setFetch(false);
-    }, [user]);
 
     return (
         <Layout>
@@ -57,25 +34,25 @@ export const ProfilePage: NextPage = () => {
                     <div className="col-start-1 grid gap-12 sm:grid-cols-4 lg:col-span-5 ">
                         <div className="flex w-full flex-col gap-8 sm:col-span-2">
                             <UserInfo
-                                title={name}
+                                title={data?.user.name}
                                 subtitle="What are we cooking today?"
-                                imgSrc={photo}
+                                imgSrc={data?.user.photo}
                             />
-                            <SearchInput recipes={recipes} />
+                            <SearchInput recipes={myRecipes} />
                         </div>
                         <UserStats
-                            recipes={recipes?.length}
+                            recipes={myRecipes?.length}
                             className="sm:col-span-2"
                         />
                     </div>
                     <div className="row-span-6 children:pb-5 lg:col-start-1 lg:col-end-6">
                         <h5>Your recipes</h5>
-                        <RecipesList recipes={recipes} panel />
+                        <RecipesList recipes={data?.recipes} panel />
                     </div>
 
                     <div className="col-start-1 children:pb-5 lg:col-span-2 lg:col-start-7 lg:row-start-2 ">
                         <h5>Reviews</h5>
-                        <ReviewList reviews={reviews} />
+                        <ReviewList reviews={data?.reviews} />
                     </div>
                 </div>
             )}
