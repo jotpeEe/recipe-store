@@ -1,32 +1,20 @@
 import { type NextPage } from 'next';
 
 import { Recipe } from '@components';
-import {
-    useGetRecipeByIdQuery,
-    useGetReviewsByRecipeQuery,
-} from '@generated/graphql';
+import { useGetRecipeByIdQuery } from '@generated/graphql';
 import { requestClient } from '@requests';
 
-type RecipeInfoProps = {
-    id?: string;
-};
-
-const RecipeInfo: NextPage<RecipeInfoProps> = ({ id }) => {
+const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
     if (!id) return null;
 
-    const { data: recipe, isLoading } = useGetRecipeByIdQuery(
+    const { data, isLoading } = useGetRecipeByIdQuery(
         requestClient,
         { id },
-        { select: data => data.getRecipe.recipe }
-    );
-
-    const { data: reviews } = useGetReviewsByRecipeQuery(
-        requestClient,
         {
-            id,
-        },
-        {
-            select: data => data.getReviewsByRecipe.reviews,
+            select: res => ({
+                ...res.getRecipeById.recipe,
+                reviews: res.getReviewsBy.reviews,
+            }),
         }
     );
 
@@ -34,7 +22,7 @@ const RecipeInfo: NextPage<RecipeInfoProps> = ({ id }) => {
 
     return (
         <div className="flex justify-center py-32">
-            <Recipe {...{ ...recipe, reviews }} withEdit={true} />
+            <Recipe {...data} withEdit={true} />
         </div>
     );
 };
