@@ -17,8 +17,15 @@ module.exports = {
         tsconfigRootDir: __dirname,
         sourceType: 'module',
     },
-    plugins: ['@typescript-eslint', 'import', 'prettier', '@next/next'],
+    plugins: [
+        '@typescript-eslint',
+        'import',
+        'prettier',
+        '@next/next',
+        'unused-imports',
+    ],
     rules: {
+        'unused-imports/no-unused-imports-ts': 2,
         'prettier/prettier': 'error',
         'no-use-before-define': [
             'error',
