@@ -1,28 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { type IRecipe, type IUser } from '@lib/types';
+import { type IUser } from '@lib/types';
 
 import authReducer from './reducers/authSlice';
-import recipeSlice from './reducers/recipeSlice';
-import statusSlice from './reducers/statusSlice';
 
 type IStore = {
     auth: {
         user?: IUser;
     };
-    status: {
-        imageUploading: boolean;
-        pageLoading: boolean;
-        isSubmitting: boolean;
-    };
-    recipe?: IRecipe | Partial<IRecipe> | undefined;
 };
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
-        status: statusSlice,
-        recipe: recipeSlice,
     },
 });
 
