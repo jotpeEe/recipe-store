@@ -5,7 +5,7 @@ import { SectionLayout as Layout } from '@layouts';
 import { type IRecipe } from '@lib/types';
 
 type RecipesProps = {
-    recipes: Partial<IRecipe>[] | undefined;
+    recipes?: Partial<IRecipe>[];
 };
 
 const Recipes: FC<RecipesProps> = ({ recipes }) => (

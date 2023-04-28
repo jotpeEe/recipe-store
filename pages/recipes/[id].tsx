@@ -19,6 +19,7 @@ const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
     );
 
     if (isLoading) return null;
+    if (!data) return null;
 
     return (
         <div className="flex justify-center py-32">

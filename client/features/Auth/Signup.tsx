@@ -13,7 +13,7 @@ import { requestClient } from '@requests';
 const signupSchema = object({
     name: string()
         .min(1, 'Name is required')
-        .max(16, 'Name must be less than 16 characters'),
+        .max(24, 'Name must be less than 16 characters'),
     email: string().min(1, 'Email is required').email(),
     photo: any().superRefine((f, ctx) => imageValidation(f, ctx)),
     password: string()
@@ -83,7 +83,7 @@ const SignUp: FC = () => {
     const onSubmitHandler: SubmitHandler<SignUpInput> = useCallback(
         async values => {
             setLoading(true);
-            const data: any = await uploadImage(values.photo?.[0]);
+            const data = await uploadImage(values.photo?.[0]);
             const input = { ...values, photo: data };
             signUpUser({ input });
         },
