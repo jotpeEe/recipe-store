@@ -1,19 +1,9 @@
-type Recipe =
-    | {
-          __typename?: 'PopulatedData' | undefined;
-          title: string;
-          prep: string;
-          image: string;
-          cuisine: string;
-          id: string;
-          user: {
-              name: string;
-              photo: string;
-          };
-      }[]
-    | undefined;
+import { type GetProfileDataQueryQuery } from '@generated/graphql';
 
-const useRecipesFilter = (recipes: Recipe, input: string) =>
+const useRecipesFilter = (
+    input: string,
+    recipes?: GetProfileDataQueryQuery['getAllRecipes']['recipes']
+) =>
     recipes?.filter(
         recipe =>
             recipe.title.toLowerCase().includes(input) ||

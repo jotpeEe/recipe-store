@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { AnimateOnLoad } from '@components/animations';
 import Button from '@components/Button';
 import RecipeMini from '@components/card/RecipeMini';
+import { type GetProfileDataQueryQuery } from '@generated/graphql';
 import { useRecipesFilter } from '@hooks';
 import { IconFilter } from '@icons';
 
@@ -12,20 +13,7 @@ import Slider from '../slider';
 import FormInput from './Input';
 
 type SearchInputProps = {
-    recipes:
-        | {
-              __typename?: 'PopulatedData' | undefined;
-              title: string;
-              prep: string;
-              image: string;
-              cuisine: string;
-              id: string;
-              user: {
-                  name: string;
-                  photo: string;
-              };
-          }[]
-        | undefined;
+    recipes?: GetProfileDataQueryQuery['getAllRecipes']['recipes'];
 };
 
 const SearchInput: FC<SearchInputProps> = ({ recipes }) => {
@@ -38,8 +26,9 @@ const SearchInput: FC<SearchInputProps> = ({ recipes }) => {
         const inputLower = searchInput.trim().toLowerCase();
 
         if (inputLower.length === 0) return [];
-        return useRecipesFilter(recipes, inputLower);
-    }, [searchInput]);
+        if (!recipes) return [];
+        return useRecipesFilter(inputLower, recipes);
+    }, [searchInput, recipes]);
 
     const exists = search && search.length !== 0;
 

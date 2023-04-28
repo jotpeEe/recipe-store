@@ -30,7 +30,7 @@ query GetAllRecipesAndLastReviews {
             neg
             createdAt
             recipeAuthor {
-                _id
+                id: _id
                 name
                 photo
             }

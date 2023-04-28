@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 
 import { useGetMeQuery, useRefreshAccessTokenQuery } from '@generated/graphql';
 import { useAppDispatch } from '@hooks';
-import { type IUser } from '@lib/types';
 import { setUser } from '@redux';
 import { queryClient, requestClient } from '@requests';
 
@@ -43,7 +42,8 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
         {},
         {
             onSuccess: data => {
-                dispatch(setUser(data.getMe.user as IUser));
+                console.log(data.getMe.user);
+                dispatch(setUser(data.getMe.user));
             },
             retry: 1,
             enabled: !!enableAuth,
