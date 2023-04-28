@@ -26,8 +26,11 @@ const RecipeCard: React.FC<{ recipe?: Partial<IRecipe> }> = ({ recipe }) => {
                 </div>
             </div>
 
-            <h5 className="z-10 flex items-center justify-center break-words py-4 font-sans2 ">
-                <Title className="font-sans" href={`/recipes/${id}`}>
+            <h5 className="z-10 flex items-center justify-center  py-4 font-sans2 ">
+                <Title
+                    className="max-w-[12ch]  break-words font-sans"
+                    href={`/recipes/${id}`}
+                >
                     {title}
                 </Title>
             </h5>
