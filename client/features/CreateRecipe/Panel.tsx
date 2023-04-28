@@ -6,13 +6,14 @@ import { IconArrow, IconClear } from '@icons';
 
 const Panel: FC = () => {
     const [openModal, setOpenModal] = useState(false);
-    const { id, resetForm } = useCreateRecipe();
+    const { id, resetForm, setStep } = useCreateRecipe();
 
     const { step, goTo } = useSliderContext();
 
     const handleGoBackClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
             goTo(step - 1);
+            setStep(prev => prev - 1);
         }, [step]);
 
     const handleClearClick: MouseEventHandler<HTMLButtonElement> =
