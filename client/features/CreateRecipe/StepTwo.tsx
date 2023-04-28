@@ -1,116 +1,129 @@
-import { type FC, type MouseEventHandler, useCallback } from 'react';
+import { type FC, type MouseEventHandler, useCallback, useMemo } from 'react';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { Button, Input } from '@components';
-import { useSliderContext } from '@contexts';
+import { Button, ErrorMessage, Input } from '@components';
+import { useCreateRecipe, useSliderContext } from '@contexts';
 import { useUpdateRecipeMutation } from '@generated/graphql';
-import { useAppDispatch, useAppSelector } from '@hooks';
-import { addIngredient, setInfo } from '@redux';
+import { updateTempRecipeData } from '@lib';
 import { requestClient } from '@requests';
 
 import Panel from './Panel';
+import { type RecipeInfoInput } from './RecipeForm';
 
-const ingredientSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    amount: z.string().min(1, 'Amount is required'),
-});
+const FormStepTwo: FC = () => {
+    const { next, step } = useSliderContext();
+    const { id, setStep } = useCreateRecipe();
 
-type IngredientInput = z.TypeOf<typeof ingredientSchema>;
+    const {
+        control,
+        register,
+        getValues,
+        trigger,
+        formState: { errors, isDirty },
+    } = useFormContext<RecipeInfoInput>();
 
-const StepTwo: FC<{ id?: string }> = ({ id }) => {
-    const dispatch = useAppDispatch();
-    const data = useAppSelector(state => state.recipe);
-
-    const { ...recipe } = data ?? {};
-    const { step, next } = useSliderContext();
-
-    const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient);
-
-    const methods = useForm<IngredientInput>({
-        resolver: zodResolver(ingredientSchema),
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'ingredients',
     });
-    const { handleSubmit, reset } = methods;
 
-    const onSubmit: SubmitHandler<IngredientInput> = useCallback(
-        values => {
-            dispatch(addIngredient(values));
-            const { name, amount } = values;
-
-            if (id && amount && name) {
-                if (!recipe.ingredients) {
-                    updateRecipe({
-                        input: { ingredients: [{ amount, name }], step },
-                        id,
-                    });
-                } else {
-                    updateRecipe({
-                        input: {
-                            ingredients: [
-                                ...recipe.ingredients,
-                                { amount, name },
-                            ],
-                            step,
-                        },
-                        id,
-                    });
-                }
-            }
-
-            reset();
+    const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient, {
+        onSuccess(data) {
+            updateTempRecipeData(data);
+            next();
+            setStep(2);
         },
-        [id, recipe.ingredients, step]
+    });
+
+    const addField: MouseEventHandler<HTMLButtonElement> = useCallback(e => {
+        e.preventDefault();
+        append({ name: '', amount: '' });
+    }, []);
+
+    const removeField: MouseEventHandler<HTMLButtonElement> = useCallback(e => {
+        e.preventDefault();
+        remove(fields.length - 1);
+    }, []);
+
+    const ifErrors = useMemo(
+        () => Object.entries(errors).length > 0,
+        [errors.ingredients]
     );
 
-    const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-        e => {
+    const handleSubmit: MouseEventHandler<HTMLButtonElement> = useCallback(
+        async e => {
             e.preventDefault();
-            dispatch(setInfo({ step: step + 1 }));
-            next();
+
+            const valid = await trigger('ingredients');
+            const { ingredients } = getValues();
+            const input = { ingredients, step: 1 };
+
+            if (valid) {
+                if (id && isDirty) updateRecipe({ id, input });
+                if (!isDirty) {
+                    next();
+                    setStep(2);
+                }
+            }
         },
-        [step]
+        [id, isDirty, step]
     );
 
     return (
-        <li>
-            <FormProvider {...methods}>
-                <form
-                    className="relative"
-                    onSubmit={handleSubmit(onSubmit)}
-                    noValidate
-                >
-                    <Panel />
-                    <h3 className="text-xl">Add Ingredients</h3>
-                    <p className="pb-4">
-                        Let’s add some ingredients <br />
-                        to the recipe.
-                    </p>
-                    <div className="[&>button:last-of-type]:mt-24 [&>button]:mb-4">
+        <div className="grid-col-panel grid w-full">
+            <Panel />
+            <h3 className="text-xl">Add Ingredients</h3>
+            <p className="pb-4">
+                Let’s add some ingredients <br />
+                to the recipe.
+            </p>
+            <div className="flex justify-between pb-4">
+                <Button onClick={addField} size="sm">
+                    &#8675; add
+                </Button>
+                <Button onClick={removeField} size="sm" variant="outlined">
+                    &#8673; remove
+                </Button>
+            </div>
+            <ul className="w-fit">
+                {fields.map((item, index) => (
+                    <li key={item.id} className="grid grid-cols-6 gap-x-2 pb-2">
                         <Input
-                            label="Name"
-                            name="name"
-                            placeholder="Enter name"
-                            type="text"
+                            label={index === 0 ? 'Name' : ''}
+                            className="col-span-4"
+                            error={!!errors?.ingredients?.[index]?.name}
+                            defaultValue={`${item.name}`}
+                            {...register(`ingredients.${index}.name` as const)}
+                            ref={null}
+                            noValidation
                         />
                         <Input
-                            label="Amount"
-                            name="amount"
-                            placeholder="ex. 35g"
-                            type="text"
+                            label={index === 0 ? 'Amount' : ''}
+                            className="col-span-2"
+                            error={!!errors?.ingredients?.[index]?.amount}
+                            defaultValue={`${item.amount}`}
+                            {...register(
+                                `ingredients.${index}.amount` as const
+                            )}
+                            ref={null}
+                            noValidation
                         />
-                        <Button type="submit" size="sm">
-                            add
-                        </Button>
-                        <Button fullWidth onClick={handleClick} arrow>
-                            Next
-                        </Button>
-                    </div>
-                </form>
-            </FormProvider>
-        </li>
+                    </li>
+                ))}
+            </ul>
+            <ErrorMessage
+                error={
+                    ifErrors
+                        ? { message: 'No empty fields required' }
+                        : undefined
+                }
+            />
+            <Button className="mt-3" fullWidth onClick={handleSubmit} arrow>
+                Next
+            </Button>
+        </div>
     );
 };
 
-export default StepTwo;
+export default FormStepTwo;
