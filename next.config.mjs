@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions, import/extensions
-!process.env.SKIP_ENV_VALIDATION && (await import('./utils/env.mjs'));
+await import('./utils/env.mjs');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,

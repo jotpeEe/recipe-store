@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "docker-compose up -d --remove-orphans && next dev",
         "build": "next build",
-        "deploy": "docker build -t jotpeee/recipes:v1 . && docker push jotpeee/recipes:v1",
+        "deploy": "docker build -t jotpeee/recipes:test . && docker push jotpeee/recipes:test",
         "prod": "docker-compose -f production.yml up -d --build",
         "start": "next start",
         "lint": "next lint --fix",
