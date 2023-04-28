@@ -1,6 +1,6 @@
 import { type FC, useEffect, useMemo, useState } from 'react';
 
-import { type FieldArrayWithId } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { AnimateOnLoad, AnimatedDiv as Animated } from '@components/animations';
 import { IngredientInput } from '@components/input';
@@ -12,20 +12,23 @@ import ReviewList from '../ReviewList';
 import Switch from '../Switch';
 import Ingredient from './Ingredient';
 
-type DisplayProps = {
-    fields: FieldArrayWithId<UpdateInput, 'ingredients', 'id'>[];
-};
-
-const Display: FC<DisplayProps> = ({ fields }) => {
+const Display: FC = () => {
     const { id, step, ingredients, servings, steps, reviews, user } =
         useRecipeContext();
+
+    const { control } = useFormContext<UpdateInput>();
+
+    const { fields } = useFieldArray({
+        control,
+        name: 'ingredients',
+    });
 
     const slicedFields = useMemo(
         () => fields.slice(ingredients ? ingredients.length : 0),
         [ingredients, fields]
     );
 
-    const [active, setActive] = useState<number>(0);
+    const [active, setActive] = useState(0);
 
     useEffect(() => {
         if (step === 2) setActive(1);
@@ -61,49 +64,64 @@ const Display: FC<DisplayProps> = ({ fields }) => {
                         </div>
                         {ingredients?.length !== 0 && active === 0 && (
                             <ul className="flex flex-col gap-4">
-                                {ingredients?.map((ingredient, index) => (
-                                    <AnimateOnLoad
-                                        as="li"
-                                        key={index}
-                                        index={index}
-                                    >
-                                        <Ingredient
-                                            {...{
-                                                ...ingredient,
-                                                id: index,
-                                            }}
-                                        />
-                                    </AnimateOnLoad>
-                                ))}
+                                {ingredients?.map((ingredient, index) => {
+                                    if (
+                                        ingredient?.amount?.length !== 0 &&
+                                        ingredient?.name?.length !== 0
+                                    )
+                                        return (
+                                            <AnimateOnLoad
+                                                as="li"
+                                                key={index}
+                                                index={index}
+                                            >
+                                                <Ingredient
+                                                    {...{
+                                                        ...ingredient,
+                                                        id: index,
+                                                    }}
+                                                />
+                                            </AnimateOnLoad>
+                                        );
+                                    return null;
+                                })}
                             </ul>
                         )}
-                        {fields.length !== 0 && active === 0 && (
-                            <ul className="flex flex-col gap-4">
-                                {slicedFields.map((item, index) => (
-                                    <AnimateOnLoad
-                                        as="li"
-                                        key={item.id}
-                                        index={index}
-                                    >
-                                        <IngredientInput
+                        {fields.length !== 0 &&
+                            active === 0 &&
+                            fields[0].name !== '' && (
+                                <ul className="flex flex-col gap-4">
+                                    {slicedFields.map((item, index) => (
+                                        <AnimateOnLoad
+                                            as="li"
+                                            key={item.id}
                                             index={index}
-                                            item={item}
-                                        />
-                                    </AnimateOnLoad>
-                                ))}
-                            </ul>
-                        )}
+                                        >
+                                            <IngredientInput
+                                                index={index}
+                                                item={item}
+                                            />
+                                        </AnimateOnLoad>
+                                    ))}
+                                </ul>
+                            )}
                         {steps &&
                             steps?.length !== 0 &&
                             active === 1 &&
-                            steps.map((text, index) => (
+                            steps.map(({ label, text }, index) => (
                                 <AnimateOnLoad key={index} index={index}>
-                                    <p
-                                        className="break-word rounded-xl bg-gray-200 px-3 py-1 text-sm"
-                                        key={index}
-                                    >
-                                        {text}
-                                    </p>
+                                    <div className="rounded-xl bg-gray-200 p-4">
+                                        {label && (
+                                            <h6 className="pb-2">{label}</h6>
+                                        )}
+                                        <p
+                                            className="max-w-[36ch] break-words text-sm text-gray-700"
+                                            key={index}
+                                            lang="pl"
+                                        >
+                                            {text}
+                                        </p>
+                                    </div>
                                 </AnimateOnLoad>
                             ))}
                         {reviews && active === 2 && (
