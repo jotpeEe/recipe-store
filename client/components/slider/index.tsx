@@ -28,7 +28,7 @@ const Slider: FC<SliderProps> = ({
     inside,
     breadcrumbs,
 }) => {
-    const [step, setStep] = useState<number>(0);
+    const [step, setStep] = useState(0);
     const steps = children.length;
 
     const next = useCallback(() => {

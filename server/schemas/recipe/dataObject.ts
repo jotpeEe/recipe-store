@@ -8,7 +8,7 @@ class DataObject {
     @Field(() => String)
     readonly _id: string;
 
-    @Field(() => String, { nullable: true })
+    @Field(() => String)
     readonly id: string;
 
     @Field(() => String)
@@ -35,8 +35,8 @@ class DataObject {
     @Field(() => [Ingredient])
     ingredients: Ingredient[];
 
-    @Field(() => Number)
-    step: number;
+    @Field(() => Number, { nullable: true })
+    step?: number;
 
     @Field(() => [Step])
     steps: Step[];

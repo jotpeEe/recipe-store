@@ -1,35 +1,19 @@
 import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
-import Button from '@components/Button';
-import Modal from '@components/Modal';
-import { useSliderContext } from '@contexts';
-import { useDeleteRecipeMutation } from '@generated/graphql';
-import { useAppDispatch, useAppSelector } from '@hooks';
+import { Button, Modal } from '@components';
+import { useCreateRecipe, useSliderContext } from '@contexts';
 import { IconArrow, IconClear } from '@icons';
-import { setRecipe } from '@redux';
-import { queryClient, requestClient } from '@requests';
 
-type PanelProps = {
-    first?: boolean;
-};
-
-const Panel: FC<PanelProps> = ({ first = false }) => {
+const Panel: FC = () => {
     const [openModal, setOpenModal] = useState(false);
+    const { id, resetForm, setStep } = useCreateRecipe();
 
     const { step, goTo } = useSliderContext();
-    const dispatch = useAppDispatch();
-
-    const id = useAppSelector(state => state.recipe?.id);
-
-    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient, {
-        onSuccess() {
-            queryClient.refetchQueries('GetTempRecipe');
-        },
-    });
 
     const handleGoBackClick: MouseEventHandler<HTMLButtonElement> =
         useCallback(() => {
             goTo(step - 1);
+            setStep(prev => prev - 1);
         }, [step]);
 
     const handleClearClick: MouseEventHandler<HTMLButtonElement> =
@@ -39,10 +23,7 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
 
     const onReset: MouseEventHandler<HTMLButtonElement> =
         useCallback(async () => {
-            if (id) {
-                await deleteRecipe({ id });
-            }
-            dispatch(setRecipe({}));
+            resetForm();
             setOpenModal(false);
             goTo(0);
         }, [id]);
@@ -52,39 +33,32 @@ const Panel: FC<PanelProps> = ({ first = false }) => {
     }, []);
 
     return (
-        <div className="absolute right-0 mr-[-8px] flex children:px-2 children:py-2">
-            {!first && (
-                <>
-                    <button
-                        type="button"
-                        className="rotate-180"
-                        onClick={handleGoBackClick}
-                    >
-                        <IconArrow />
-                    </button>
-
-                    <button type="button" onClick={handleClearClick}>
-                        <IconClear />
-                    </button>
-                    <Modal openModal={openModal} setOpenModal={setOpenModal}>
-                        <>
-                            <p>Do you want to reset create form?</p>
-                            <div className="flex justify-end gap-2 pt-2">
-                                <Button
-                                    size="sm"
-                                    onClick={onCancel}
-                                    variant="outlined"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button size="sm" onClick={onReset}>
-                                    Reset
-                                </Button>
-                            </div>
-                        </>
-                    </Modal>
-                </>
+        <div className="absolute right-0 -mr-[-24px] flex children:px-2 children:py-2">
+            {step !== 0 && (
+                <button
+                    type="button"
+                    className="rotate-180"
+                    onClick={handleGoBackClick}
+                >
+                    <IconArrow />
+                </button>
             )}
+            <button type="button" onClick={handleClearClick}>
+                <IconClear />
+            </button>
+            <Modal openModal={openModal} setOpenModal={setOpenModal}>
+                <>
+                    <p>Do you want to reset create form?</p>
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button size="sm" onClick={onCancel} variant="outlined">
+                            Cancel
+                        </Button>
+                        <Button size="sm" type="reset" onClick={onReset}>
+                            Reset
+                        </Button>
+                    </div>
+                </>
+            </Modal>
         </div>
     );
 };

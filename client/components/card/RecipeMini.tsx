@@ -3,23 +3,12 @@ import { type FC } from 'react';
 import Image from 'next/image';
 
 import { IconClock } from '@components/icons';
+import { type IRecipe } from '@lib/types';
 
 import { Card, Title } from '../CardWithLinks';
 
-type RecipeMiniProps = {
-    t__typename?: 'PopulatedData' | undefined;
-    title: string;
-    prep: string;
-    image: string;
-    cuisine: string;
-    id: string;
-    user: {
-        name: string;
-        photo: string;
-    };
-};
-
-const RecipeMini: FC<RecipeMiniProps> = ({ id, title, user, prep, image }) => {
+const RecipeMini: FC<Partial<IRecipe> | undefined> = props => {
+    const { id, title, user, prep, image } = props ?? {};
     const { name, photo } = user ?? {};
     return (
         <div className="pt-12 pl-1">
@@ -44,7 +33,7 @@ const RecipeMini: FC<RecipeMiniProps> = ({ id, title, user, prep, image }) => {
                             <Image
                                 width={25}
                                 height={25}
-                                src={photo}
+                                src={photo || ''}
                                 alt={`${name} user`}
                                 className="rounded-full"
                             ></Image>

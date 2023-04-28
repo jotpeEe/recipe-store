@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import type { GetServerSideProps, NextPage } from 'next';
 import { dehydrate } from '@tanstack/react-query';
+import { type GetServerSideProps } from 'next';
 
-import { Slider } from '@components';
-import { Preview, StepOne, StepThree, StepTwo } from '@components/createRecipe';
-import { useGetCuisinesQuery, useGetTempRecipeQuery } from '@generated/graphql';
-import { useAppDispatch, useWindowSize } from '@hooks';
-import { SectionLayout } from '@layouts';
-import { setRecipe } from '@redux';
+import { RecipeForm } from '@features';
+import {
+    type GetCuisinesQuery,
+    type GetTempRecipeQuery,
+    useGetCuisinesQuery,
+    useGetTempRecipeQuery,
+} from '@generated/graphql';
 import { queryClient, requestClient } from '@requests';
 
-const CreateRecipe: NextPage = () => {
+const CreateRecipe = () => {
     const [first, setFirst] = useState(true);
-    const dispatch = useAppDispatch();
-    const width = useWindowSize();
 
     const { data: cuisines } = useGetCuisinesQuery(
         requestClient,
@@ -22,49 +21,35 @@ const CreateRecipe: NextPage = () => {
         {
             enabled: first,
             // sort case-insensitive
-            select: res =>
-                res.getCuisines.cuisines.sort((a, b) =>
-                    a.toLowerCase().localeCompare(b.toLowerCase())
-                ),
+            select: useCallback(
+                (res: GetCuisinesQuery) =>
+                    res.getCuisines.cuisines.sort((a, b) =>
+                        a.toLowerCase().localeCompare(b.toLowerCase())
+                    ),
+                []
+            ),
         }
     );
 
-    const { data, isLoading } = useGetTempRecipeQuery(
+    const { data } = useGetTempRecipeQuery(
         requestClient,
         {},
         {
             enabled: first,
-            select: res => {
-                const {
-                    id,
-                    __typename: tn,
-                    ...recipe
-                } = res.temp?.recipe ?? {};
+            select: useCallback((res: GetTempRecipeQuery) => {
+                if (!res.temp?.recipe) return undefined;
+                const { id, ...recipe } = res.temp.recipe;
                 return { recipe, id };
-            },
-            onSuccess(res) {
-                dispatch(setRecipe({ id: res.id, ...res.recipe }));
-            },
+            }, []),
         }
     );
 
-    useEffect(() => setFirst(false), []);
-
-    if (isLoading) return null;
+    useEffect(() => {
+        setFirst(false);
+    }, []);
 
     return (
-        <SectionLayout flex>
-            <div className="w-[270px]">
-                <Slider
-                    breadcrumbs={['Add info', 'Add ingredients', 'Add steps']}
-                >
-                    <StepOne defaultValues={data?.recipe} cuisines={cuisines} />
-                    <StepTwo id={data?.id} />
-                    <StepThree />
-                </Slider>
-            </div>
-            {width && width > 768 && <Preview />}
-        </SectionLayout>
+        <RecipeForm cuisines={cuisines} id={data?.id} recipe={data?.recipe} />
     );
 };
 
@@ -79,6 +64,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     return {
         props: {
+            create: true,
             dehydratedState: dehydrate(queryClient),
             requireAuth: true,
             enableAuth: !!req.cookies.refresh_token,

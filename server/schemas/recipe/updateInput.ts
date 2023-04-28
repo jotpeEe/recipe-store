@@ -39,6 +39,9 @@ class UpdateInput {
 
     @Field(() => Number, { nullable: true })
     step?: number;
+
+    @Field(() => Boolean, { nullable: true })
+    temp?: boolean;
 }
 
 export default UpdateInput;

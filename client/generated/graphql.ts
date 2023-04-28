@@ -151,13 +151,13 @@ export type PopulatedData = {
     createdAt: Scalars['DateTime'];
     cuisine: Scalars['String'];
     description: Scalars['String'];
-    id?: Maybe<Scalars['String']>;
+    id: Scalars['String'];
     image: Scalars['String'];
     ingredients: Array<Ingredient>;
     prep: Scalars['String'];
     reviews: Array<ReviewData>;
     servings?: Maybe<Scalars['Float']>;
-    step: Scalars['Float'];
+    step?: Maybe<Scalars['Float']>;
     steps: Array<Step>;
     temp: Scalars['Boolean'];
     title: Scalars['String'];
@@ -201,12 +201,12 @@ export type RecipeData = {
     createdAt: Scalars['DateTime'];
     cuisine: Scalars['String'];
     description: Scalars['String'];
-    id?: Maybe<Scalars['String']>;
+    id: Scalars['String'];
     image: Scalars['String'];
     ingredients: Array<Ingredient>;
     prep: Scalars['String'];
     servings?: Maybe<Scalars['Float']>;
-    step: Scalars['Float'];
+    step?: Maybe<Scalars['Float']>;
     steps: Array<Step>;
     temp: Scalars['Boolean'];
     title: Scalars['String'];
@@ -290,6 +290,7 @@ export type UpdateInput = {
     servings?: InputMaybe<Scalars['Float']>;
     step?: InputMaybe<Scalars['Float']>;
     steps?: InputMaybe<Array<StepInput>>;
+    temp?: InputMaybe<Scalars['Boolean']>;
     title?: InputMaybe<Scalars['String']>;
 };
 
@@ -418,9 +419,9 @@ export type GetAllRecipesAndLastReviewsQuery = {
             id: string;
             recipeAuthor: {
                 __typename?: 'UserData';
-                _id: string;
                 name: string;
                 photo: string;
+                id: string;
             };
             recipe: {
                 __typename?: 'RecipeData';
@@ -462,6 +463,11 @@ export type GetMeQuery = {
             email: string;
             name: string;
             photo: string;
+            _id: string;
+            createdAt: any;
+            role: string;
+            terms: boolean;
+            updatedAt: any;
             id: string;
         };
     };
@@ -877,7 +883,7 @@ export const GetAllRecipesAndLastReviewsDocument = `
       neg
       createdAt
       recipeAuthor {
-        _id
+        id: _id
         name
         photo
       }
@@ -948,6 +954,11 @@ export const GetMeDocument = `
       email
       name
       photo
+      _id
+      createdAt
+      role
+      terms
+      updatedAt
     }
   }
 }

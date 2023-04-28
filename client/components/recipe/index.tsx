@@ -3,12 +3,7 @@ import { type FC, useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { hasCookie } from 'cookies-next';
 import router from 'next/router';
-import {
-    FormProvider,
-    type SubmitHandler,
-    useFieldArray,
-    useForm,
-} from 'react-hook-form';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { AnimatedDiv as Animated } from '@components/animations';
 import { UserInfo } from '@components/user';
@@ -16,7 +11,7 @@ import { RecipeContext } from '@contexts';
 import { type UpdateInput, useUpdateRecipeMutation } from '@generated/graphql';
 import { useAppSelector, useKeyPress } from '@hooks';
 import { IconClock, IconStar } from '@icons';
-import type { IRecipe, IReview } from '@lib/types';
+import { type IRecipe, type IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
 import Display from './Display';
@@ -55,14 +50,8 @@ const Recipe: FC<RecipeProps> = props => {
     });
     const {
         handleSubmit,
-        control,
         formState: { isDirty },
     } = methods;
-
-    const { fields, append, remove } = useFieldArray<UpdateInput>({
-        control,
-        name: 'ingredients',
-    });
 
     const loggedUser = useAppSelector(state => state.auth.user);
 
@@ -72,7 +61,7 @@ const Recipe: FC<RecipeProps> = props => {
 
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient, {
         onSuccess() {
-            queryClient.refetchQueries({ queryKey: ['GetRecipeById'] });
+            queryClient.refetchQueries(['GetRecipeById']);
         },
         onError(error: any) {
             if (error.response.errors[0].message === 'No access token found') {
@@ -94,14 +83,14 @@ const Recipe: FC<RecipeProps> = props => {
     const loggedIn = hasCookie('logged_in');
 
     useEffect(() => {
-        if (loggedIn) queryClient.refetchQueries({ queryKey: ['GetMe'] });
+        if (loggedIn) queryClient.refetchQueries(['GetMe']);
     }, []);
 
     useEffect(() => {
         if (isEnterPressed && isDirty) {
             handleSubmit(onSubmit)();
         }
-    }, [isEnterPressed, fields, isDirty]);
+    }, [isEnterPressed, isDirty]);
 
     if (!user) return null;
 
@@ -113,15 +102,13 @@ const Recipe: FC<RecipeProps> = props => {
                 isTheSameUser,
                 withEdit,
                 onSubmit,
-                fields,
-                append,
-                remove,
             }}
         >
             <FormProvider {...methods}>
                 <form
                     className={classNames(
-                        'grid h-fit max-w-sm origin-top grid-cols-3 gap-y-8 rounded-xl p-8 shadow-card transition-transform duration-500'
+                        'grid h-fit max-w-sm origin-top grid-cols-3 gap-y-8 rounded-xl p-8 shadow-card transition-transform duration-500',
+                        hideMobile ? 'hidden md:grid' : 'grid'
                     )}
                 >
                     {title && (
@@ -160,7 +147,7 @@ const Recipe: FC<RecipeProps> = props => {
                                 variant="textarea"
                                 value={description}
                             >
-                                <p className="max-w-[40ch] break-words text-sm ">
+                                <p className="max-w-[36ch] break-words text-sm ">
                                     {description}
                                 </p>
                             </Edit>
@@ -178,7 +165,7 @@ const Recipe: FC<RecipeProps> = props => {
                             />
                         </Animated>
                     )}
-                    <Display fields={fields} />
+                    <Display />
                 </form>
             </FormProvider>
         </RecipeContext.Provider>

@@ -19,9 +19,7 @@ const uploadImage = async (
         body: formData,
     })
         .then(res => res.json())
-        .catch(err => {
-            console.log(err);
-        });
+        .catch();
 
     return data.secure_url;
 };
