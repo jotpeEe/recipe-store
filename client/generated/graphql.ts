@@ -157,7 +157,7 @@ export type PopulatedData = {
     prep: Scalars['String'];
     reviews: Array<ReviewData>;
     servings?: Maybe<Scalars['Float']>;
-    step: Scalars['Float'];
+    step?: Maybe<Scalars['Float']>;
     steps: Array<Step>;
     temp: Scalars['Boolean'];
     title: Scalars['String'];
@@ -206,7 +206,7 @@ export type RecipeData = {
     ingredients: Array<Ingredient>;
     prep: Scalars['String'];
     servings?: Maybe<Scalars['Float']>;
-    step: Scalars['Float'];
+    step?: Maybe<Scalars['Float']>;
     steps: Array<Step>;
     temp: Scalars['Boolean'];
     title: Scalars['String'];
@@ -290,6 +290,7 @@ export type UpdateInput = {
     servings?: InputMaybe<Scalars['Float']>;
     step?: InputMaybe<Scalars['Float']>;
     steps?: InputMaybe<Array<StepInput>>;
+    temp?: InputMaybe<Scalars['Boolean']>;
     title?: InputMaybe<Scalars['String']>;
 };
 
