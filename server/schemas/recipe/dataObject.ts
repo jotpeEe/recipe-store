@@ -8,7 +8,7 @@ class DataObject {
     @Field(() => String)
     readonly _id: string;
 
-    @Field(() => String, { nullable: true })
+    @Field(() => String)
     readonly id: string;
 
     @Field(() => String)

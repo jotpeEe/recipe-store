@@ -118,7 +118,6 @@ export default class ReviewService {
                 status: 'success',
                 results: reviews.length,
                 reviews,
-                userId: user?._id,
             };
         } catch (error: any) {
             errorHandler(error);
@@ -169,7 +168,7 @@ export default class ReviewService {
     getLastReviews = async () => {
         try {
             const reviewsQuery = ReviewModel.find()
-                .populate(['user', 'recipe'])
+                .populate(['user', 'recipe', 'recipeAuthor'])
                 .limit(8);
 
             const reviews = await reviewsQuery
