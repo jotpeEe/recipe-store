@@ -51,7 +51,6 @@ const Input: FC<InputProps> = ({
                         {label}
                     </label>
                 )}
-
                 <input
                     type={type}
                     defaultValue={value}

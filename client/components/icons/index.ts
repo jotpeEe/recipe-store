@@ -3,6 +3,8 @@ export { default as IconBookmark } from './Bookmark';
 export { default as IconCheck } from './Check';
 export { default as IconClear } from './Clear';
 export { default as IconClock } from './Clock';
+export { default as IconCopy } from './Copy';
+export { default as IconCorrect } from './Correct';
 export { default as IconDish } from './Dish';
 export { default as IconEdit } from './Edit';
 export { default as IconFacebook } from './Facebook';
