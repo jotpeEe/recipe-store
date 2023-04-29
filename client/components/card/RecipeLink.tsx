@@ -1,12 +1,18 @@
-import React, { type ChangeEventHandler, useEffect, useState } from 'react';
+import React, {
+    type ChangeEventHandler,
+    type FC,
+    useEffect,
+    useState,
+} from 'react';
 
 import cn from 'classnames';
 
 import Button from '@components/Button';
 import { IconCopy, IconCorrect } from '@components/icons';
+import { HOST_URL } from '@constants';
 
-const RecipeLink = () => {
-    const defaultValue = 'app.Recipe.co/jollof_rice';
+const RecipeLink: FC<{ id?: string | undefined }> = ({ id }) => {
+    const defaultValue = `${HOST_URL}recipes/${id}`;
     const [input, setInput] = useState<string>(defaultValue);
     const [copiedText, setCopiedText] = useState(false);
 
@@ -34,7 +40,7 @@ const RecipeLink = () => {
     }, [copiedText]);
 
     return (
-        <div className="mt-24 flex h-fit w-fit flex-col items-start justify-center rounded-3xl border p-4 drop-shadow children:py-1.5">
+        <div className="flex h-fit w-fit min-w-max flex-col items-start justify-center rounded-3xl border bg-white p-4 drop-shadow children:py-1.5">
             <h3 className="text-xl font-bold">Recipe link</h3>
             <p className="max-w-[38ch] text-xs">
                 Copy recipe link and share your recipe link with friends and

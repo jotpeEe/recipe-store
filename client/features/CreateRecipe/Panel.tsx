@@ -47,7 +47,7 @@ const Panel: FC = () => {
                 <IconClear />
             </button>
             <Modal openModal={openModal} setOpenModal={setOpenModal}>
-                <>
+                <div className="rounded-xl bg-white p-4">
                     <p>Do you want to reset create form?</p>
                     <div className="flex justify-end gap-2 pt-2">
                         <Button size="sm" onClick={onCancel} variant="outlined">
@@ -57,7 +57,7 @@ const Panel: FC = () => {
                             Reset
                         </Button>
                     </div>
-                </>
+                </div>
             </Modal>
         </div>
     );

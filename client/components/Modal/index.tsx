@@ -1,26 +1,36 @@
 import React, { type FC } from 'react';
 
+import cn from 'classnames';
 import ReactDom from 'react-dom';
 
 type IPostModal = {
     openModal: boolean;
     setOpenModal: (openModal: boolean) => void;
     children: React.ReactNode;
+    target?: HTMLElement;
 };
 
-const Modal: FC<IPostModal> = ({ openModal, setOpenModal, children }) => {
+const Modal: FC<IPostModal> = ({
+    openModal,
+    setOpenModal,
+    children,
+    target,
+}) => {
     if (!openModal) return null;
     return ReactDom.createPortal(
         <>
-            <div
-                className="fixed inset-0 z-[1000] bg-[rgba(0,0,0,.5)]"
-                onClick={() => setOpenModal(false)}
-            />
-            <div className="w-fill fixed top-[15%] left-1/2 z-[1001] max-w-lg -translate-x-1/2 rounded-md bg-white p-6">
+            <div className="absolute left-1/2 top-1/2 z-[300] -translate-x-1/2 -translate-y-1/2">
                 {children}
             </div>
+            <div
+                className={cn(
+                    'absolute inset-0 z-[200] bg-[rgba(0,0,0,.5)]',
+                    target && 'rounded-xl'
+                )}
+                onClick={() => setOpenModal(false)}
+            />
         </>,
-        document.getElementById('post-modal') as HTMLElement
+        target || (document.getElementById('post-modal') as HTMLElement)
     );
 };
 

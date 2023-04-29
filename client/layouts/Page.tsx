@@ -42,7 +42,6 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
         {},
         {
             onSuccess: data => {
-                console.log(data.getMe.user);
                 dispatch(setUser(data.getMe.user));
             },
             retry: 1,

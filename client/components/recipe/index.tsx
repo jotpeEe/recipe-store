@@ -1,4 +1,11 @@
-import { type FC, useCallback, useEffect } from 'react';
+import {
+    type FC,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 import classNames from 'classnames';
 import { hasCookie } from 'cookies-next';
@@ -6,12 +13,15 @@ import router from 'next/router';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { AnimatedDiv as Animated } from '@components/animations';
+import RecipeLink from '@components/card/RecipeLink';
+import RecipeRating from '@components/card/RecipeRating';
 import Dropdown from '@components/Dropdown';
+import Modal from '@components/Modal';
 import { UserInfo } from '@components/user';
 import { RecipeContext } from '@contexts';
 import { type UpdateInput, useUpdateRecipeMutation } from '@generated/graphql';
 import { useAppSelector, useKeyPress } from '@hooks';
-import { IconClock, IconStar } from '@icons';
+import { IconBookmark, IconClock, IconShare, IconStar } from '@icons';
 import { type IRecipe, type IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
@@ -27,6 +37,10 @@ export type RecipeProps = Partial<IRecipe> & {
 };
 
 const Recipe: FC<RecipeProps> = props => {
+    const recipeRef = useRef(null);
+    const [actionIndex, setActionIndex] = useState(0);
+    const [openModal, setOpenModal] = useState(false);
+
     const {
         title,
         image,
@@ -54,6 +68,31 @@ const Recipe: FC<RecipeProps> = props => {
         formState: { isDirty },
     } = methods;
 
+    const options = useMemo(
+        () => [
+            { icon: <IconShare />, text: 'Share' },
+            {
+                icon: <IconStar width={16} height={16} />,
+                text: 'Rate Recipe',
+            },
+            {
+                icon: <IconBookmark width={16} height={16} />,
+                text: 'Unsave',
+            },
+        ],
+        []
+    );
+
+    const element = useMemo(() => {
+        switch (actionIndex) {
+            case 0:
+                return <RecipeLink id={id} />;
+            case 1:
+                return <RecipeRating id={id} />;
+            default:
+                return <></>;
+        }
+    }, [actionIndex, id]);
 
     const handleSelect = (index: number) => {
         setActionIndex(index);
@@ -113,6 +152,7 @@ const Recipe: FC<RecipeProps> = props => {
         >
             <FormProvider {...methods}>
                 <form
+                    ref={recipeRef}
                     className={classNames(
                         'relative grid h-fit max-w-sm origin-top grid-cols-3 gap-y-8 rounded-xl p-8 shadow-card transition-transform duration-500',
                         hideMobile ? 'hidden md:grid' : 'grid'
@@ -178,6 +218,13 @@ const Recipe: FC<RecipeProps> = props => {
                         options={options}
                         onSelect={handleSelect}
                     />
+                    <Modal
+                        setOpenModal={setOpenModal}
+                        openModal={openModal}
+                        target={recipeRef.current || undefined}
+                    >
+                        {element}
+                    </Modal>
                 </form>
             </FormProvider>
         </RecipeContext.Provider>
