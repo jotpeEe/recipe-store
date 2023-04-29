@@ -6,6 +6,7 @@ import router from 'next/router';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
 import { AnimatedDiv as Animated } from '@components/animations';
+import Dropdown from '@components/Dropdown';
 import { UserInfo } from '@components/user';
 import { RecipeContext } from '@contexts';
 import { type UpdateInput, useUpdateRecipeMutation } from '@generated/graphql';
@@ -52,6 +53,12 @@ const Recipe: FC<RecipeProps> = props => {
         handleSubmit,
         formState: { isDirty },
     } = methods;
+
+
+    const handleSelect = (index: number) => {
+        setActionIndex(index);
+        setOpenModal(true);
+    };
 
     const loggedUser = useAppSelector(state => state.auth.user);
 
@@ -107,7 +114,7 @@ const Recipe: FC<RecipeProps> = props => {
             <FormProvider {...methods}>
                 <form
                     className={classNames(
-                        'grid h-fit max-w-sm origin-top grid-cols-3 gap-y-8 rounded-xl p-8 shadow-card transition-transform duration-500',
+                        'relative grid h-fit max-w-sm origin-top grid-cols-3 gap-y-8 rounded-xl p-8 shadow-card transition-transform duration-500',
                         hideMobile ? 'hidden md:grid' : 'grid'
                     )}
                 >
@@ -166,6 +173,11 @@ const Recipe: FC<RecipeProps> = props => {
                         </Animated>
                     )}
                     <Display />
+                    <Dropdown
+                        className="absolute top-5 right-5"
+                        options={options}
+                        onSelect={handleSelect}
+                    />
                 </form>
             </FormProvider>
         </RecipeContext.Provider>
