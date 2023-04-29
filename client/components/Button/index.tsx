@@ -1,4 +1,11 @@
-import { type ButtonHTMLAttributes, type FC, type ReactNode } from 'react';
+import {
+    type ButtonHTMLAttributes,
+    type ChangeEvent,
+    type FC,
+    type ReactNode,
+    useEffect,
+    useState,
+} from 'react';
 
 import classNames from 'classnames';
 import Link from 'next/link';
@@ -37,13 +44,27 @@ const Button: FC<ButtonProps> = ({
     isLoading,
     outlined,
     rotate,
-    size = 'lg',
+    size = 'xl',
     type = 'button',
     hidden,
     variant = 'normal',
     message,
     ...props
 }) => {
+    const [isActiveMessage, setActiveMessage] = useState(false);
+
+    const handleCheckboxOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setActiveMessage(true);
+    };
+
+    useEffect(() => {
+        const clear = setTimeout(() => {
+            if (message?.active) setActiveMessage(false);
+        }, 1500);
+
+        return () => clearTimeout(clear);
+    }, [isActiveMessage, message?.active]);
+
     const styles = classNames(
         'flex items-center justify-center font-semibold gap-2 text-center transition-all h-fit border whitespace-nowrap',
         circle ? 'rounded-full p-4' : 'rounded-xl',
@@ -93,14 +114,18 @@ const Button: FC<ButtonProps> = ({
                     {message && (
                         <>
                             <input
-                                className="peer absolute left-0 right-0 bottom-0 top-0 z-20 hidden"
-                                defaultChecked={message.active}
+                                className="peer absolute left-0 right-0 bottom-0 top-0 z-20 opacity-0"
+                                onChange={handleCheckboxOnChange}
                                 type="checkbox"
                                 id="btnControl"
+                                disabled={message.active}
                             />
                             <label
                                 htmlFor="btnControl"
-                                className="absolute left-1 -top-2 -translate-x-1/4 -translate-y-full rounded-3xl bg-primary px-3 py-1.5 text-black opacity-0 transition-opacity peer-checked:opacity-100 "
+                                className={classNames(
+                                    'absolute left-1 -top-2 -translate-x-1/4 -translate-y-full rounded-3xl bg-primary px-3 py-1.5 text-black opacity-0 transition-opacity',
+                                    isActiveMessage && 'opacity-100'
+                                )}
                             >
                                 <p className="relative text-[10px] font-semibold text-white before:absolute before:-bottom-2.5 before:left-1/2 before:z-10 before:h-2 before:w-2 before:-translate-x-[30%] before:rotate-45 before:rounded-sm before:bg-primary">
                                     {message.text}
