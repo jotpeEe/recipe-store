@@ -1,22 +1,32 @@
 import { type FC, type MouseEventHandler, useMemo, useState } from 'react';
 
 import cn from 'classnames';
+import { useRouter } from 'next/router';
 
 import Button from '@components/Button';
 import { IconStar } from '@components/icons';
+import { useRecipeContext } from '@contexts';
+import {
+    useCreateRatingMutation,
+    useUpdateRatingMutation,
+} from '@generated/graphql';
 import { useAppSelector } from '@hooks';
+import { requestClient } from '@requests';
 
 type RecipeRatingProps = {
     scale?: number;
-    id?: string | undefined;
 };
 
-const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5, id }) => {
+const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5 }) => {
     const user = useAppSelector(state => state.auth.user);
-    const [hover, setHover] = useState(0);
-    const [rating, setRating] = useState(0);
+    const { id, ratings, setOpenModal } = useRecipeContext();
+    const myRating = useMemo(
+        () => ratings?.find(item => item.user === user?.id),
+        [ratings]
+    );
 
-    const { id: userId } = user ?? {};
+    const [hover, setHover] = useState(0);
+    const [rating, setRating] = useState(myRating?.rating || 0);
 
     const items = useMemo(() => {
         const temp = ['empty'];
@@ -26,7 +36,29 @@ const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5, id }) => {
         return temp;
     }, []);
 
-    const handleSubmit: MouseEventHandler<HTMLButtonElement> = () => {};
+    const router = useRouter();
+
+    const { mutate: createRating } = useCreateRatingMutation(requestClient, {
+        onSuccess() {
+            setOpenModal(false);
+        },
+        onError() {
+            router.push('/');
+        },
+    });
+
+    const { mutate: updateRating } = useUpdateRatingMutation(requestClient, {
+        onSuccess() {
+            setOpenModal(false);
+        },
+    });
+
+    const handleSubmit: MouseEventHandler<HTMLButtonElement> = e => {
+        e.preventDefault();
+        if (id && user?.id && !myRating) createRating({ input: rating, id });
+        if (id && user?.id && myRating)
+            updateRating({ id: myRating.id, input: rating });
+    };
 
     return (
         <div className="flex w-fit flex-col items-center rounded-2xl border bg-white p-4 drop-shadow children:my-1.5">
@@ -73,7 +105,7 @@ const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5, id }) => {
                         )
                 )}
             </ul>
-            <Button size="sm" disabled={rating === 0}>
+            <Button onClick={handleSubmit} size="sm" disabled={rating === 0}>
                 Submit
             </Button>
         </div>
