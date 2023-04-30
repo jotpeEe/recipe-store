@@ -1,0 +1,11 @@
+mutation CreateRating($input: Float!, $id: String!) {
+    createRating(input: $input, id: $id) {
+        status
+        rating {
+            id
+            rating
+            recipe
+            user
+        }
+    }
+}

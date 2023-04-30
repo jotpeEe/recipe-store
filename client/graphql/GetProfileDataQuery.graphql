@@ -5,10 +5,7 @@ query GetProfileDataQuery {
         reviews {
             id: _id
             text
-            recipe {
-                id: _id
-                description
-            }
+            recipe
             recipeAuthor {
                 name
                 photo

@@ -1,0 +1,11 @@
+mutation UpdateRating($id: String!, $input: Float!) {
+    updateRating(id: $id, input: $input) {
+        status
+        rating {
+            id
+            rating
+            recipe
+            user
+        }
+    }
+}

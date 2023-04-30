@@ -21,28 +21,25 @@ query GetRecipeById($id: String!) {
                 name
                 photo
             }
-        }
-    }
-
-    getReviewsBy(id: $id) {
-        reviews {
-            id: _id
-            text
-            recipe {
+            reviews {
+                _id
                 id: _id
-            }
-            recipeAuthor {
-                name
-                photo
-            }
-            user {
+                text
+                neg
+                pos
+                user {
+                    id: _id
+                    name
+                    photo
+                }
+                createdAt
+            },
+            ratings {
                 id: _id
-                name
-                photo
+                recipe
+                rating
+                user
             }
-            pos
-            neg
-            createdAt
         }
     }
 }

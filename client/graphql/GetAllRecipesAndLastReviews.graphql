@@ -34,11 +34,7 @@ query GetAllRecipesAndLastReviews {
                 name
                 photo
             }
-            recipe {
-                id: _id
-                title
-                image
-            }
+            recipe 
             user {
                 id: _id
                 name
