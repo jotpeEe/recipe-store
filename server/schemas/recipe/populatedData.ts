@@ -1,6 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 
-import ReviewData from '@schemas/review/data';
+import { RatingData } from '@schemas/rating';
+import { ReviewPopulatedData } from '@schemas/review';
 import { UserData } from '@schemas/user';
 
 import DataObject from './dataObject';
@@ -10,8 +11,11 @@ class PopulatedData extends DataObject {
     @Field(() => UserData)
     user: UserData;
 
-    @Field(() => [ReviewData])
-    reviews: ReviewData[];
+    @Field(() => [ReviewPopulatedData])
+    reviews: ReviewPopulatedData[];
+
+    @Field(() => [RatingData])
+    ratings: RatingData[];
 }
 
 export default PopulatedData;

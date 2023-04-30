@@ -31,9 +31,6 @@ class UpdateInput {
     @Field(() => [IngredientInput], { nullable: true })
     ingredients?: Ingredient[];
 
-    @Field(() => [String], { nullable: true })
-    reviews?: string[];
-
     @Field(() => [StepInput], { nullable: true })
     steps?: Step[];
 

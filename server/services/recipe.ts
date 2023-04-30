@@ -1,7 +1,7 @@
 import { ValidationError } from 'apollo-server-micro';
 
 import errorHandler from '@controllers';
-import { type Recipe, RecipeModel } from '@models';
+import { type Recipe, RecipeModel, ReviewModel } from '@models';
 import { type Input } from '@schemas/recipe';
 import { type Context } from 'server/types/context';
 
@@ -64,7 +64,20 @@ export default class RecipeService {
     getRecipeById = async (id: string) => {
         try {
             const recipe = await RecipeModel.findById(id)
-                .populate('user')
+                .populate([
+                    'user',
+                    'reviews',
+                    'ratings',
+                    {
+                        path: 'reviews',
+                        populate: [
+                            {
+                                path: 'user',
+                                model: 'User',
+                            },
+                        ],
+                    },
+                ])
                 .lean();
 
             if (!recipe)
@@ -199,6 +212,7 @@ export default class RecipeService {
         try {
             await deserializeUser(req, res);
             const recipe = await RecipeModel.findByIdAndDelete(id);
+            await ReviewModel.deleteMany({ recipe: recipe?.id });
 
             if (!recipe)
                 return new ValidationError('No recipe with that id exists');
@@ -207,6 +221,40 @@ export default class RecipeService {
         } catch (error: any) {
             errorHandler(error);
             return { status: 'error' };
+        }
+    };
+
+    addRating = async (
+        id: string,
+        rating: number,
+        { req, res, deserializeUser }: Context
+    ) => {
+        try {
+            const user = await deserializeUser(req, res);
+
+            const recipe = await RecipeModel.findByIdAndUpdate(
+                id,
+                { rating, user: user?._id },
+                {
+                    new: true,
+                    runValidators: true,
+                    lean: true,
+                }
+            );
+
+            if (!recipe)
+                return new ValidationError('No recipe with that id exists');
+
+            return {
+                status: 'success',
+                recipe,
+            };
+        } catch (error: any) {
+            errorHandler(error);
+            return {
+                status: 'error',
+                recipe: undefined,
+            };
         }
     };
 }

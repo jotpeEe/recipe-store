@@ -167,13 +167,10 @@ export default class ReviewService {
 
     getLastReviews = async () => {
         try {
-            const reviewsQuery = ReviewModel.find()
+            const reviews = await ReviewModel.find()
                 .populate(['user', 'recipe', 'recipeAuthor'])
-                .limit(8);
-
-            const reviews = await reviewsQuery
+                .limit(8)
                 .sort({ createdAt: -1 })
-                .limit(10)
                 .lean();
 
             return {

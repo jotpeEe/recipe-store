@@ -8,6 +8,8 @@ import {
 
 import { type Ingredient, type Step } from '@schemas/recipe';
 
+import { Rating } from './rating';
+import { Review } from './review';
 import { User } from './user';
 
 @ModelOptions({
@@ -51,8 +53,11 @@ export class Recipe {
     @prop()
     steps: Step[];
 
-    @prop()
-    reviews: string[];
+    @prop({ ref: () => Rating })
+    ratings: Ref<Rating>[];
+
+    @prop({ ref: () => Review })
+    reviews: Ref<Review>[];
 
     @prop()
     ingredients: Ingredient[];

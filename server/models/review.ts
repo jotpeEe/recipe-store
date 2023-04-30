@@ -6,7 +6,6 @@ import {
     prop,
 } from '@typegoose/typegoose';
 
-import { Recipe } from './recipe';
 import { User } from './user';
 
 @ModelOptions({
@@ -29,13 +28,13 @@ export class Review {
     @prop({ required: true, default: [] })
     neg: string[];
 
-    @prop({ required: true, ref: () => Recipe })
-    recipe: Ref<Recipe>;
+    @prop()
+    recipe: string;
 
-    @prop({ required: true, ref: () => User })
+    @prop({ ref: () => User })
     user: Ref<User>;
 
-    @prop({ required: true, ref: () => User })
+    @prop({ ref: () => User })
     recipeAuthor: Ref<User>;
 }
 
