@@ -94,15 +94,23 @@ export type LoginResponse = {
 
 export type Mutation = {
     __typename?: 'Mutation';
+    createRating: RatingResponse;
     createRecipe: PopulatedResponse;
     createReview: ReviewResponse;
+    deleteRating: RatingDeleteResponse;
     deleteRecipe: PopulatedResponse;
     deleteReview: ReviewPopulatedResponse;
     deleteUser: Scalars['Boolean'];
     loginUser: LoginResponse;
     signupUser: UserResponse;
+    updateRating: RatingResponse;
     updateRecipe: PopulatedResponse;
     updateReview: ReviewResponse;
+};
+
+export type MutationCreateRatingArgs = {
+    id: Scalars['String'];
+    input: Scalars['Float'];
 };
 
 export type MutationCreateRecipeArgs = {
@@ -112,6 +120,10 @@ export type MutationCreateRecipeArgs = {
 export type MutationCreateReviewArgs = {
     id: Scalars['String'];
     input: Scalars['String'];
+};
+
+export type MutationDeleteRatingArgs = {
+    id: Scalars['String'];
 };
 
 export type MutationDeleteRecipeArgs = {
@@ -135,6 +147,11 @@ export type MutationSignupUserArgs = {
     input: SignUpInput;
 };
 
+export type MutationUpdateRatingArgs = {
+    id: Scalars['String'];
+    input: Scalars['Float'];
+};
+
 export type MutationUpdateRecipeArgs = {
     id: Scalars['String'];
     input: UpdateInput;
@@ -155,7 +172,8 @@ export type PopulatedData = {
     image: Scalars['String'];
     ingredients: Array<Ingredient>;
     prep: Scalars['String'];
-    reviews: Array<ReviewData>;
+    ratings: Array<RatingData>;
+    reviews: Array<ReviewPopulatedData>;
     servings?: Maybe<Scalars['Float']>;
     step?: Maybe<Scalars['Float']>;
     steps: Array<Step>;
@@ -195,37 +213,24 @@ export type QueryGetReviewsByArgs = {
     id?: InputMaybe<Scalars['String']>;
 };
 
-export type RecipeData = {
-    __typename?: 'RecipeData';
+export type RatingData = {
+    __typename?: 'RatingData';
     _id: Scalars['String'];
-    createdAt: Scalars['DateTime'];
-    cuisine: Scalars['String'];
-    description: Scalars['String'];
     id: Scalars['String'];
-    image: Scalars['String'];
-    ingredients: Array<Ingredient>;
-    prep: Scalars['String'];
-    servings?: Maybe<Scalars['Float']>;
-    step?: Maybe<Scalars['Float']>;
-    steps: Array<Step>;
-    temp: Scalars['Boolean'];
-    title: Scalars['String'];
-    updatedAt: Scalars['DateTime'];
+    rating: Scalars['Float'];
+    recipe: Scalars['String'];
     user: Scalars['String'];
 };
 
-export type ReviewData = {
-    __typename?: 'ReviewData';
-    _id: Scalars['String'];
-    createdAt: Scalars['DateTime'];
-    id?: Maybe<Scalars['String']>;
-    neg: Array<Scalars['String']>;
-    pos: Array<Scalars['String']>;
-    recipe: Scalars['String'];
-    recipeAuthor: Scalars['String'];
-    text: Scalars['String'];
-    updatedAt: Scalars['DateTime'];
-    user: Scalars['String'];
+export type RatingDeleteResponse = {
+    __typename?: 'RatingDeleteResponse';
+    status: Scalars['String'];
+};
+
+export type RatingResponse = {
+    __typename?: 'RatingResponse';
+    rating: RatingData;
+    status: Scalars['String'];
 };
 
 export type ReviewListResponse = {
@@ -242,7 +247,7 @@ export type ReviewPopulatedData = {
     id?: Maybe<Scalars['String']>;
     neg: Array<Scalars['String']>;
     pos: Array<Scalars['String']>;
-    recipe: RecipeData;
+    recipe: Scalars['String'];
     recipeAuthor: UserData;
     text: Scalars['String'];
     updatedAt: Scalars['DateTime'];
@@ -256,7 +261,7 @@ export type ReviewPopulatedResponse = {
 
 export type ReviewResponse = {
     __typename?: 'ReviewResponse';
-    review: ReviewData;
+    review: ReviewPopulatedData;
     status: Scalars['String'];
 };
 
@@ -286,7 +291,6 @@ export type UpdateInput = {
     image?: InputMaybe<Scalars['String']>;
     ingredients?: InputMaybe<Array<IngredientInput>>;
     prep?: InputMaybe<Scalars['String']>;
-    reviews?: InputMaybe<Array<Scalars['String']>>;
     servings?: InputMaybe<Scalars['Float']>;
     step?: InputMaybe<Scalars['Float']>;
     steps?: InputMaybe<Array<StepInput>>;
@@ -311,6 +315,26 @@ export type UserResponse = {
     __typename?: 'UserResponse';
     status: Scalars['String'];
     user: UserData;
+};
+
+export type CreateRatingMutationVariables = Exact<{
+    input: Scalars['Float'];
+    id: Scalars['String'];
+}>;
+
+export type CreateRatingMutation = {
+    __typename?: 'Mutation';
+    createRating: {
+        __typename?: 'RatingResponse';
+        status: string;
+        rating: {
+            __typename?: 'RatingData';
+            id: string;
+            rating: number;
+            recipe: string;
+            user: string;
+        };
+    };
 };
 
 export type CreateRecipeMutationVariables = Exact<{
@@ -416,17 +440,12 @@ export type GetAllRecipesAndLastReviewsQuery = {
             pos: Array<string>;
             neg: Array<string>;
             createdAt: any;
+            recipe: string;
             id: string;
             recipeAuthor: {
                 __typename?: 'UserData';
                 name: string;
                 photo: string;
-                id: string;
-            };
-            recipe: {
-                __typename?: 'RecipeData';
-                title: string;
-                image: string;
                 id: string;
             };
             user: {
@@ -484,15 +503,11 @@ export type GetProfileDataQueryQuery = {
         reviews: Array<{
             __typename?: 'ReviewPopulatedData';
             text: string;
+            recipe: string;
             pos: Array<string>;
             neg: Array<string>;
             createdAt: any;
             id: string;
-            recipe: {
-                __typename?: 'RecipeData';
-                description: string;
-                id: string;
-            };
             recipeAuthor: {
                 __typename?: 'UserData';
                 name: string;
@@ -570,30 +585,29 @@ export type GetRecipeByIdQuery = {
                 photo: string;
                 id: string;
             };
-        } | null;
-    };
-    getReviewsBy: {
-        __typename?: 'ReviewListResponse';
-        reviews: Array<{
-            __typename?: 'ReviewPopulatedData';
-            text: string;
-            pos: Array<string>;
-            neg: Array<string>;
-            createdAt: any;
-            id: string;
-            recipe: { __typename?: 'RecipeData'; id: string };
-            recipeAuthor: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-            };
-            user: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
+            reviews: Array<{
+                __typename?: 'ReviewPopulatedData';
+                _id: string;
+                text: string;
+                neg: Array<string>;
+                pos: Array<string>;
+                createdAt: any;
                 id: string;
-            };
-        }>;
+                user: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+            }>;
+            ratings: Array<{
+                __typename?: 'RatingData';
+                recipe: string;
+                rating: number;
+                user: string;
+                id: string;
+            }>;
+        } | null;
     };
 };
 
@@ -668,6 +682,26 @@ export type SignUpUserMutation = {
     };
 };
 
+export type UpdateRatingMutationVariables = Exact<{
+    id: Scalars['String'];
+    input: Scalars['Float'];
+}>;
+
+export type UpdateRatingMutation = {
+    __typename?: 'Mutation';
+    updateRating: {
+        __typename?: 'RatingResponse';
+        status: string;
+        rating: {
+            __typename?: 'RatingData';
+            id: string;
+            rating: number;
+            recipe: string;
+            user: string;
+        };
+    };
+};
+
 export type UpdateRecipeMutationVariables = Exact<{
     id: Scalars['String'];
     input: UpdateInput;
@@ -701,6 +735,45 @@ export type UpdateRecipeMutation = {
     };
 };
 
+export const CreateRatingDocument = `
+    mutation CreateRating($input: Float!, $id: String!) {
+  createRating(input: $input, id: $id) {
+    status
+    rating {
+      id
+      rating
+      recipe
+      user
+    }
+  }
+}
+    `;
+export const useCreateRatingMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        CreateRatingMutation,
+        TError,
+        CreateRatingMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        CreateRatingMutation,
+        TError,
+        CreateRatingMutationVariables,
+        TContext
+    >(
+        ['CreateRating'],
+        (variables?: CreateRatingMutationVariables) =>
+            fetcher<CreateRatingMutation, CreateRatingMutationVariables>(
+                client,
+                CreateRatingDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
 export const CreateRecipeDocument = `
     mutation CreateRecipe($input: Input!) {
   createRecipe(input: $input) {
@@ -887,11 +960,7 @@ export const GetAllRecipesAndLastReviewsDocument = `
         name
         photo
       }
-      recipe {
-        id: _id
-        title
-        image
-      }
+      recipe
       user {
         id: _id
         name
@@ -987,10 +1056,7 @@ export const GetProfileDataQueryDocument = `
     reviews {
       id: _id
       text
-      recipe {
-        id: _id
-        description
-      }
+      recipe
       recipeAuthor {
         name
         photo
@@ -1076,27 +1142,25 @@ export const GetRecipeByIdDocument = `
         name
         photo
       }
-    }
-  }
-  getReviewsBy(id: $id) {
-    reviews {
-      id: _id
-      text
-      recipe {
+      reviews {
+        _id
         id: _id
+        text
+        neg
+        pos
+        user {
+          id: _id
+          name
+          photo
+        }
+        createdAt
       }
-      recipeAuthor {
-        name
-        photo
-      }
-      user {
+      ratings {
         id: _id
-        name
-        photo
+        recipe
+        rating
+        user
       }
-      pos
-      neg
-      createdAt
     }
   }
 }
@@ -1281,6 +1345,45 @@ export const useSignUpUserMutation = <TError = unknown, TContext = unknown>(
             fetcher<SignUpUserMutation, SignUpUserMutationVariables>(
                 client,
                 SignUpUserDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
+export const UpdateRatingDocument = `
+    mutation UpdateRating($id: String!, $input: Float!) {
+  updateRating(id: $id, input: $input) {
+    status
+    rating {
+      id
+      rating
+      recipe
+      user
+    }
+  }
+}
+    `;
+export const useUpdateRatingMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        UpdateRatingMutation,
+        TError,
+        UpdateRatingMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        UpdateRatingMutation,
+        TError,
+        UpdateRatingMutationVariables,
+        TContext
+    >(
+        ['UpdateRating'],
+        (variables?: UpdateRatingMutationVariables) =>
+            fetcher<UpdateRatingMutation, UpdateRatingMutationVariables>(
+                client,
+                UpdateRatingDocument,
                 variables,
                 headers
             )(),
