@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
+
+import { hasCookie } from 'cookies-next';
 import { type NextPage } from 'next';
 
 import { Recipe } from '@components';
-import { useGetRecipeByIdQuery } from '@generated/graphql';
+import { useGetMeQuery, useGetRecipeByIdQuery } from '@generated/graphql';
 import { requestClient } from '@requests';
 
 const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
@@ -11,12 +14,17 @@ const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
         requestClient,
         { id },
         {
-            select: res => ({
-                ...res.getRecipeById.recipe,
-                reviews: res.getReviewsBy.reviews,
-            }),
+            select: res => res.getRecipeById.recipe,
         }
     );
+
+    const query = useGetMeQuery(requestClient, {}, { enabled: false });
+
+    const loggedIn = hasCookie('logged_in');
+
+    useEffect(() => {
+        if (loggedIn) query.refetch();
+    }, []);
 
     if (isLoading) return null;
     if (!data) return null;
