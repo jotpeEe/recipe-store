@@ -6,7 +6,7 @@ import {
 } from 'react';
 
 import cn from 'classnames';
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 import Image from 'next/image';
 
 import Button from '@components/Button';
@@ -17,12 +17,12 @@ type ReviewMiniProps = DetailedHTMLProps<
     HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
 > & {
-    review: IReview;
+    review: Partial<IReview>;
 };
 
 const ReviewMini: FC<ReviewMiniProps> = ({ className, review, ...props }) => {
     const { createdAt, text, pos, neg, user } = review;
-    const { name, photo } = user;
+    const { name, photo } = user ?? {};
 
     const formattedDate = useMemo(() => {
         const date = new Date(createdAt);

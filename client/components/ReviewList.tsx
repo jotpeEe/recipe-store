@@ -16,7 +16,7 @@ import ReviewMini from './card/ReviewMini';
 import { TextArea } from './input';
 
 type ReviewListProps = {
-    reviews?: IReview[];
+    reviews?: Partial<IReview>[];
     id?: string;
     addEnable?: boolean;
     recipeAuthor?: {

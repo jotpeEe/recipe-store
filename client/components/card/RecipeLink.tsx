@@ -10,8 +10,10 @@ import cn from 'classnames';
 import Button from '@components/Button';
 import { IconCopy, IconCorrect } from '@components/icons';
 import { HOST_URL } from '@constants';
+import { useRecipeContext } from '@contexts';
 
-const RecipeLink: FC<{ id?: string | undefined }> = ({ id }) => {
+const RecipeLink: FC = () => {
+    const { id } = useRecipeContext();
     const defaultValue = `${HOST_URL}recipes/${id}`;
     const [input, setInput] = useState<string>(defaultValue);
     const [copiedText, setCopiedText] = useState(false);

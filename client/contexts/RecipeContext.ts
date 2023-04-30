@@ -1,4 +1,10 @@
-import { createContext, useContext } from 'react';
+import {
+    type Dispatch,
+    type MutableRefObject,
+    type SetStateAction,
+    createContext,
+    useContext,
+} from 'react';
 
 import type { SubmitHandler } from 'react-hook-form';
 
@@ -9,6 +15,10 @@ export const RecipeContext = createContext<
     | (RecipeProps & {
           isEnterPressed: boolean;
           isTheSameUser: boolean;
+          active: number;
+          recipeRef: MutableRefObject<null | HTMLElement>;
+          openModal: boolean;
+          setOpenModal: Dispatch<SetStateAction<boolean>>;
           onSubmit: SubmitHandler<UpdateInput>;
           withEdit: boolean | undefined;
       })

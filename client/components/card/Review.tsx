@@ -10,7 +10,6 @@ import UserInfo from '../user/Info';
 
 const ReviewCard: React.FC<IReview> = ({ text, recipe, user, createdAt }) => {
     const { name, photo } = user ?? {};
-    const { id } = recipe ?? {};
 
     const formattedDate = useMemo(() => {
         const date = new Date(createdAt);
@@ -32,7 +31,7 @@ const ReviewCard: React.FC<IReview> = ({ text, recipe, user, createdAt }) => {
                     <RecipeTitle size="sm" imgSrc={image} title={title} />
                 </Title> */}
                 <Link
-                    href={`/recipes/${id}`}
+                    href={`/recipes/${recipe}`}
                     className="w-fill flex items-center justify-end gap-4 text-xs"
                 >
                     <IconNext />
