@@ -154,6 +154,7 @@ const RecipeForm: FC<RecipeFormProps> = ({ cuisines, recipe, id }) => {
                 >
                     <Slider
                         className="max-w-[300px]"
+                        fullWidth
                         breadcrumbs={[
                             'Add info',
                             'Add ingredients',

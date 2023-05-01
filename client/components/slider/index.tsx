@@ -18,6 +18,7 @@ type SliderProps = {
     breadcrumbs?: string[];
     className?: string;
     controller?: boolean;
+    fullWidth?: boolean;
     inside?: boolean;
 };
 
@@ -25,6 +26,7 @@ const Slider: FC<SliderProps> = ({
     children,
     className,
     controller,
+    fullWidth,
     inside,
     breadcrumbs,
 }) => {
@@ -68,7 +70,10 @@ const Slider: FC<SliderProps> = ({
                     {children.map((child, index) => (
                         <li
                             key={index}
-                            className="ease w-full shrink-0 pr-8 transition duration-300"
+                            className={cn(
+                                'ease shrink-0 pr-8 transition duration-300',
+                                fullWidth ? 'w-full' : 'w-fit'
+                            )}
                             style={{
                                 transform: `translateX(-${step * 100}%)`,
                             }}
