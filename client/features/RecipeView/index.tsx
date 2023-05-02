@@ -11,18 +11,20 @@ import classNames from 'classnames';
 import router from 'next/router';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 
-import { AnimatedDiv as Animated } from '@components/animations';
-import RecipeLink from '@components/card/RecipeLink';
-import RecipeRating from '@components/card/RecipeRating';
-import Dropdown from '@components/Dropdown';
-import Modal from '@components/Modal';
-import Switch from '@components/Switch';
-import { UserInfo } from '@components/user';
+import {
+    AnimatedDiv as Animated,
+    Dropdown,
+    Modal,
+    RecipeLink,
+    RecipeRating,
+    Switch,
+    UserInfo,
+} from '@components';
 import { RecipeContext } from '@contexts';
 import { type UpdateInput, useUpdateRecipeMutation } from '@generated/graphql';
 import { useAppSelector, useKeyPress } from '@hooks';
 import { IconBookmark, IconShare, IconStar } from '@icons';
-import { type IRecipe } from '@lib/types';
+import { type RecipeProps } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
 import Edit from './Edit';
@@ -33,12 +35,6 @@ import Reviews from './Reviews';
 import Servings from './Servings';
 import Steps from './Steps';
 import RecipeTitle from './Title';
-
-export type RecipeProps = Partial<IRecipe> & {
-    step?: number;
-    withEdit?: boolean;
-    hideMobile?: boolean;
-};
 
 const Recipe: FC<RecipeProps> = props => {
     const recipeRef = useRef(null);

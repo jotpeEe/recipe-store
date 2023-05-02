@@ -8,8 +8,8 @@ import {
 
 import type { SubmitHandler } from 'react-hook-form';
 
-import { type RecipeProps } from '@components/recipe';
 import { type UpdateInput } from '@generated/graphql';
+import { type RecipeProps } from '@lib/types';
 
 export const RecipeContext = createContext<
     | (RecipeProps & {
