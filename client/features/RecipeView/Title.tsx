@@ -1,58 +1,49 @@
 import { type FC } from 'react';
 
-import classNames from 'classnames';
 import Image from 'next/image';
 
-import { AnimatedDiv as Animated } from '@components';
 import { useRecipeContext } from '@contexts';
+import { IconBookmark } from '@icons';
 
-import Edit from './Edit';
+import PrepTime from './PrepTime';
+import Rating from './Rating';
 
-type RecipeTitleProps = {
-    className?: string;
-    size?: 'md' | 'sm';
-};
-
-const RecipeTitle: FC<RecipeTitleProps> = ({ size, className }) => {
-    const { withEdit, title, image } = useRecipeContext();
+const Title: FC<{ handleRating: () => void }> = ({ handleRating }) => {
+    const { image, title } = useRecipeContext();
 
     return (
-        <Animated className={classNames('grid grid-cols-3', className)}>
-            <div
-                className={classNames(
-                    'relative overflow-hidden rounded-full',
-                    size === 'md' && 'h-24 w-24',
-                    size === 'sm' && 'h-16 w-16'
-                )}
-            >
-                <Image
-                    width={110}
-                    height={110}
-                    src={
-                        image ||
-                        'https://res.cloudinary.com/dxkgc7cab/image/upload/v1673326140/m7xf1knsrfbyctetp4ln.png'
-                    }
-                    alt="recipe image"
-                    className="m-[0 auto] inline h-full w-auto"
-                />
-            </div>
+        <div className="relative col-span-3 flex min-h-[150px] w-[315px] flex-col items-end justify-between rounded-xl bg-gradient-to-b from-transparent to-black p-4">
+            <Image
+                className="absolute left-0 right-0 top-0 bottom-0 z-[-1] rounded-xl"
+                src={
+                    image ||
+                    'https://res.cloudinary.com/dxkgc7cab/image/upload/v1683044395/pgjgl3tkgktenlpw3jzd.png'
+                }
+                alt="My responsive image"
+                fill
+            />
+            {title && <Rating handleRating={handleRating} />}
 
-            {title &&
-                (withEdit ? (
-                    <div className="col-span-2 self-center justify-self-center ">
-                        <Edit name={['title']} value={title}>
-                            <h5 className="break-words text-center sm:max-w-[10ch] md:max-w-[15ch]">
-                                {title}
-                            </h5>
-                        </Edit>
-                    </div>
-                ) : (
-                    <h5 className="col-span-2 self-center justify-self-center break-words text-center sm:max-w-[10ch] md:max-w-[15ch]">
+            <div className="flex w-full items-end justify-between">
+                <div className="flex flex-col gap-1">
+                    <h6 className="break-words max-w-[19ch] font-bold leading-4 text-white ">
                         {title}
-                    </h5>
-                ))}
-        </Animated>
+                    </h6>
+                    {/* <p className="text-[10px] text-white opacity-70">
+                        By {name}
+                    </p> */}
+                </div>
+                <div className="flex items-center justify-center gap-2 text-white">
+                    <PrepTime />
+                    {title && (
+                        <div className="rounded-xl bg-white p-1">
+                            <IconBookmark width={16} height={16} fill="green" />
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
     );
 };
 
-export default RecipeTitle;
+export default Title;
