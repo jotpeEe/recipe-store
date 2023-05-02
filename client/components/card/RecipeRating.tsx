@@ -11,7 +11,7 @@ import {
     useUpdateRatingMutation,
 } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
-import { requestClient } from '@requests';
+import { queryClient, requestClient } from '@requests';
 
 type RecipeRatingProps = {
     scale?: number;
@@ -40,16 +40,21 @@ const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5 }) => {
 
     const { mutate: createRating } = useCreateRatingMutation(requestClient, {
         onSuccess() {
+            queryClient.refetchQueries(['GetRecipeById', { id }]);
             setOpenModal(false);
         },
         onError() {
-            router.push('/');
+            router.push('/auth');
         },
     });
 
     const { mutate: updateRating } = useUpdateRatingMutation(requestClient, {
         onSuccess() {
+            queryClient.refetchQueries(['GetRecipeById', { id }]);
             setOpenModal(false);
+        },
+        onError() {
+            router.push('/auth');
         },
     });
 
@@ -58,6 +63,9 @@ const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5 }) => {
         if (id && user?.id && !myRating) createRating({ input: rating, id });
         if (id && user?.id && myRating)
             updateRating({ id: myRating.id, input: rating });
+        if (!user?.id) router.push('/auth');
+
+        setOpenModal(false);
     };
 
     return (

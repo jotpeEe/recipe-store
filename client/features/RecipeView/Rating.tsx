@@ -1,11 +1,10 @@
 import React, { type FC, useMemo, useState } from 'react';
 
-import RecipeRating from '@components/card/RecipeRating';
-import { IconStar } from '@components/icons';
-import Modal from '@components/Modal';
+import { Modal, RecipeRating } from '@components';
 import { useRecipeContext } from '@contexts';
+import { IconStar } from '@icons';
 
-const Rating: FC = () => {
+const Rating: FC<{ handleRating: () => void }> = ({ handleRating }) => {
     const [clicked, setClicked] = useState(false);
     const { ratings, recipeRef } = useRecipeContext();
 
@@ -18,13 +17,13 @@ const Rating: FC = () => {
 
     return (
         <div
-            className="flex items-center justify-center rounded-3xl bg-yellow-100 py-1 px-2 text-xs leading-normal"
+            className="flex cursor-pointer items-center justify-center rounded-3xl bg-yellow-100 py-1 px-2 text-xs leading-normal"
             onClick={() => {
-                setClicked(true);
+                handleRating();
             }}
         >
             <IconStar width={18} height={18} fill="orange" />
-            <span className="pl-1">{averageRating}</span>
+            {!!averageRating && <span className="pl-1">{averageRating}</span>}
             {clicked && (
                 <Modal
                     setOpenModal={setClicked}
