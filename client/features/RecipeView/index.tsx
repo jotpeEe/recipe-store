@@ -49,10 +49,7 @@ const RecipeView: FC<RecipeProps> = props => {
     );
 
     useEffect(() => {
-        if (isEnterPressed && isDirty) {
-            handleSubmit(onSubmit)();
-            reset({ ingredients: [] });
-        }
+        if (isEnterPressed && isDirty) handleSubmit(onSubmit)();
     }, [isEnterPressed, isDirty]);
 
     return (
