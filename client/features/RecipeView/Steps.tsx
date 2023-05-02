@@ -1,6 +1,6 @@
 import React, { type FC } from 'react';
 
-import { AnimateOnLoad } from '@components/animations';
+import { AnimateOnLoad } from '@components';
 import { useRecipeContext } from '@contexts';
 
 const Steps: FC = () => {

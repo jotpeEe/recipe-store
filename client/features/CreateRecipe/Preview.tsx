@@ -2,9 +2,10 @@ import { type FC, useMemo } from 'react';
 
 import { useFormContext } from 'react-hook-form';
 
-import Recipe from '@components/recipe';
 import { useCreateRecipe } from '@contexts';
 import { useAppSelector } from '@hooks';
+
+import Recipe from '../RecipeView';
 
 const Preview: FC = () => {
     const user = useAppSelector(state => state.auth.user);

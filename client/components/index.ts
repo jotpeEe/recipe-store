@@ -4,7 +4,14 @@ export { default as Button } from './Button';
 export { Card, Title, Link } from './CardWithLinks';
 export { default as Dropdown } from './Dropdown';
 export { UserInfo, UserStats } from './user';
-export { Checkbox, ErrorMessage, Input, ImageInput, TextArea } from './input';
+export {
+    Checkbox,
+    ErrorMessage,
+    Input,
+    ImageInput,
+    TextArea,
+    IngredientInput,
+} from './input';
 export { default as Nav } from './Nav';
 export { default as Modal } from './Modal';
 export {
@@ -16,6 +23,7 @@ export {
     RecipeRating,
 } from './card';
 export { default as RecipesList } from './RecipesList';
+export { default as ReviewList } from './ReviewList';
 export { default as SectionTitle } from './SectionTitle';
 export { default as SearchInput } from './input/Search';
 export { default as Select } from './input/Select';

@@ -105,9 +105,14 @@ const Recipe: FC<RecipeProps> = props => {
         setOpenModal(true);
     };
 
+    const handleRating = () => {
+        setActionIndex(1);
+        setOpenModal(true);
+    };
+
     const { mutate: updateRecipe } = useUpdateRecipeMutation(requestClient, {
         onSuccess() {
-            queryClient.refetchQueries(['GetRecipeById']);
+            queryClient.refetchQueries(['GetRecipeById', { id }]);
         },
         onError(error: any) {
             if (error.response.errors[0].message === 'No access token found') {
@@ -171,7 +176,7 @@ const Recipe: FC<RecipeProps> = props => {
                     {prep && (
                         <Animated className="col-span-3 flex items-center gap-4 transition">
                             <PrepTime />
-                            <Rating />
+                            <Rating handleRating={handleRating} />
                         </Animated>
                     )}
                     {description && (

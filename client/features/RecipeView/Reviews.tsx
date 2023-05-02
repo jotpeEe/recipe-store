@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import ReviewList from '@components/ReviewList';
+import { ReviewList } from '@components';
 import { useRecipeContext } from '@contexts';
 
 const Reviews: FC = () => {

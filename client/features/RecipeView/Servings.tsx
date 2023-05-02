@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 
-import { IconDish } from '@components/icons';
 import { useRecipeContext } from '@contexts';
+import { IconDish } from '@icons';
 
 const Servings: FC = () => {
     const { servings, ingredients } = useRecipeContext();

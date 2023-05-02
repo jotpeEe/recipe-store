@@ -2,8 +2,7 @@ import React, { type FC, useMemo } from 'react';
 
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { AnimateOnLoad } from '@components/animations';
-import { IngredientInput } from '@components/input';
+import { AnimateOnLoad, IngredientInput } from '@components';
 import { useRecipeContext } from '@contexts';
 import { type UpdateInput } from '@generated/graphql';
 

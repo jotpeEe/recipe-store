@@ -1,7 +1,7 @@
 import React, { type FC } from 'react';
 
-import { IconClock } from '@components/icons';
 import { useRecipeContext } from '@contexts';
+import { IconClock } from '@icons';
 
 import Edit from './Edit';
 

@@ -11,11 +11,10 @@ import {
 import cn from 'classnames';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import Button from '@components/Button';
-import { IconClear, IconEdit } from '@components/icons';
-import { Input, TextArea } from '@components/input';
+import { Button, Input, TextArea } from '@components';
 import { useRecipeContext } from '@contexts';
 import { type UpdateInput } from '@generated/graphql';
+import { IconClear, IconEdit } from '@icons';
 
 type EditProps = PropsWithChildren & {
     className?: string;

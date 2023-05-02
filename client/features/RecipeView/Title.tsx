@@ -3,7 +3,7 @@ import { type FC } from 'react';
 import classNames from 'classnames';
 import Image from 'next/image';
 
-import { AnimatedDiv as Animated } from '@components/animations';
+import { AnimatedDiv as Animated } from '@components';
 
 import Edit from './Edit';
 
