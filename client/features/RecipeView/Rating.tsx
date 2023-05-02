@@ -6,7 +6,7 @@ import { IconStar } from '@icons';
 
 const Rating: FC<{ handleRating: () => void }> = ({ handleRating }) => {
     const [clicked, setClicked] = useState(false);
-    const { ratings, recipeRef } = useRecipeContext();
+    const { ratings, recipeRef, withEdit } = useRecipeContext();
 
     const averageRating = useMemo(() => {
         if (!ratings) return undefined;
@@ -14,6 +14,8 @@ const Rating: FC<{ handleRating: () => void }> = ({ handleRating }) => {
         const avgRating = totalRating / ratings.length;
         return parseFloat(avgRating.toFixed(1));
     }, [ratings]);
+
+    if (!withEdit) return null;
 
     return (
         <div

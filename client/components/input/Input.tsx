@@ -2,6 +2,7 @@ import {
     type DetailedHTMLProps,
     type FC,
     type InputHTMLAttributes,
+    type KeyboardEventHandler,
 } from 'react';
 
 import cn from 'classnames';
@@ -17,6 +18,7 @@ type InputProps = DetailedHTMLProps<
     name: string;
     label?: string;
     noValidation?: boolean;
+    preventDef?: boolean;
     value?: string | number;
     error?: boolean | undefined;
     type?: 'text' | 'number' | 'password' | 'email';
@@ -28,6 +30,7 @@ const Input: FC<InputProps> = ({
     name,
     value,
     error,
+    preventDef,
     required,
     noValidation,
     type = 'text',
@@ -37,6 +40,12 @@ const Input: FC<InputProps> = ({
         register,
         formState: { errors },
     } = useFormContext();
+
+    const preventDefault: KeyboardEventHandler<HTMLInputElement> = event => {
+        if (preventDef && event.key === 'Enter') {
+            event?.preventDefault();
+        }
+    };
 
     return (
         <>
@@ -52,13 +61,14 @@ const Input: FC<InputProps> = ({
                     </label>
                 )}
                 <input
+                    {...props}
                     type={type}
                     defaultValue={value}
+                    onKeyDown={preventDefault}
                     className={cn(
                         'w-full rounded-lg border p-3 text-xs',
                         errors[name] || (error && 'border-red-600')
                     )}
-                    {...props}
                     {...register(name, {
                         required: required && 'This field is required',
                     })}

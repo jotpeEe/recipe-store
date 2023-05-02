@@ -13,13 +13,13 @@ import { type RecipeProps } from '@lib/types';
 
 export const RecipeContext = createContext<
     | (RecipeProps & {
-          isEnterPressed: boolean;
+          isEnterPressed?: boolean;
           isTheSameUser: boolean;
           active: number;
           recipeRef: MutableRefObject<null | HTMLElement>;
           openModal: boolean;
           setOpenModal: Dispatch<SetStateAction<boolean>>;
-          onSubmit: SubmitHandler<UpdateInput>;
+          onSubmit?: SubmitHandler<UpdateInput>;
           withEdit: boolean | undefined;
       })
     | undefined

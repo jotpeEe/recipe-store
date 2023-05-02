@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { useCreateRecipe } from '@contexts';
 import { useAppSelector } from '@hooks';
 
-import Recipe from '../RecipeView';
+import RecipeView from '../RecipeView';
 
 const Preview: FC = () => {
     const user = useAppSelector(state => state.auth.user);
@@ -45,7 +45,7 @@ const Preview: FC = () => {
         ]
     );
 
-    return <Recipe hideMobile {...recipe} />;
+    return <RecipeView hideMobile {...recipe} withEdit={false} />;
 };
 
 export default Preview;

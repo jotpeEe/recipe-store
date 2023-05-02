@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { hasCookie } from 'cookies-next';
 import { type NextPage } from 'next';
 
-import { Recipe } from '@components';
 import { useGetMeQuery, useGetRecipeByIdQuery } from '@generated/graphql';
 import { requestClient } from '@requests';
+import RecipeView from 'client/features/RecipeView';
 
 const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
     if (!id) return null;
@@ -31,7 +31,7 @@ const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
 
     return (
         <div className="flex justify-center py-32">
-            <Recipe {...data} withEdit={true} />
+            <RecipeView {...data} withEdit={true} />
         </div>
     );
 };

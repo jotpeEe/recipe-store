@@ -46,8 +46,10 @@ const Edit: FC<EditProps> = ({
     const { withEdit, isEnterPressed, isTheSameUser, onSubmit } =
         useRecipeContext();
 
+    if (!onSubmit) return null;
+
     useEffect(() => {
-        if (open) setOpen(isEnterPressed);
+        if (open) setOpen(isEnterPressed || false);
     }, [isEnterPressed]);
 
     const handleClick = () => {
@@ -80,6 +82,7 @@ const Edit: FC<EditProps> = ({
                         value={value}
                         type="number"
                         noValidation
+                        preventDef
                         autoFocus
                     />
                 );
@@ -95,6 +98,7 @@ const Edit: FC<EditProps> = ({
                                         `ingredients.${ingId}.name` as const
                                     )}
                                     ref={null}
+                                    preventDef
                                     noValidation
                                 />
                                 <Input
@@ -104,6 +108,7 @@ const Edit: FC<EditProps> = ({
                                         `ingredients.${ingId}.amount` as const
                                     )}
                                     ref={null}
+                                    preventDef
                                     noValidation
                                 />
                             </>
@@ -117,6 +122,7 @@ const Edit: FC<EditProps> = ({
                         value={value}
                         noValidation
                         autoFocus
+                        preventDef
                     />
                 );
         }
@@ -128,7 +134,10 @@ const Edit: FC<EditProps> = ({
                 'relative flex items-center justify-start',
                 className
             )}
-            onClick={handleClick}
+            onClick={e => {
+                e.preventDefault();
+                handleClick();
+            }}
         >
             {open && isTheSameUser ? (
                 element

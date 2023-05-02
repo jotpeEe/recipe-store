@@ -2,6 +2,8 @@ import { type FC, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 
+import { useRecipeContext } from '@contexts';
+
 import Edit from './Edit';
 
 const IngredientInfo: FC<{ name: string; amount: string }> = ({
@@ -35,12 +37,24 @@ const Ingredient: FC<{ name: string; amount: string; id: number }> = ({
     name,
     amount,
     id,
-}) => (
-    <>
-        <Edit variant="array" name={['name', 'amount']} ingId={id} withButtons>
-            <IngredientInfo name={name} amount={amount} />
-        </Edit>
-    </>
-);
+}) => {
+    const { withEdit } = useRecipeContext();
+    return (
+        <>
+            {withEdit ? (
+                <Edit
+                    variant="array"
+                    name={['name', 'amount']}
+                    ingId={id}
+                    withButtons
+                >
+                    <IngredientInfo name={name} amount={amount} />
+                </Edit>
+            ) : (
+                <IngredientInfo name={name} amount={amount} />
+            )}
+        </>
+    );
+};
 
 export default Ingredient;
