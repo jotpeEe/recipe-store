@@ -26,7 +26,7 @@ const Title: FC<{ handleRating: () => void }> = ({ handleRating }) => {
 
             <div className="flex w-full items-end justify-between">
                 <div className="flex flex-col gap-1">
-                    <h6 className="break-words max-w-[19ch] font-bold leading-4 text-white ">
+                    <h6 className="max-w-[19ch] break-words font-bold leading-4 text-white ">
                         {title}
                     </h6>
                     {/* <p className="text-[10px] text-white opacity-70">

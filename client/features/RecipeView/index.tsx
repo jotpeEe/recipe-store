@@ -23,7 +23,6 @@ const RecipeView: FC<RecipeProps> = props => {
         },
     });
     const {
-        reset,
         handleSubmit,
         formState: { isDirty },
     } = methods;

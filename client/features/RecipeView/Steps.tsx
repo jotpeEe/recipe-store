@@ -12,10 +12,15 @@ const Steps: FC = () => {
                 active === 1 &&
                 steps.map(({ label, text }, index) => (
                     <AnimateOnLoad key={index} index={index}>
-                        <div className="rounded-xl bg-gray-200 p-4">
-                            {label && <h6 className="pb-2">{label}</h6>}
+                        <div className="rounded-xl border-gray-200 shadow-card">
+                            {label && (
+                                <h6 className="rounded-xl px-3 py-4 text-xs ">
+                                    {label}
+                                </h6>
+                            )}
+                            <div className="h-[1px] w-full bg-gray-100"></div>
                             <p
-                                className="max-w-[36ch] break-words text-sm text-gray-700"
+                                className="break-words max-w-[36ch] px-3 py-4 text-xs text-gray-700 opacity-70"
                                 key={index}
                                 lang="pl"
                             >

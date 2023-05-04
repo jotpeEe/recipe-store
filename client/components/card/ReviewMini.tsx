@@ -30,14 +30,21 @@ const ReviewMini: FC<ReviewMiniProps> = ({ className, review, ...props }) => {
     }, [createdAt]);
 
     return (
-        <div {...props} className={cn('children:pb-2', className)}>
+        <div
+            {...props}
+            className={cn('mx-1 my-2 rounded-xl border shadow-card', className)}
+        >
             <UserInfo
+                className="px-2 py-2"
                 size="sm"
                 imgSrc={photo}
                 title={name}
                 subtitle={formattedDate}
             />
-            <p className="max-w-[40ch] text-xs">{text}</p>
+            <div className="h-[1px] w-full bg-gray-50"></div>
+            <p className="break-words max-w-[41ch] px-2  pb-2 text-xs">
+                {text}
+            </p>
             {(pos?.length !== 0 || neg?.length !== 0) && (
                 <div className="flex gap-2">
                     <Button disabled size="xs">

@@ -18,12 +18,10 @@ import { type RecipeProps } from '@lib/types';
 
 import Description from './Description';
 import Ingredients from './Ingredients';
-import PrepTime from './PrepTime';
-import Rating from './Rating';
 import Reviews from './Reviews';
 import Servings from './Servings';
 import Steps from './Steps';
-import RecipeTitle from './Title';
+import Title from './Title';
 
 const Recipe: FC<RecipeProps> = props => {
     const recipeRef = useRef(null);
@@ -37,6 +35,8 @@ const Recipe: FC<RecipeProps> = props => {
         prep,
         user,
         id,
+        description,
+        cuisine,
         ingredients,
         withEdit,
         onSubmit,
@@ -80,8 +80,10 @@ const Recipe: FC<RecipeProps> = props => {
     };
 
     const handleRating = () => {
-        setActionIndex(1);
-        setOpenModal(true);
+        if (withEdit) {
+            setActionIndex(1);
+            setOpenModal(true);
+        }
     };
 
     useEffect(() => {
@@ -111,12 +113,8 @@ const Recipe: FC<RecipeProps> = props => {
                     hideMobile ? 'hidden md:grid' : 'grid'
                 )}
             >
-                {title && <RecipeTitle className="col-span-3 h-fit" />}
-                {prep && (
-                    <Animated className="col-span-3 flex items-center gap-4 transition">
-                        <PrepTime />
-                        <Rating handleRating={handleRating} />
-                    </Animated>
+                {(title || prep || cuisine || description) && (
+                    <Title handleRating={handleRating} />
                 )}
                 <Description className="col-span-3" />
                 {user && (
@@ -150,11 +148,13 @@ const Recipe: FC<RecipeProps> = props => {
                         </div>
                     </>
                 )}
-                <Dropdown
-                    className="absolute top-5 right-5"
-                    options={settings}
-                    onSelect={handleSelect}
-                />
+                {withEdit && (
+                    <Dropdown
+                        className="absolute top-5 right-5"
+                        options={settings}
+                        onSelect={handleSelect}
+                    />
+                )}
                 <Modal
                     setOpenModal={setOpenModal}
                     openModal={openModal}

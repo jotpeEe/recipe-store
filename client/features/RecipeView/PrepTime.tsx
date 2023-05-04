@@ -10,7 +10,7 @@ const PrepTime: FC = () => {
     const numPrep = prep ? parseInt(prep, 10) : undefined;
 
     return (
-        <div className="flex items-center gap-1">
+        <div className="flex w-fit items-center gap-1">
             {withEdit ? (
                 <Edit
                     className="gap-1"
@@ -18,13 +18,19 @@ const PrepTime: FC = () => {
                     variant="number"
                     value={prep}
                 >
-                    <IconClock />
-                    <span className="min-w-[4rem] text-xs ">{numPrep} min</span>
+                    <div className="flex items-center gap-1">
+                        <IconClock />
+                        <span className="text-xs ">{numPrep} min</span>
+                    </div>
                 </Edit>
             ) : (
                 <>
-                    <IconClock />
-                    <span className="min-w-[4rem] text-xs ">{numPrep} min</span>
+                    {numPrep && (
+                        <div className="flex w-fit items-center gap-1">
+                            <IconClock />
+                            <span className="text-xs ">{numPrep} min</span>
+                        </div>
+                    )}
                 </>
             )}
         </div>

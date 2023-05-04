@@ -26,7 +26,7 @@ const ReviewCard: React.FC<IReview> = ({ text, recipe, user, createdAt }) => {
                     size="sm"
                     subtitle={formattedDate}
                 />
-                <p className="text-left text-xs">{text}</p>
+                <p className="break-words text-left text-xs">{text}</p>
                 {/* <Title href={`/recipes/${id}`}>
                     <RecipeTitle size="sm" imgSrc={image} title={title} />
                 </Title> */}

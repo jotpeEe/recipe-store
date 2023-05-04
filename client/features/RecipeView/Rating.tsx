@@ -6,16 +6,14 @@ import { IconStar } from '@icons';
 
 const Rating: FC<{ handleRating: () => void }> = ({ handleRating }) => {
     const [clicked, setClicked] = useState(false);
-    const { ratings, recipeRef, withEdit } = useRecipeContext();
+    const { ratings, recipeRef } = useRecipeContext();
 
     const averageRating = useMemo(() => {
-        if (!ratings) return undefined;
+        if (!ratings || ratings.length === 0) return undefined;
         const totalRating = ratings.reduce((acc, cur) => acc + cur.rating, 0);
         const avgRating = totalRating / ratings.length;
-        return parseFloat(avgRating.toFixed(1));
+        return avgRating.toFixed(1);
     }, [ratings]);
-
-    if (!withEdit) return null;
 
     return (
         <div
@@ -25,7 +23,7 @@ const Rating: FC<{ handleRating: () => void }> = ({ handleRating }) => {
             }}
         >
             <IconStar width={18} height={18} fill="orange" />
-            {!!averageRating && <span className="pl-1">{averageRating}</span>}
+            {averageRating && <span className="pl-1">{averageRating}</span>}
             {clicked && (
                 <Modal
                     setOpenModal={setClicked}
