@@ -1,6 +1,6 @@
 import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
-import { Button, Modal } from '@components';
+import { Modal, ModalMessage } from '@components';
 import { useCreateRecipe, useSliderContext } from '@contexts';
 import { IconArrow, IconClear } from '@icons';
 
@@ -21,17 +21,13 @@ const Panel: FC = () => {
             setOpenModal(true);
         }, [id]);
 
-    const onReset: MouseEventHandler<HTMLButtonElement> =
-        useCallback(async () => {
-            resetForm();
-            setOpenModal(false);
-            goTo(0);
-        }, [id]);
-
-    const onCancel: MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+    const onReset = () => {
+        resetForm();
         setOpenModal(false);
-    }, []);
+        goTo(0);
+    };
 
+    const onCancel = () => setOpenModal(false);
     return (
         <div className="absolute right-0 -mr-[-24px] flex children:px-2 children:py-2">
             {step !== 0 && (
@@ -47,17 +43,11 @@ const Panel: FC = () => {
                 <IconClear />
             </button>
             <Modal openModal={openModal} setOpenModal={setOpenModal}>
-                <div className="rounded-xl bg-white p-4">
-                    <p>Do you want to reset create form?</p>
-                    <div className="flex justify-end gap-2 pt-2">
-                        <Button size="sm" onClick={onCancel} variant="outlined">
-                            Cancel
-                        </Button>
-                        <Button size="sm" type="reset" onClick={onReset}>
-                            Reset
-                        </Button>
-                    </div>
-                </div>
+                <ModalMessage
+                    message="Do you want to reset the form?"
+                    onConfirm={onReset}
+                    onCancel={onCancel}
+                />
             </Modal>
         </div>
     );
