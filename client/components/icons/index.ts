@@ -19,6 +19,7 @@ export { default as IconLogout } from './Logout';
 export { default as IconNext } from './Next';
 export { default as IconPin } from './Pin';
 export { default as IconProfile } from './Profile';
+export { default as IconRemoveBookmark } from './RemoveBookmark';
 export { default as IconReviews } from './Reviews';
 export { default as IconSettings } from './Settings';
 export { default as IconShare } from './Share';
