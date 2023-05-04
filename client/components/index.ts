@@ -13,6 +13,7 @@ export {
     IngredientInput,
 } from './input';
 export { default as Nav } from './Nav';
+export { default as ModalMessage } from './Modal/Message';
 export { default as Modal } from './Modal';
 export {
     RecipeCard,

@@ -5,6 +5,7 @@ export { default as IconClear } from './Clear';
 export { default as IconClock } from './Clock';
 export { default as IconCopy } from './Copy';
 export { default as IconCorrect } from './Correct';
+export { default as IconDelete } from './Delete';
 export { default as IconDish } from './Dish';
 export { default as IconEdit } from './Edit';
 export { default as IconFacebook } from './Facebook';

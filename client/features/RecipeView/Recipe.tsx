@@ -1,20 +1,24 @@
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import classNames from 'classnames';
+import { useRouter } from 'next/router';
 
 import {
     AnimatedDiv as Animated,
     Dropdown,
     Modal,
+    ModalMessage,
     RecipeLink,
     RecipeRating,
     Switch,
     UserInfo,
 } from '@components';
 import { RecipeContext } from '@contexts';
+import { useDeleteRecipeMutation } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
-import { IconBookmark, IconShare, IconStar } from '@icons';
+import { IconBookmark, IconDelete, IconShare, IconStar } from '@icons';
 import { type RecipeProps } from '@lib/types';
+import { requestClient } from '@requests';
 
 import Description from './Description';
 import Ingredients from './Ingredients';
@@ -59,20 +63,28 @@ const Recipe: FC<RecipeProps> = props => {
                 icon: <IconBookmark width={16} height={16} />,
                 text: 'Unsave',
             },
+            {
+                icon: <IconDelete width={16} height={16} />,
+                text: 'Delete',
+            },
         ],
         []
     );
 
-    const element = useMemo(() => {
-        switch (actionIndex) {
-            case 0:
-                return <RecipeLink />;
-            case 1:
-                return <RecipeRating />;
-            default:
-                return <></>;
-        }
-    }, [actionIndex, id]);
+    const router = useRouter();
+
+    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient, {
+        onError() {
+            router.push('/auth');
+        },
+        onSuccess() {
+            router.push('/#recipes');
+        },
+    });
+
+    const handleDelete = () => {
+        if (id) deleteRecipe({ id });
+    };
 
     const handleSelect = (index: number) => {
         setActionIndex(index);
@@ -85,6 +97,29 @@ const Recipe: FC<RecipeProps> = props => {
             setOpenModal(true);
         }
     };
+
+    const onCancel = () => {
+        setOpenModal(false);
+    };
+
+    const element = useMemo(() => {
+        switch (actionIndex) {
+            case 0:
+                return <RecipeLink />;
+            case 1:
+                return <RecipeRating />;
+            case 3:
+                return (
+                    <ModalMessage
+                        message="Are you sure, you want to delete recipe?"
+                        onCancel={onCancel}
+                        onConfirm={handleDelete}
+                    />
+                );
+            default:
+                return <></>;
+        }
+    }, [actionIndex, id]);
 
     useEffect(() => {
         if (step === 2) setActive(1);

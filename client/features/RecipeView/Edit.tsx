@@ -160,7 +160,7 @@ const Edit: FC<EditProps> = ({
                                 onClick={e => {
                                     e.preventDefault();
                                     remove(ingId);
-                                    handleSubmit(onSubmit);
+                                    handleSubmit(onSubmit)();
                                 }}
                             />
                         </div>
