@@ -28,7 +28,15 @@ const Switch: FC<SwitchProps> = ({
     );
 
     return (
-        <ul className={classNames('flex gap-2', fullWidth && 'w-full')}>
+        <ul
+            className={classNames(
+                'flex gap-2 rounded-2xl p-1',
+                active === 0 && 'bg-gradient-to-r from-emerald-50 to-slate-50',
+                active === 1 && 'bg-emerald-50',
+                active === 2 && 'bg-gradient-to-l from-emerald-50 to-slate-50',
+                fullWidth && 'w-full'
+            )}
+        >
             {array &&
                 array.map((children, index) => (
                     <li key={index} className="w-full">
