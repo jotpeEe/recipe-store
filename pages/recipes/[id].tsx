@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 
-import { hasCookie } from 'cookies-next';
 import { type NextPage } from 'next';
 
 import { useGetMeQuery, useGetRecipeByIdQuery } from '@generated/graphql';
+import { useAppSelector } from '@hooks';
 import { requestClient } from '@requests';
 import RecipeView from 'client/features/RecipeView';
 
 const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
     if (!id) return null;
+    const user = useAppSelector(state => state.auth.user);
 
     const { data, isLoading } = useGetRecipeByIdQuery(
         requestClient,
@@ -20,10 +21,8 @@ const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
 
     const query = useGetMeQuery(requestClient, {}, { enabled: false });
 
-    const loggedIn = hasCookie('logged_in');
-
     useEffect(() => {
-        if (loggedIn) query.refetch();
+        if (!user) query.refetch();
     }, []);
 
     if (isLoading) return null;
