@@ -32,7 +32,7 @@ const ReviewMini: FC<ReviewMiniProps> = ({ className, review, ...props }) => {
     return (
         <div
             {...props}
-            className={cn('mx-1 my-2 rounded-xl border shadow-card', className)}
+            className={cn('mx-1 my-2 rounded-xl border shadow-lg', className)}
         >
             <UserInfo
                 className="px-2 py-2"
@@ -42,7 +42,7 @@ const ReviewMini: FC<ReviewMiniProps> = ({ className, review, ...props }) => {
                 subtitle={formattedDate}
             />
             <div className="h-[1px] w-full bg-gray-50"></div>
-            <p className="break-words max-w-[41ch] px-2  pb-2 text-xs">
+            <p className="max-w-[41ch] break-words px-2  pb-2 text-xs">
                 {text}
             </p>
             {(pos?.length !== 0 || neg?.length !== 0) && (

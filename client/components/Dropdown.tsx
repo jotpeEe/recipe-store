@@ -11,6 +11,7 @@ type Option = {
 type DropdownProps = {
     className?: string;
     options: Option[];
+    vertical?: boolean;
     onSelect: (index: number) => void;
 };
 
@@ -28,12 +29,12 @@ const Dropdown: FC<DropdownProps> = ({ options, onSelect, className }) => {
             <div className="relative">
                 <Button
                     variant="pure"
-                    size="lg"
+                    size="sm"
                     icon={<IconSettings />}
                     onClick={() => setIsOpen(!isOpen)}
                 />
                 {isOpen && (
-                    <ul className="absolute left-0 top-0 translate-y-7 rounded-2xl border bg-white py-2 px-2">
+                    <ul className="absolute left-0 top-0 z-50 translate-y-7 rounded-2xl border bg-white py-2 px-2">
                         {options.map((option, index) => (
                             <li
                                 key={index}
@@ -41,7 +42,7 @@ const Dropdown: FC<DropdownProps> = ({ options, onSelect, className }) => {
                                 onClick={e => handleSelect(e, index)}
                             >
                                 {option.icon}
-                                <p className="whitespace-nowrap pl-3 text-sm">
+                                <p className="whitespace-nowrap pl-3 text-xs">
                                     {option.text}
                                 </p>
                             </li>
