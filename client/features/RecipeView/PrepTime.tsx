@@ -28,7 +28,9 @@ const PrepTime: FC = () => {
                     {numPrep && (
                         <div className="flex w-fit items-center gap-1">
                             <IconClock />
-                            <span className="text-xs ">{numPrep} min</span>
+                            <span className="max-w-[8ch] overflow-hidden text-ellipsis whitespace-nowrap text-xs">
+                                {numPrep} min
+                            </span>
                         </div>
                     )}
                 </>

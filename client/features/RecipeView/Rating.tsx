@@ -22,7 +22,7 @@ const Rating: FC<{ handleRating: () => void }> = ({ handleRating }) => {
                 handleRating();
             }}
         >
-            <IconStar width={18} height={18} fill="orange" />
+            <IconStar width={14} height={14} fill="orange" />
             {averageRating && <span className="pl-1">{averageRating}</span>}
             {clicked && (
                 <Modal

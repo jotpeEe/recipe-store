@@ -1,8 +1,6 @@
 import {
     type FC,
-    type MouseEvent,
     type PropsWithChildren,
-    useCallback,
     useEffect,
     useMemo,
     useState,
@@ -11,10 +9,10 @@ import {
 import cn from 'classnames';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
-import { Button, Input, TextArea } from '@components';
+import { Dropdown, Input, TextArea } from '@components';
 import { useRecipeContext } from '@contexts';
 import { type UpdateInput } from '@generated/graphql';
-import { IconClear, IconEdit } from '@icons';
+import { IconDelete, IconEdit } from '@icons';
 
 type EditProps = PropsWithChildren & {
     className?: string;
@@ -37,7 +35,6 @@ const Edit: FC<EditProps> = ({
     const [open, setOpen] = useState(false);
 
     const { register, handleSubmit, control } = useFormContext<UpdateInput>();
-
     const { fields, remove } = useFieldArray({
         control,
         name: 'ingredients',
@@ -55,14 +52,6 @@ const Edit: FC<EditProps> = ({
     const handleClick = () => {
         if (!withButtons) setOpen(true);
     };
-
-    const handleEdit = useCallback(
-        (e: MouseEvent<HTMLElement>) => {
-            e.preventDefault();
-            setOpen(true);
-        },
-        [open]
-    );
 
     const element = useMemo(() => {
         switch (variant) {
@@ -128,12 +117,37 @@ const Edit: FC<EditProps> = ({
         }
     }, [variant]);
 
+    const menu = useMemo(
+        () => [
+            {
+                icon: <IconEdit width={14} height={14} />,
+                text: 'Unsave',
+            },
+            {
+                icon: <IconDelete width={16} height={16} />,
+                text: 'Delete',
+            },
+        ],
+        []
+    );
+
+    const handleMenuSelect = useMemo(
+        () => (clicked: number) => {
+            const action = {
+                0: () => setOpen(true),
+                1: () => {
+                    remove(ingId);
+                    handleSubmit(onSubmit)();
+                },
+            }[clicked];
+            action?.();
+        },
+        []
+    );
+
     return (
         <div
-            className={cn(
-                'relative flex items-center justify-start',
-                className
-            )}
+            className={cn('flex items-center justify-start', className)}
             onClick={e => {
                 e.preventDefault();
                 handleClick();
@@ -145,23 +159,12 @@ const Edit: FC<EditProps> = ({
                 <>
                     {children}
                     {withButtons && isTheSameUser && withEdit && (
-                        <div className="absolute -right-6 top-0 flex flex-col gap-1">
-                            <Button
-                                variant="outlined"
-                                size="xxs"
-                                icon={<IconEdit />}
-                                onClick={handleEdit}
-                            />
-                            <Button
-                                variant="alert"
-                                size="xxs"
-                                type="button"
-                                icon={<IconClear />}
-                                onClick={e => {
-                                    e.preventDefault();
-                                    remove(ingId);
-                                    handleSubmit(onSubmit)();
-                                }}
+                        <div className="">
+                            <Dropdown
+                                vertical
+                                options={menu}
+                                onSelect={handleMenuSelect}
+                                className="mr-[-20px]"
                             />
                         </div>
                     )}

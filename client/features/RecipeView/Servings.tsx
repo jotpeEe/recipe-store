@@ -1,12 +1,20 @@
-import { type FC } from 'react';
+import { type FC, useMemo } from 'react';
 
 import { useRecipeContext } from '@contexts';
 import { IconDish } from '@icons';
 
 const Servings: FC = () => {
-    const { servings, ingredients } = useRecipeContext();
+    const { servings, ingredients, steps, reviews, active } =
+        useRecipeContext();
 
-    const items = ingredients?.length;
+    const items = useMemo(() => {
+        const action = {
+            0: () => ingredients?.length,
+            1: () => steps?.length,
+            2: () => reviews?.length,
+        }[active];
+        return action?.();
+    }, [active]);
 
     return (
         <div className="flex justify-between text-sm text-outlined">

@@ -16,7 +16,7 @@ import {
 import { RecipeContext } from '@contexts';
 import { useDeleteRecipeMutation } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
-import { IconBookmark, IconDelete, IconShare, IconStar } from '@icons';
+import { IconDelete, IconRemoveBookmark, IconShare, IconStar } from '@icons';
 import { type RecipeProps } from '@lib/types';
 import { requestClient } from '@requests';
 
@@ -52,24 +52,26 @@ const Recipe: FC<RecipeProps> = props => {
     const { name, photo } = user || {};
     const isTheSameUser = user?.id === loggedUser?.id;
 
-    const settings = useMemo(
-        () => [
-            { icon: <IconShare />, text: 'Share' },
+    const settings = useMemo(() => {
+        const array = [
+            { icon: <IconShare width={16} height={16} />, text: 'Share' },
             {
                 icon: <IconStar width={16} height={16} />,
                 text: 'Rate Recipe',
             },
             {
-                icon: <IconBookmark width={16} height={16} />,
+                icon: <IconRemoveBookmark width={16} height={16} />,
                 text: 'Unsave',
             },
-            {
+        ];
+        if (isTheSameUser) {
+            array.push({
                 icon: <IconDelete width={16} height={16} />,
                 text: 'Delete',
-            },
-        ],
-        []
-    );
+            });
+        }
+        return array;
+    }, [isTheSameUser]);
 
     const router = useRouter();
 
