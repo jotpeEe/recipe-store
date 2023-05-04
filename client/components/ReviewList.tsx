@@ -48,10 +48,6 @@ const ReviewList: FC<ReviewListProps> = ({
     const methods = useForm<ReviewInput>();
     const { reset, getValues } = methods;
 
-    const REVIEW_LIMIT = 4;
-    const [limit, setLimit] = useState(REVIEW_LIMIT);
-    const slicedReviews = reviews?.slice(0, limit);
-
     const { mutate: createReview } = useCreateReviewMutation(requestClient, {
         onSuccess() {
             queryClient.refetchQueries({ queryKey: ['GetRecipeById', {}] });
@@ -61,15 +57,6 @@ const ReviewList: FC<ReviewListProps> = ({
     });
 
     const loggedIn = hasCookie('logged_in');
-
-    const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
-        e => {
-            e.preventDefault();
-            if (reviews) setLimit(clicked ? REVIEW_LIMIT : reviews.length);
-            setClicked(state => !state);
-        },
-        [clicked, reviews]
-    );
 
     const onAddCommentClick: MouseEventHandler<HTMLButtonElement> = useCallback(
         async e => {
@@ -101,7 +88,7 @@ const ReviewList: FC<ReviewListProps> = ({
         <>
             {reviews?.length !== 0 && (
                 <div className={cn(fullWidth ? 'w-full' : 'w-fit')}>
-                    {reviews && reviews?.length > 4 && (
+                    {/* {reviews && reviews?.length > 4 && (
                         <button
                             onClick={handleClick}
                             className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary shadow-card shadow-gray-400"
@@ -113,14 +100,9 @@ const ReviewList: FC<ReviewListProps> = ({
                                 {clicked ? 'Show less' : 'Show more'}
                             </h5>
                         </button>
-                    )}
-                    <div
-                        className={cn(
-                            'max-h-[400px]',
-                            clicked ? 'overflow-y-auto' : 'overflow-hidden'
-                        )}
-                    >
-                        {slicedReviews?.map((review, index) => (
+                    )} */}
+                    <div className={cn('max-h-[400px] overflow-y-auto')}>
+                        {reviews?.map((review, index) => (
                             <AnimateOnLoad key={index} index={index}>
                                 <ReviewMini review={review} />
                             </AnimateOnLoad>
