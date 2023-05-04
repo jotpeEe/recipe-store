@@ -1,31 +1,43 @@
-import React, { type FC, useMemo } from 'react';
+import React, { type FC, useCallback, useState } from 'react';
 
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import cn from 'classnames';
 
-import { AnimateOnLoad, IngredientInput } from '@components';
+import { AnimateOnLoad } from '@components';
 import { useRecipeContext } from '@contexts';
-import { type UpdateInput } from '@generated/graphql';
 
-import Ingredient from './Ingredient';
+import Edit from './Edit';
+
+const Ingredient: FC<{ name: string; amount: string }> = ({ name, amount }) => {
+    const [disabled, setDisabled] = useState(false);
+
+    const handleClick = useCallback(
+        () => setDisabled(prevState => !prevState),
+        [disabled]
+    );
+
+    return (
+        <div
+            onClick={handleClick}
+            className={cn(
+                'relative flex w-full cursor-pointer select-none items-center justify-between rounded-lg py-2 transition after:absolute after:bottom-0 after:right-0 after:h-[1px] after:w-full after:transition ',
+                disabled
+                    ? 'text-gray-300 line-through after:bg-gray-300'
+                    : 'after:bg-primary'
+            )}
+        >
+            <p className="text-xs">{name}</p>
+            <span className="text-xs font-semibold">{amount}</span>
+        </div>
+    );
+};
 
 const Ingredients: FC = () => {
-    const { control } = useFormContext<UpdateInput>();
-    const { active, ingredients } = useRecipeContext();
-
-    const { fields } = useFieldArray({
-        control,
-        name: 'ingredients',
-    });
-
-    const slicedFields = useMemo(
-        () => fields.slice(ingredients ? ingredients.length : 0),
-        [ingredients, fields]
-    );
+    const { active, ingredients, withEdit } = useRecipeContext();
 
     return (
         <>
             {ingredients?.length !== 0 && active === 0 && (
-                <ul className="flex flex-col gap-4">
+                <ul className="flex flex-col gap-2">
                     {ingredients?.map((ingredient, index) => {
                         if (
                             ingredient?.amount?.length !== 0 &&
@@ -37,25 +49,28 @@ const Ingredients: FC = () => {
                                     key={index}
                                     index={index}
                                 >
-                                    <Ingredient
-                                        {...{
-                                            ...ingredient,
-                                            id: index,
-                                        }}
-                                    />
+                                    {withEdit ? (
+                                        <Edit
+                                            variant="array"
+                                            name={['name', 'amount']}
+                                            ingId={index}
+                                            withButtons
+                                        >
+                                            <Ingredient
+                                                name={ingredient.name}
+                                                amount={ingredient.amount}
+                                            />
+                                        </Edit>
+                                    ) : (
+                                        <Ingredient
+                                            name={ingredient.name}
+                                            amount={ingredient.amount}
+                                        />
+                                    )}
                                 </AnimateOnLoad>
                             );
                         return null;
                     })}
-                </ul>
-            )}
-            {fields.length !== 0 && active === 0 && (
-                <ul className="flex flex-col gap-4">
-                    {slicedFields.map((item, index) => (
-                        <AnimateOnLoad as="li" key={item.id} index={index}>
-                            <IngredientInput index={index} item={item} />
-                        </AnimateOnLoad>
-                    ))}
                 </ul>
             )}
         </>
