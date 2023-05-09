@@ -66,7 +66,7 @@ const Input: FC<InputProps> = ({
                     defaultValue={value}
                     onKeyDown={preventDefault}
                     className={cn(
-                        'w-full rounded-lg border p-3 text-xs',
+                        'w-full rounded-lg border p-3 text-xs text-black',
                         errors[name] || (error && 'border-red-600')
                     )}
                     {...register(name, {
