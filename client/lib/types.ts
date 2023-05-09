@@ -7,6 +7,10 @@ import {
     type UpdateInput,
 } from '@generated/graphql';
 
+export type FilterOption = {
+    [k: string]: string | number;
+};
+
 export type IUser = GetMeQuery['getMe']['user'];
 
 export type IRecipe = GetRecipeByIdQuery['getRecipeById']['recipe'];
