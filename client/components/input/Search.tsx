@@ -1,13 +1,16 @@
-import { type FC, useMemo } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AnimateOnLoad } from '@components/animations';
 import Button from '@components/Button';
 import RecipeMini from '@components/card/RecipeMini';
+import Filter from '@components/Filter';
+import Modal from '@components/Modal';
 import { type GetProfileDataQueryQuery } from '@generated/graphql';
 import { useRecipesFilter } from '@hooks';
 import { IconFilter } from '@icons';
+import { type FilterOption } from '@lib/types';
 
 import Slider from '../slider';
 import FormInput from './Input';
@@ -17,8 +20,38 @@ type SearchInputProps = {
 };
 
 const SearchInput: FC<SearchInputProps> = ({ recipes }) => {
+    const [openFilter, setOpenFilter] = useState(false);
+    const [filterValues, setFilterValues] = useState<
+        FilterOption | undefined
+    >();
+
     const methods = useForm();
     const { watch } = methods;
+
+    const options = useMemo(
+        () => [
+            {
+                name: 'Time',
+                options: ['All', 'Newest', 'Oldest', 'Popularity'],
+            },
+            {
+                name: 'Rating',
+                options: [1, 2, 3, 4, 5],
+                default: 5,
+            },
+            {
+                name: 'Category',
+                options: ['All', 'Cereal', 'Vegetables'],
+            },
+        ],
+        []
+    );
+
+    const handleSubmit = (activeFilters: FilterOption | undefined) => {
+        console.log(activeFilters);
+        setOpenFilter(false);
+        setFilterValues(activeFilters);
+    };
 
     const searchInput = watch('input') ?? '';
 
@@ -42,7 +75,18 @@ const SearchInput: FC<SearchInputProps> = ({ recipes }) => {
                         noValidation
                     />
                 </FormProvider>
-                <Button size="sm" icon={<IconFilter />} />
+                <Button
+                    onClick={() => setOpenFilter(true)}
+                    size="sm"
+                    icon={<IconFilter />}
+                />
+                <Modal openModal={openFilter} setOpenModal={setOpenFilter}>
+                    <Filter
+                        filterGroups={options}
+                        handleSubmit={handleSubmit}
+                        updatedState={filterValues}
+                    />
+                </Modal>
             </div>
 
             {exists && (
