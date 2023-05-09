@@ -1,4 +1,4 @@
-import { type FC, type MouseEvent, useState } from 'react';
+import { type FC, type MouseEvent, useEffect, useState } from 'react';
 
 import Button from './Button';
 import { IconSettings } from './icons';
@@ -9,13 +9,21 @@ type Option = {
 };
 
 type DropdownProps = {
+    idx?: number;
+    openIndex?: number;
     className?: string;
     options: Option[];
     vertical?: boolean;
     onSelect: (index: number) => void;
 };
 
-const Dropdown: FC<DropdownProps> = ({ options, onSelect, className }) => {
+const Dropdown: FC<DropdownProps> = ({
+    options,
+    onSelect,
+    className,
+    idx,
+    openIndex,
+}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSelect = (e: MouseEvent<HTMLLIElement>, index: number) => {
@@ -24,6 +32,10 @@ const Dropdown: FC<DropdownProps> = ({ options, onSelect, className }) => {
         setIsOpen(false);
     };
 
+    useEffect(() => {
+        if (idx !== openIndex) setIsOpen(false);
+    }, [openIndex]);
+
     return (
         <div className={className}>
             <div className="relative">
@@ -31,7 +43,10 @@ const Dropdown: FC<DropdownProps> = ({ options, onSelect, className }) => {
                     variant="pure"
                     size="sm"
                     icon={<IconSettings />}
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={e => {
+                        e.preventDefault();
+                        setIsOpen(!isOpen);
+                    }}
                 />
                 {isOpen && (
                     <ul className="absolute left-0 top-0 z-50 translate-y-7 rounded-2xl border bg-white py-2 px-2">
