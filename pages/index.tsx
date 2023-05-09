@@ -1,6 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 import type { GetServerSideProps, NextPage } from 'next';
 
+import ScrollToTop from '@components/ScrollToTop';
 import { Hero, Recipes, Reviews } from '@features';
 import { useGetAllRecipesAndLastReviewsQuery } from '@generated/graphql';
 import { queryClient, requestClient } from '@requests';
@@ -27,6 +28,7 @@ const Home: NextPage = () => {
             <Hero />
             <Recipes recipes={data?.recipes} />
             <Reviews reviews={data?.reviews} />
+            <ScrollToTop />
         </>
     );
 };

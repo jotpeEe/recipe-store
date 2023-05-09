@@ -1,3 +1,4 @@
+export { default as IconAlignTop } from './AlignTop';
 export { default as IconArrow } from './Arrow';
 export { default as IconBookmark } from './Bookmark';
 export { default as IconCheck } from './Check';
