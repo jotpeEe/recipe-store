@@ -130,8 +130,10 @@ const Button = <T extends boolean>({
                             <label
                                 htmlFor="btnControl"
                                 className={cn(
-                                    'absolute left-1 -top-2 -translate-x-1/4 -translate-y-full rounded-3xl bg-primary px-3 py-1.5 text-black opacity-0 transition-opacity',
-                                    isActiveMessage && 'opacity-100'
+                                    'ransition-opacity absolute left-1 -top-2 -translate-x-1/4 -translate-y-full rounded-3xl bg-primary px-3 py-1.5 text-black',
+                                    isActiveMessage
+                                        ? 'opacity-100'
+                                        : 't opacity-0'
                                 )}
                             >
                                 <p className="relative text-[10px] font-semibold text-white before:absolute before:-bottom-2.5 before:left-1/2 before:z-10 before:h-2 before:w-2 before:-translate-x-[30%] before:rotate-45 before:rounded-sm before:bg-primary">
