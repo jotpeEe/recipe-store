@@ -1,4 +1,4 @@
-import React, { type FC } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 
 import cn from 'classnames';
 import ReactDom from 'react-dom';
@@ -16,10 +16,22 @@ const Modal: FC<IPostModal> = ({
     children,
     target,
 }) => {
+    const [active, setActive] = useState(false);
+
+    useEffect(() => {
+        if (openModal) setActive(true);
+        if (!openModal) setActive(false);
+    }, [openModal]);
+
     if (!openModal) return null;
     return ReactDom.createPortal(
         <>
-            <div className="absolute left-1/2 top-1/2 z-[300] -translate-x-1/2 -translate-y-1/2">
+            <div
+                className={cn(
+                    'absolute left-1/2 top-1/2 z-[300] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out',
+                    active ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                )}
+            >
                 {children}
             </div>
             <div
