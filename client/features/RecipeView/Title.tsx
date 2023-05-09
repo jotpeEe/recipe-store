@@ -5,11 +5,12 @@ import Image from 'next/image';
 import { useRecipeContext } from '@contexts';
 import { IconBookmark } from '@icons';
 
+import Edit from './Edit';
 import PrepTime from './PrepTime';
 import Rating from './Rating';
 
 const Title: FC<{ handleRating: () => void }> = ({ handleRating }) => {
-    const { image, title } = useRecipeContext();
+    const { image, title, withEdit } = useRecipeContext();
 
     return (
         <div className="relative col-span-3 flex min-h-[150px] w-[315px] flex-col items-end justify-between rounded-xl bg-gradient-to-b from-transparent to-black p-4">
@@ -26,9 +27,17 @@ const Title: FC<{ handleRating: () => void }> = ({ handleRating }) => {
 
             <div className="flex w-full items-end justify-between">
                 <div className="flex flex-col gap-1">
-                    <h6 className="max-w-[19ch] break-words font-bold leading-4 text-white ">
-                        {title}
-                    </h6>
+                    {withEdit ? (
+                        <Edit name={['title']} value={title}>
+                            <h6 className="max-w-[19ch] break-words font-bold leading-4 text-white ">
+                                {title}
+                            </h6>
+                        </Edit>
+                    ) : (
+                        <h6 className="max-w-[19ch] break-words font-bold leading-4 text-white ">
+                            {title}
+                        </h6>
+                    )}
                     {/* <p className="text-[10px] text-white opacity-70">
                         By {name}
                     </p> */}
