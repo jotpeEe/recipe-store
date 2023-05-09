@@ -44,7 +44,8 @@ const Panel: FC = () => {
             </button>
             <Modal openModal={openModal} setOpenModal={setOpenModal}>
                 <ModalMessage
-                    message="Do you want to reset the form?"
+                    title="Recipe form reset"
+                    message="Are you sure you want to reset your recipe? All of your data will be permanently removed. This action cannot be undone."
                     onConfirm={onReset}
                     onCancel={onCancel}
                 />
