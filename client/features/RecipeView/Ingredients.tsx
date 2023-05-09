@@ -1,4 +1,10 @@
-import React, { type FC, useCallback, useState } from 'react';
+import React, {
+    type FC,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import cn from 'classnames';
 
@@ -33,10 +39,33 @@ const Ingredient: FC<{ name: string; amount: string }> = ({ name, amount }) => {
 
 const Ingredients: FC = () => {
     const { active, ingredients, withEdit } = useRecipeContext();
+    const [openIndex, setOpenIndex] = useState(-1);
+    const ingredientsRef = useRef<(HTMLLIElement | HTMLDivElement | null)[]>(
+        []
+    );
+
+    const handleClickAway = useCallback((event: MouseEvent) => {
+        if (
+            ingredientsRef.current.every(
+                ref => ref && !ref.contains(event.target as Node)
+            )
+        ) {
+            setOpenIndex(-1);
+        }
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickAway);
+        return () => {
+            document.removeEventListener('mousedown', handleClickAway);
+        };
+    }, [handleClickAway]);
+
+    const handleOpenMenu = (index: number) => setOpenIndex(index);
 
     return (
         <>
-            {ingredients?.length !== 0 && active === 0 && (
+            {ingredients?.length !== 0 && active === 'Ingredients' && (
                 <ul className="flex flex-col gap-2">
                     {ingredients?.map((ingredient, index) => {
                         if (
@@ -49,24 +78,32 @@ const Ingredients: FC = () => {
                                     key={index}
                                     index={index}
                                 >
-                                    {withEdit ? (
-                                        <Edit
-                                            variant="array"
-                                            name={['name', 'amount']}
-                                            ingId={index}
-                                            withButtons
-                                        >
+                                    <div
+                                        ref={ref => {
+                                            ingredientsRef.current[index] = ref;
+                                        }}
+                                    >
+                                        {withEdit ? (
+                                            <Edit
+                                                variant="array"
+                                                name={['name', 'amount']}
+                                                ingId={index}
+                                                withButtons
+                                                handleOpenMenu={handleOpenMenu}
+                                                openIndex={openIndex}
+                                            >
+                                                <Ingredient
+                                                    name={ingredient.name}
+                                                    amount={ingredient.amount}
+                                                />
+                                            </Edit>
+                                        ) : (
                                             <Ingredient
                                                 name={ingredient.name}
                                                 amount={ingredient.amount}
                                             />
-                                        </Edit>
-                                    ) : (
-                                        <Ingredient
-                                            name={ingredient.name}
-                                            amount={ingredient.amount}
-                                        />
-                                    )}
+                                        )}
+                                    </div>
                                 </AnimateOnLoad>
                             );
                         return null;
