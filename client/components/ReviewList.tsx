@@ -88,26 +88,13 @@ const ReviewList: FC<ReviewListProps> = ({
         <>
             {reviews?.length !== 0 && (
                 <div className={cn(fullWidth ? 'w-full' : 'w-fit')}>
-                    {/* {reviews && reviews?.length > 4 && (
-                        <button
-                            onClick={handleClick}
-                            className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary shadow-card shadow-gray-400"
-                        >
-                            <div className="my-1 ml-1 rounded-full bg-white px-2 font-medium text-gray-500">
-                                {clicked ? '-' : '+'}
-                            </div>
-                            <h5 className="text-xs text-white">
-                                {clicked ? 'Show less' : 'Show more'}
-                            </h5>
-                        </button>
-                    )} */}
-                    <div className={cn('max-h-[400px] overflow-y-auto')}>
+                    <ul className={cn('max-h-[400px] overflow-y-auto')}>
                         {reviews?.map((review, index) => (
-                            <AnimateOnLoad key={index} index={index}>
+                            <AnimateOnLoad key={index} index={index} as="li">
                                 <ReviewMini review={review} />
                             </AnimateOnLoad>
                         ))}
-                    </div>
+                    </ul>
                 </div>
             )}
             {addEnable && !isTheSameUser && (
