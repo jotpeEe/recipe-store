@@ -1,8 +1,10 @@
 /* eslint-disable no-param-reassign */
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions, import/extensions
-await import('./utils/env.mjs');
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
     reactStrictMode: true,
     webpack: config => {
         config.experiments = config.experiments || {};
@@ -19,9 +21,8 @@ const nextConfig = {
         ],
     },
     eslint: {
-        dirs: ['client', 'pages', 'server', 'styles', 'utils'], // Only run ESLint on the 'pages' and 'utils' directories during production builds (next build)
+        dirs: ['client', 'pages', 'server', 'styles', 'utils'],
     },
-
     /**
      * If you have the "experimental: { appDir: true }" setting enabled, then you
      * must comment the below `i18n` config out.
@@ -33,6 +34,4 @@ const nextConfig = {
         defaultLocale: 'en',
     },
     output: 'standalone',
-};
-
-export default nextConfig;
+});
