@@ -6,17 +6,21 @@ import { useRecipeContext } from '@contexts';
 const Reviews: FC = () => {
     const { active, id, user, reviews } = useRecipeContext();
     return (
-        <div>
-            {reviews && active === 2 && (
-                <ReviewList
-                    addEnable
-                    reviews={reviews}
-                    id={id}
-                    recipeAuthor={user}
-                    fullWidth
-                />
+        <>
+            {reviews && reviews?.length > 0 && (
+                <div>
+                    {reviews && active === 'Reviews' && (
+                        <ReviewList
+                            addEnable
+                            reviews={reviews}
+                            id={id}
+                            recipeAuthor={user}
+                            fullWidth
+                        />
+                    )}
+                </div>
             )}
-        </div>
+        </>
     );
 };
 

@@ -30,7 +30,7 @@ import Title from './Title';
 const Recipe: FC<RecipeProps> = props => {
     const recipeRef = useRef(null);
     const [actionIndex, setActionIndex] = useState(0);
-    const [active, setActive] = useState(0);
+    const [activeSwitchOption, setActiveSwitchOption] = useState('Ingredients');
     const [openModal, setOpenModal] = useState(false);
     const loggedUser = useAppSelector(state => state.auth.user);
 
@@ -84,6 +84,10 @@ const Recipe: FC<RecipeProps> = props => {
         },
     });
 
+    const handleCategoryFilterChange = (filter: string) => {
+        setActiveSwitchOption(filter);
+    };
+
     const handleDelete = () => {
         if (id) deleteRecipe({ id });
     };
@@ -124,8 +128,8 @@ const Recipe: FC<RecipeProps> = props => {
     }, [actionIndex, id]);
 
     useEffect(() => {
-        if (step === 2) setActive(1);
-        if (step !== 2) setActive(0);
+        if (step === 2) setActiveSwitchOption('Steps');
+        if (step !== 2) setActiveSwitchOption('Ingredients');
     }, [step]);
 
     if (!user) return null;
@@ -134,7 +138,7 @@ const Recipe: FC<RecipeProps> = props => {
         <RecipeContext.Provider
             value={{
                 ...props,
-                active,
+                active: activeSwitchOption,
                 recipeRef,
                 openModal,
                 setOpenModal,
@@ -170,9 +174,9 @@ const Recipe: FC<RecipeProps> = props => {
                     <>
                         <Animated className="col-span-3 flex h-fit justify-center">
                             <Switch
-                                setActive={setActive}
-                                active={active}
-                                array={['Ingredients', 'Steps', 'Reviews']}
+                                activeOption={activeSwitchOption}
+                                onOptionChange={handleCategoryFilterChange}
+                                options={['Ingredients', 'Steps', 'Reviews']}
                                 size="sm"
                                 fullWidth
                             />
@@ -192,13 +196,15 @@ const Recipe: FC<RecipeProps> = props => {
                         onSelect={handleSelect}
                     />
                 )}
-                <Modal
-                    setOpenModal={setOpenModal}
-                    openModal={openModal}
-                    target={recipeRef.current || undefined}
-                >
-                    {element}
-                </Modal>
+                {openModal && (
+                    <Modal
+                        setOpenModal={setOpenModal}
+                        openModal={openModal}
+                        target={recipeRef.current || undefined}
+                    >
+                        {element}
+                    </Modal>
+                )}
             </div>
         </RecipeContext.Provider>
     );

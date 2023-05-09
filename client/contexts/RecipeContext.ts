@@ -15,7 +15,7 @@ export const RecipeContext = createContext<
     | (RecipeProps & {
           isEnterPressed?: boolean;
           isTheSameUser: boolean;
-          active: number;
+          active: string;
           recipeRef: MutableRefObject<null | HTMLElement>;
           openModal: boolean;
           setOpenModal: Dispatch<SetStateAction<boolean>>;

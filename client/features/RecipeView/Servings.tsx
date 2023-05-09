@@ -9,12 +9,12 @@ const Servings: FC = () => {
 
     const items = useMemo(() => {
         const action = {
-            0: () => ingredients?.length,
-            1: () => steps?.length,
-            2: () => reviews?.length,
+            Ingredients: () => ingredients?.length,
+            Steps: () => steps?.length,
+            Reviews: () => reviews?.length,
         }[active];
         return action?.();
-    }, [active]);
+    }, [active, ingredients, steps, reviews]);
 
     return (
         <div className="flex justify-between text-sm text-outlined">
