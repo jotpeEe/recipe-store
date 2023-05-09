@@ -1,4 +1,10 @@
-import { type FC, useCallback, useMemo, useState } from 'react';
+import {
+    type FC,
+    type MouseEvent,
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 
 import cn from 'classnames';
 
@@ -11,16 +17,15 @@ import RecipeCard from './card/Recipe';
 import Switch from './Switch';
 
 type RecipesListProps = {
-    className?: string;
     recipes?: Partial<IRecipe>[];
     panel?: boolean;
 };
 
-const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
-    const [active, setActive] = useState(0);
+const RecipesList: FC<RecipesListProps> = ({ recipes, panel }) => {
+    const [activeCategoryFilter, setActiveCategoryFilter] = useState('All');
     const [limit, setLimit] = useState(RECIPE_LIMIT);
 
-    const cuisine = useMemo(
+    const cuisines = useMemo(
         () =>
             recipes?.reduce(
                 (acc, cv) => {
@@ -39,8 +44,8 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
     );
 
     const recipeList = useMemo(() => {
-        if (cuisine && recipes) {
-            const filter = cuisine[active];
+        if (cuisines && recipes) {
+            const filter = activeCategoryFilter;
 
             if (filter === 'All') return recipes.slice(0, limit);
 
@@ -50,25 +55,31 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
 
             return list;
         }
-
         return undefined;
-    }, [recipes, limit, active]);
+    }, [recipes, limit, activeCategoryFilter]);
 
-    const handleClick = useCallback(() => {
+    const handleCategoryFilterChange = (filter: string) => {
+        setActiveCategoryFilter(filter);
+    };
+
+    const handleClick = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         if (recipes) setLimit(recipes?.length);
     }, []);
 
     return (
-        <div className={`${className} children:mb-4`}>
+        <div className={cn('children:mb-4')}>
             <ul className="scrollbar-none flex w-fit gap-3 overflow-x-scroll">
-                <Switch
-                    array={cuisine}
-                    active={active}
-                    setActive={setActive}
-                    size="sm"
-                />
+                {cuisines && (
+                    <Switch
+                        options={cuisines}
+                        onOptionChange={handleCategoryFilterChange}
+                        activeOption={activeCategoryFilter}
+                        size="sm"
+                    />
+                )}
             </ul>
-            <div
+            <ul
                 className={cn(
                     'grid max-h-list grid-cols-fill gap-12',
                     RECIPE_LIMIT === limit
@@ -78,12 +89,12 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
             >
                 {recipeList &&
                     recipeList.map((recipe, index) => (
-                        <AnimateOnLoad key={index} index={index}>
+                        <AnimateOnLoad key={index} index={index} as="li">
                             <RecipeCard recipe={recipe} />
                         </AnimateOnLoad>
                     ))}
                 {panel && (
-                    <div className="self-center">
+                    <li className="self-center">
                         <Button href="/create" className="mb-3" size="sm">
                             Create new recipe
                         </Button>
@@ -95,9 +106,9 @@ const RecipesList: FC<RecipesListProps> = ({ className, recipes, panel }) => {
                         >
                             View more recipes
                         </Button>
-                    </div>
+                    </li>
                 )}
-            </div>
+            </ul>
         </div>
     );
 };
