@@ -16,6 +16,8 @@ import { IconDelete, IconEdit } from '@icons';
 
 type EditProps = PropsWithChildren & {
     className?: string;
+    handleOpenMenu?: (index: number) => void;
+    openIndex?: number;
     value?: string;
     name: string[];
     ingId?: number;
@@ -26,6 +28,8 @@ type EditProps = PropsWithChildren & {
 const Edit: FC<EditProps> = ({
     children,
     className,
+    handleOpenMenu,
+    openIndex,
     value,
     variant,
     name,
@@ -48,10 +52,6 @@ const Edit: FC<EditProps> = ({
     useEffect(() => {
         if (open) setOpen(isEnterPressed || false);
     }, [isEnterPressed]);
-
-    const handleClick = () => {
-        if (!withButtons) setOpen(true);
-    };
 
     const element = useMemo(() => {
         switch (variant) {
@@ -121,7 +121,7 @@ const Edit: FC<EditProps> = ({
         () => [
             {
                 icon: <IconEdit width={14} height={14} />,
-                text: 'Unsave',
+                text: 'Edit',
             },
             {
                 icon: <IconDelete width={16} height={16} />,
@@ -145,12 +145,18 @@ const Edit: FC<EditProps> = ({
         []
     );
 
+    const handleClick = () => {
+        if (!withButtons) setOpen(true);
+    };
+
     return (
         <div
             className={cn('flex items-center justify-start', className)}
             onClick={e => {
                 e.preventDefault();
                 handleClick();
+                if (handleOpenMenu && ingId !== undefined)
+                    handleOpenMenu(ingId);
             }}
         >
             {open && isTheSameUser ? (
@@ -159,14 +165,14 @@ const Edit: FC<EditProps> = ({
                 <>
                     {children}
                     {withButtons && isTheSameUser && withEdit && (
-                        <div className="">
-                            <Dropdown
-                                vertical
-                                options={menu}
-                                onSelect={handleMenuSelect}
-                                className="mr-[-20px]"
-                            />
-                        </div>
+                        <Dropdown
+                            idx={ingId}
+                            openIndex={openIndex}
+                            vertical
+                            options={menu}
+                            onSelect={handleMenuSelect}
+                            className="mr-[-20px]"
+                        />
                     )}
                 </>
             )}
