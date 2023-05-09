@@ -1,54 +1,56 @@
-import { type FC, type MouseEvent, useCallback } from 'react';
-
 import classNames from 'classnames';
 
 import Button from '../Button';
 
-type SwitchProps = {
-    array: string[] | undefined;
-    setActive: (index: number) => void;
-    active: number;
+type SwitchProps<T extends number | string> = {
+    options: T[];
+    activeOption: T;
+    onOptionChange: (option: T, group?: string) => void;
+    label?: string;
     size?: 'sm' | 'md';
+    withBorder?: boolean;
     fullWidth?: boolean;
 };
 
-const Switch: FC<SwitchProps> = ({
-    array,
-    setActive,
-    active,
+const Switch = <T extends number | string>({
+    label,
+    options,
+    onOptionChange,
+    activeOption,
     size = 'md',
+    withBorder,
     fullWidth,
-}) => {
-    const handleClick = useCallback(
-        (event: MouseEvent<HTMLButtonElement>, index: number) => {
-            event.preventDefault();
-            setActive(index);
-        },
-        []
-    );
+}: SwitchProps<T>) => {
+    const getButtonVariant = (option: T) => {
+        if (option !== activeOption) {
+            return withBorder ? 'pure-border' : 'pure';
+        }
+        return 'normal';
+    };
 
     return (
         <ul
             className={classNames(
-                'flex gap-2 rounded-2xl p-1',
-                active === 0 && 'bg-gradient-to-r from-emerald-50 to-slate-50',
-                active === 1 && 'bg-emerald-50',
-                active === 2 && 'bg-gradient-to-l from-emerald-50 to-slate-50',
-                fullWidth && 'w-full'
+                'flex gap-2 rounded-2xl',
+                fullWidth ? 'w-full' : 'w-fit'
             )}
         >
-            {array &&
-                array.map((children, index) => (
+            {options &&
+                options.map((option, index) => (
                     <li key={index} className="w-full">
                         <Button
                             key={index}
                             fullWidth
                             size={size}
                             className="self-center justify-self-end"
-                            variant={index !== active ? 'pure' : 'normal'}
-                            onClick={event => handleClick(event, index)}
+                            variant={getButtonVariant(option)}
+                            onClick={
+                                label
+                                    ? () => onOptionChange(option, label)
+                                    : () => onOptionChange(option)
+                            }
                         >
-                            {children}
+                            {option}
                         </Button>
                     </li>
                 ))}
