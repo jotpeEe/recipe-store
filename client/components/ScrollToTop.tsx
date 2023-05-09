@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-/* eslint-disable no-plusplus */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-use-before-define */
->>>>>>> ff811bb6af8d44895179657ebc0130a54867ea8a
 import { type FC, type MouseEvent, useEffect, useState } from 'react';
 
 import cn from 'classnames';
@@ -47,13 +41,11 @@ const ScrollToTop: FC<ScrollToTopProps> = ({
                 c: number,
                 d: number
             ): number => {
-
                 const time = t / d;
                 const easedTime = time - 1;
                 return (
                     -c * (easedTime * easedTime * easedTime * easedTime - 1) + b
                 );
-
             };
 
             const animation = (currentTime: number) => {
