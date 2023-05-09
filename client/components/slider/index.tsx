@@ -14,7 +14,7 @@ import BreadCrumbs from './BreadCrumbs';
 import SliderController from './Controller';
 
 type SliderProps = {
-    children: ReactNode[];
+    children?: ReactNode[] | undefined;
     breadcrumbs?: string[];
     className?: string;
     controller?: boolean;
@@ -23,7 +23,7 @@ type SliderProps = {
 };
 
 const Slider: FC<SliderProps> = ({
-    children,
+    children = [],
     className,
     controller,
     fullWidth,
