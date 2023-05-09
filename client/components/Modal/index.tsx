@@ -36,13 +36,13 @@ const Modal: FC<IPostModal> = ({
             </div>
             <div
                 className={cn(
-                    'absolute inset-0 z-[200] bg-[rgba(0,0,0,.5)]',
-                    target && 'rounded-xl'
+                    'inset-0 z-[200]  bg-[rgba(0,0,0,.5)]',
+                    target ? 'absolute rounded-xl' : 'fixed'
                 )}
                 onClick={() => setOpenModal(false)}
             />
         </>,
-        target || (document.getElementById('post-modal') as HTMLElement)
+        target || (document.getElementById('root-modal') as HTMLElement)
     );
 };
 
