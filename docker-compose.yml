@@ -8,7 +8,7 @@ services:
         volumes:
             - mongo:/data/db
         env_file:
-            - .env
+            - .env.local
 
     cache:
         image: redis:7-alpine
