@@ -23,7 +23,6 @@ const RecipeView: FC<RecipeProps> = props => {
         },
     });
     const {
-        reset,
         handleSubmit,
         formState: { isDirty },
     } = methods;
@@ -51,7 +50,6 @@ const RecipeView: FC<RecipeProps> = props => {
     useEffect(() => {
         if (isEnterPressed && isDirty) {
             handleSubmit(onSubmit)();
-            reset({ ingredients: [] });
         }
     }, [isEnterPressed, isDirty]);
 
