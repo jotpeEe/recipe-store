@@ -1,24 +1,21 @@
 import {
     type ButtonHTMLAttributes,
-    type ChangeEvent,
-    type FC,
     type ReactNode,
     useEffect,
     useState,
 } from 'react';
 
-import classNames from 'classnames';
+import cn from 'classnames';
 import Link from 'next/link';
 
-import { IconArrow } from '@icons';
+import { IconArrow } from '@components/icons';
+import Spinner from '@components/Spinner';
 
-import Spinner from '../Spinner';
-
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps<T extends boolean> = {
     children?: ReactNode;
     href?: string;
     arrow?: boolean;
-    circle?: boolean;
+    circle?: T;
     fullWidth?: boolean;
     message?: {
         active: boolean;
@@ -28,11 +25,19 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     isLoading?: boolean;
     outlined?: boolean;
     rotate?: boolean;
-    variant?: 'outlined' | 'pure' | 'normal' | 'alert' | 'input';
+    variant?:
+        | 'outlined'
+        | 'pure'
+        | 'pure-border'
+        | 'normal'
+        | 'alert'
+        | 'input';
     size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-};
+} & (T extends true
+    ? ButtonHTMLAttributes<HTMLButtonElement>
+    : { type?: never } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'>);
 
-const Button: FC<ButtonProps> = ({
+const Button = <T extends boolean>({
     arrow,
     href,
     children,
@@ -43,17 +48,17 @@ const Button: FC<ButtonProps> = ({
     icon,
     isLoading,
     outlined,
-    rotate,
     size = 'xl',
-    type = 'button',
     hidden,
     variant = 'normal',
+    rotate,
     message,
+    type = 'button',
     ...props
-}) => {
+}: ButtonProps<T>): JSX.Element => {
     const [isActiveMessage, setActiveMessage] = useState(false);
 
-    const handleCheckboxOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleCheckboxOnChange = () => {
         setActiveMessage(true);
     };
 
@@ -65,7 +70,7 @@ const Button: FC<ButtonProps> = ({
         return () => clearTimeout(clear);
     }, [isActiveMessage, message?.active]);
 
-    const styles = classNames(
+    const styles = cn(
         'flex items-center justify-center font-semibold gap-2 text-center transition-all h-fit border whitespace-nowrap',
         circle ? 'rounded-full p-4' : 'rounded-xl',
         size === 'xxs' && 'text-xs p-0.5',
@@ -74,6 +79,8 @@ const Button: FC<ButtonProps> = ({
         size === 'md' && 'px-5 py-2',
         size === 'lg' && 'text-xs p-3',
         size === 'xl' && !circle && 'px-12 py-4',
+        variant === 'pure-border' &&
+            'bg-white text-secondary border-primary hover:bg-gray-100',
         variant === 'pure' &&
             'bg-white text-secondary border-white hover:bg-gray-100',
         variant === 'normal' &&
@@ -122,7 +129,7 @@ const Button: FC<ButtonProps> = ({
                             />
                             <label
                                 htmlFor="btnControl"
-                                className={classNames(
+                                className={cn(
                                     'absolute left-1 -top-2 -translate-x-1/4 -translate-y-full rounded-3xl bg-primary px-3 py-1.5 text-black opacity-0 transition-opacity',
                                     isActiveMessage && 'opacity-100'
                                 )}
