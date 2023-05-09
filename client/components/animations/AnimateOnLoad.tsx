@@ -1,6 +1,6 @@
 import {
-    type FC,
     type PropsWithChildren,
+    createElement,
     useEffect,
     useMemo,
     useState,
@@ -8,17 +8,17 @@ import {
 
 import classNames from 'classnames';
 
-type AnimateOnMountProps = PropsWithChildren & {
-    index: number;
-    as?: 'li' | 'div';
-};
+type AnimateOnMountProps<E extends keyof JSX.IntrinsicElements> =
+    PropsWithChildren<{
+        index: number;
+        as?: E;
+    }>;
 
-const AnimateOnMount: FC<AnimateOnMountProps> = ({
+const AnimateOnMount = <E extends keyof JSX.IntrinsicElements>({
     index,
     children,
-    as = 'div',
-}) => {
-    // set initial delay
+    as,
+}: AnimateOnMountProps<E>) => {
     const [delay, setDelay] = useState(index * 100);
     const [active, setActive] = useState(false);
 
@@ -38,16 +38,11 @@ const AnimateOnMount: FC<AnimateOnMountProps> = ({
     useEffect(() => {
         setActive(true);
 
-        // clear delay after first load for other interactive transitions on a client
         setTimeout(() => setDelay(0), index * 100);
     }, []);
 
-    return (
-        <>
-            {as === 'div' && <div {...props}>{children}</div>}
-            {as === 'li' && <li {...props}>{children}</li>}
-        </>
-    );
+    if (as) return createElement(as, props, children);
+    return null;
 };
 
 export default AnimateOnMount;
