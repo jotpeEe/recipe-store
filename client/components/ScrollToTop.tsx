@@ -2,7 +2,7 @@ import { type FC, type MouseEvent, useEffect, useState } from 'react';
 
 import cn from 'classnames';
 
-import AlignTop from './icons/AlignTop';
+import Arrow from './icons/Arrow';
 
 type ScrollToTopProps = {
     threshold?: number;
@@ -77,14 +77,20 @@ const ScrollToTop: FC<ScrollToTopProps> = ({
     return (
         <button
             className={cn(
-                'fixed bottom-8 right-8 rounded-full bg-gray-800 p-3 text-white transition-all duration-500 ease-out',
+                'group right-8 hidden rounded-full bg-gray-800 p-3 text-white transition-all duration-500 ease-out sm:fixed sm:bottom-8 sm:block',
                 isVisible && window.scrollY > showUnder
-                    ? 'opacity-100'
+                    ? 'opacity-50 hover:opacity-100'
                     : 'translate-y-52 opacity-0'
             )}
             onClick={handleClick}
         >
-            <AlignTop height={36} width={36} strokeWidth={2} />
+            <Arrow
+                className="rotate-[270deg] transition-transform duration-300 group-hover:-translate-y-1"
+                height={36}
+                width={36}
+                fill={'currentColor'}
+                strokeWidth={2}
+            />
         </button>
     );
 };

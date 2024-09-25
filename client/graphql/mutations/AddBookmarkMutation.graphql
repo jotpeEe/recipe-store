@@ -1,0 +1,11 @@
+mutation AddBookmark($id: String!) {
+    addBookmark(id: $id) {
+        status
+        user {
+            id: _id
+            name
+            photo
+            bookmarks
+        }
+    }
+}

@@ -37,8 +37,8 @@ export default class ReviewResolver {
     }
 
     @Query(() => ReviewListResponse)
-    async getLastReviews() {
-        return this.reviewService.getLastReviews();
+    async getLastReviews(@Arg('limit', { nullable: true }) limit?: number) {
+        return this.reviewService.getLastReviews(limit);
     }
 
     @Mutation(() => ReviewResponse)

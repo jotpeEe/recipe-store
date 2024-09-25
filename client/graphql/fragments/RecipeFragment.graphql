@@ -1,0 +1,49 @@
+fragment WideRecipeFragment on PopulatedData {
+    id: _id
+    cuisine
+    title
+    description
+    prep
+    servings
+    createdAt
+    ingredients {
+        name
+        amount
+        edit
+    }
+    image
+    steps {
+        label
+        text
+        edit
+    }
+    user {
+        id: _id
+        name
+        photo
+    }
+    reviews {
+        id: _id
+        text
+        pos
+        neg
+        createdAt
+        recipeAuthor {
+            id: _id
+            name
+            photo
+        }
+        recipe 
+        user {
+            id: _id
+            name
+            photo
+        }
+    },
+    ratings {
+        id: _id
+        recipe
+        rating
+        user
+    }
+}

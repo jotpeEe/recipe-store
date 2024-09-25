@@ -15,11 +15,15 @@ const Section: React.FC<SectionProps> = ({
     flex,
     maxWidth = false,
 }) => (
-    <section id={id} className={cn('w-full py-12 sm:py-24 lg:py-28')}>
+    <section
+        id={id}
+        className={cn('h-full w-full pt-12 sm:pt-24 sm:pb-0 lg:pt-28 lg:pb-0')}
+    >
         <div
             className={cn(
-                'px-3 sm:px-6 md:px-12',
-                maxWidth ? 'max-w-full' : 'mx-auto max-w-7xl',
+                maxWidth
+                    ? 'max-w-full'
+                    : 'mx-auto max-w-7xl px-3 sm:px-6 md:px-12',
                 flex && 'flex justify-center gap-6 md:gap-16 lg:gap-24',
                 className && className
             )}

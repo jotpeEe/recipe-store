@@ -1,7 +1,7 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 
 import {
-    CuisineResponse,
+    AvailableCatResponse,
     Input,
     ListResponse,
     PopulatedResponse,
@@ -26,14 +26,14 @@ export default class RecipeResolver {
         return this.recipeService.getRecipeById(id);
     }
 
-    @Query(() => PopulatedResponse, { nullable: true })
+    @Query(() => PopulatedResponse)
     async getTempRecipe(@Ctx() ctx: Context) {
         return this.recipeService.getTempRecipe(ctx);
     }
 
-    @Query(() => CuisineResponse)
-    async getCuisines() {
-        return this.recipeService.getCuisines();
+    @Query(() => AvailableCatResponse)
+    async getAvailableCategories(@Arg('cat') cat: string) {
+        return this.recipeService.getAvailableCategories(cat);
     }
 
     @Mutation(() => PopulatedResponse)
@@ -46,8 +46,8 @@ export default class RecipeResolver {
     }
 
     @Query(() => ListResponse)
-    async getAllRecipes() {
-        return this.recipeService.getAllRecipes();
+    async getAllRecipes(@Arg('limit', { nullable: true }) limit?: number) {
+        return this.recipeService.getAllRecipes(limit);
     }
 
     @Query(() => ListResponse)

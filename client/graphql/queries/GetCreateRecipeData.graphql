@@ -1,0 +1,14 @@
+query GetCreateRecipeData($cat: String!){
+    getAvailableCategories(cat: $cat) {
+        status
+        results
+        category
+    }
+
+    getTempRecipe {
+        status
+        recipe {
+            ...BaseRecipeInputFragment
+        }
+    }
+}

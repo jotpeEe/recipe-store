@@ -1,0 +1,19 @@
+fragment BaseRecipeInputFragment on PopulatedData {
+    id: _id
+    cuisine
+    title
+    description
+    prep
+    servings
+    ingredients {
+        name
+        amount
+        edit
+    }
+    image
+    steps {
+        label
+        text
+        edit
+    }
+}

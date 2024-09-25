@@ -1,11 +1,12 @@
 import { type FC } from 'react';
 
-import { RecipesList, SectionTitle } from '@components';
+import { SectionTitle } from '@components';
+import RecipeList from '@components/RecipeList';
 import { SectionLayout as Layout } from '@layouts';
-import { type IRecipe } from '@lib/types';
+import { type RecipeProps } from '@lib/types';
 
 type RecipesProps = {
-    recipes?: Partial<IRecipe>[];
+    recipes?: RecipeProps[];
 };
 
 const Recipes: FC<RecipesProps> = ({ recipes }) => (
@@ -21,7 +22,7 @@ const Recipes: FC<RecipesProps> = ({ recipes }) => (
                 href="/create"
                 buttonText="Create recipe"
             />
-            <RecipesList recipes={recipes} />
+            <RecipeList recipes={recipes} />
         </div>
     </Layout>
 );

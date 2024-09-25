@@ -8,14 +8,19 @@ import React, {
 import cn from 'classnames';
 
 import Button from '@components/Button';
-import { IconCopy, IconCorrect } from '@components/icons';
-import { HOST_URL } from '@constants';
 import { useRecipeContext } from '@contexts';
+import Icon from '@icons';
 
 const RecipeLink: FC = () => {
     const { id } = useRecipeContext();
-    const defaultValue = `${HOST_URL}recipes/${id}`;
-    const [input, setInput] = useState<string>(defaultValue);
+
+    const defaultValue = `${
+        process.env.NODE_ENV === 'production'
+            ? 'https://recipes.mklos.dev/'
+            : 'http://localhost:3000/'
+    }recipes/${id}`.replace(/\s+/g, '');
+
+    const [input, setInput] = useState(defaultValue);
     const [copiedText, setCopiedText] = useState(false);
 
     const copyToClipboard = () => {
@@ -63,7 +68,11 @@ const RecipeLink: FC = () => {
                     onClick={copyToClipboard}
                     message={{ text: 'Copied', active: copiedText }}
                 >
-                    {copiedText ? <IconCorrect /> : <IconCopy />}
+                    {copiedText ? (
+                        <Icon name="Correct" />
+                    ) : (
+                        <Icon name="Copy" />
+                    )}
                 </Button>
             </div>
         </div>

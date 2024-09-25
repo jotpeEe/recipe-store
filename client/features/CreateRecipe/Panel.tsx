@@ -1,53 +1,77 @@
-import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
+import { type FC, useCallback, useState } from 'react';
+
+import { useFormContext } from 'react-hook-form';
 
 import { Modal, ModalMessage } from '@components';
 import { useCreateRecipe, useSliderContext } from '@contexts';
-import { IconArrow, IconClear } from '@icons';
+import { useDeleteRecipeMutation } from '@generated/graphql';
+import { type RecipeInfoInput } from '@hooks';
+import Icon from '@icons';
+import { updateTempRecipeData } from '@lib';
+import { requestClient } from '@requests';
 
 const Panel: FC = () => {
     const [openModal, setOpenModal] = useState(false);
-    const { id, resetForm, setStep } = useCreateRecipe();
+    const { id, recipe, setStep } = useCreateRecipe();
 
     const { step, goTo } = useSliderContext();
+    const { reset } = useFormContext<RecipeInfoInput>();
 
-    const handleGoBackClick: MouseEventHandler<HTMLButtonElement> =
-        useCallback(() => {
-            goTo(step - 1);
-            setStep(prev => prev - 1);
-        }, [step]);
+    const { mutate: deleteRecipe } = useDeleteRecipeMutation(requestClient, {
+        onSuccess({ deleteRecipe: data }) {
+            updateTempRecipeData(data);
 
-    const handleClearClick: MouseEventHandler<HTMLButtonElement> =
-        useCallback(() => {
-            setOpenModal(true);
-        }, [id]);
+            /**
+             * useFieldArray reset must be explicit
+             *
+             * @see https://react-hook-form.com/api/usefieldarray/#rules
+             */
+            reset({ ingredients: [], steps: [] });
+        },
+    });
 
-    const onReset = () => {
+    const resetForm = useCallback(() => {
+        if (id) deleteRecipe({ id });
+        reset();
+    }, [id, recipe]);
+
+    const handleGoBackClick = useCallback(() => {
+        goTo(step - 1);
+        setStep(prev => prev - 1);
+    }, [step, goTo]);
+
+    const handleClearClick = useCallback(() => {
+        setOpenModal(true);
+    }, [id]);
+
+    const handleReset = useCallback(() => {
         resetForm();
         setOpenModal(false);
         goTo(0);
-    };
+    }, [resetForm, goTo]);
 
-    const onCancel = () => setOpenModal(false);
+    const handleCancel = () => setOpenModal(false);
+
     return (
-        <div className="absolute right-0 -mr-[-24px] flex children:px-2 children:py-2">
+        <div className="absolute -right-1  flex children:px-2 children:py-2">
             {step !== 0 && (
                 <button
                     type="button"
                     className="rotate-180"
                     onClick={handleGoBackClick}
                 >
-                    <IconArrow />
+                    <Icon name="Arrow" className="h-4" />
                 </button>
             )}
             <button type="button" onClick={handleClearClick}>
-                <IconClear />
+                <Icon name="Clear" className="h-3" />
             </button>
             <Modal openModal={openModal} setOpenModal={setOpenModal}>
                 <ModalMessage
                     title="Recipe form reset"
                     message="Are you sure you want to reset your recipe? All of your data will be permanently removed. This action cannot be undone."
-                    onConfirm={onReset}
-                    onCancel={onCancel}
+                    onConfirm={handleReset}
+                    onCancel={handleCancel}
                 />
             </Modal>
         </div>

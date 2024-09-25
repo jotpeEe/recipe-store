@@ -1,6 +1,5 @@
 import {
     type Dispatch,
-    type MutableRefObject,
     type SetStateAction,
     createContext,
     useContext,
@@ -13,10 +12,10 @@ import { type RecipeProps } from '@lib/types';
 
 export const RecipeContext = createContext<
     | (RecipeProps & {
+          isClickedOutside?: boolean;
           isEnterPressed?: boolean;
           isTheSameUser: boolean;
           active: string;
-          recipeRef: MutableRefObject<null | HTMLElement>;
           openModal: boolean;
           setOpenModal: Dispatch<SetStateAction<boolean>>;
           onSubmit?: SubmitHandler<UpdateInput>;

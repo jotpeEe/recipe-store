@@ -3,16 +3,21 @@ import { configureStore } from '@reduxjs/toolkit';
 import { type IUser } from '@lib/types';
 
 import authReducer from './reducers/authSlice';
+import statusReducer from './reducers/statusSlice';
 
 type IStore = {
     auth: {
         user?: IUser;
+    };
+    status: {
+        navState: 'active' | 'hidden';
     };
 };
 
 const store = configureStore({
     reducer: {
         auth: authReducer,
+        status: statusReducer,
     },
 });
 

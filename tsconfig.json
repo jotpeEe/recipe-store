@@ -17,6 +17,7 @@
             "@constants": ["utils/constants"],
             "@controllers": ["server/controllers/error"],
             "@features": ["client/features"],
+            "@features/*": ["client/features/*"],
             "@sections": ["client/sections"],
             "@generated/*": ["client/generated/*"],
             "@hooks": ["client/hooks"],
@@ -47,12 +48,10 @@
     },
     "include": [
         "next-env.d.ts",
-        "custom.d.ts",
         "**/*.ts",
         "**/*.tsx",
         "**/*.js",
         "**/*.mjs",
-        ".eslintrc.js"
     ],
     "exclude": ["node_modules", "**/*.json"]
 }

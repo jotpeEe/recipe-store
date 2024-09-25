@@ -1,0 +1,10 @@
+#import "../fragments/RecipeFragment.graphql"
+
+query GetRecipeById($id: String!) {
+    getRecipeById(id: $id) {
+        status
+        recipe {
+            ...WideRecipeFragment
+        }
+    }
+}

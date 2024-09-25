@@ -1,0 +1,11 @@
+#import "../fragments/BaseRecipeInputFragment.graphql"
+
+mutation CreateRecipe($input: Input!) {
+    createRecipe(input: $input) {
+        status
+        recipe {
+            ...BaseRecipeInputFragment
+        }
+
+    }
+}

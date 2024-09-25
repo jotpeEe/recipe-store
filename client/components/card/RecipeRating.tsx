@@ -4,17 +4,70 @@ import cn from 'classnames';
 import { useRouter } from 'next/router';
 
 import Button from '@components/Button';
-import { IconStar } from '@components/icons';
 import { useRecipeContext } from '@contexts';
 import {
     useCreateRatingMutation,
     useUpdateRatingMutation,
 } from '@generated/graphql';
 import { useAppSelector } from '@hooks';
+import Icon from '@icons';
 import { queryClient, requestClient } from '@requests';
+
+type StarsProps = {
+    scale: number;
+    rating: number;
+    hover: number;
+    setRating: (rating: number) => void;
+    setHover: (hover: number) => void;
+};
 
 type RecipeRatingProps = {
     scale?: number;
+};
+
+const Stars: FC<StarsProps> = ({
+    hover,
+    scale,
+    rating,
+    setRating,
+    setHover,
+}) => {
+    const items = Array.from({ length: scale }, (_, index) => index + 1);
+
+    return (
+        <ul className="flex gap-2 text-white">
+            {items.map((item, index) => (
+                <li
+                    key={index}
+                    className={cn(
+                        hover > index && 'text-amber-500',
+                        hover === 0 && rating > index && 'text-amber-500',
+                        'relative hover:scale-150'
+                    )}
+                    onMouseOver={() => setHover(item)}
+                    onMouseOut={() => setHover(0)}
+                >
+                    <label htmlFor={`rating-${item}`}>
+                        <Icon
+                            name="Star"
+                            className="group-hover:scale-150"
+                            width={20}
+                            height={20}
+                            fill="currentColor"
+                            stroke="#f59e0b"
+                        />
+                    </label>
+                    <input
+                        className="absolute left-0 right-0 bottom-0 top-0 z-20 cursor-pointer opacity-0"
+                        type="radio"
+                        id={`rating-${item}`}
+                        checked={rating === item}
+                        onChange={() => setRating(item)}
+                    />
+                </li>
+            ))}
+        </ul>
+    );
 };
 
 const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5 }) => {
@@ -27,14 +80,6 @@ const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5 }) => {
 
     const [hover, setHover] = useState(0);
     const [rating, setRating] = useState(myRating?.rating || 0);
-
-    const items = useMemo(() => {
-        const temp = ['empty'];
-        for (let i = 1; i <= scale; i += 1) {
-            temp.push(' ');
-        }
-        return temp;
-    }, []);
 
     const router = useRouter();
 
@@ -69,50 +114,15 @@ const RecipeRating: FC<RecipeRatingProps> = ({ scale = 5 }) => {
     };
 
     return (
-        <div className="flex w-fit flex-col items-center rounded-2xl border bg-white p-4 drop-shadow children:my-1.5">
+        <div className="flex w-fit flex-col items-center gap-4 rounded-2xl border bg-white p-6 drop-shadow">
             <h6 className="">Rate recipe</h6>
-            <ul className="flex text-white children:p-2 ">
-                {items.map(
-                    (item, index) =>
-                        item !== 'empty' && (
-                            <li
-                                key={index}
-                                className={cn(
-                                    hover >= index && 'text-amber-500',
-                                    hover === 0 &&
-                                        rating >= index &&
-                                        'text-amber-500',
-                                    'relative transition hover:scale-150'
-                                )}
-                                onMouseOver={() => {
-                                    setHover(index);
-                                }}
-                                onMouseOut={() => {
-                                    setHover(0);
-                                }}
-                            >
-                                <label htmlFor="rating" className="">
-                                    <IconStar
-                                        width={20}
-                                        height={20}
-                                        fill="currentColor"
-                                        stroke="#f59e0b"
-                                    />
-                                </label>
-                                <input
-                                    className="absolute left-0 right-0 bottom-0 top-0 z-20 cursor-pointer opacity-0"
-                                    type="radio"
-                                    id="rating"
-                                    checked={rating === index}
-                                    onChange={e => {
-                                        e.preventDefault();
-                                        setRating(index);
-                                    }}
-                                />
-                            </li>
-                        )
-                )}
-            </ul>
+            <Stars
+                scale={scale}
+                rating={rating}
+                hover={hover}
+                setRating={setRating}
+                setHover={setHover}
+            />
             <Button onClick={handleSubmit} size="sm" disabled={rating === 0}>
                 Submit
             </Button>

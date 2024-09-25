@@ -103,7 +103,7 @@ export default class ReviewService {
         try {
             const user = await deserializeUser(req, res);
             const reviews = await ReviewModel.find({
-                recipeAuthor: user?._id,
+                user: user?._id,
             })
                 .populate(['user', 'recipeAuthor', 'recipe'])
                 .sort({ createdAt: -1 })
@@ -165,11 +165,11 @@ export default class ReviewService {
         }
     };
 
-    getLastReviews = async () => {
+    getLastReviews = async (limit = 10) => {
         try {
             const reviews = await ReviewModel.find()
                 .populate(['user', 'recipe', 'recipeAuthor'])
-                .limit(8)
+                .limit(limit)
                 .sort({ createdAt: -1 })
                 .lean();
 

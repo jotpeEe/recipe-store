@@ -1,0 +1,25 @@
+fragment BaseRecipeFragment on PopulatedData {
+    id: _id
+    title
+    prep
+    image
+    cuisine
+    image
+    user {
+        id: _id
+        name
+        photo
+    }
+    ratings {
+        id: _id
+        recipe
+        rating
+        user
+    }
+    ingredients{
+        name
+        amount
+        edit
+    }
+    createdAt
+}

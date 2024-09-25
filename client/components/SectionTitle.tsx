@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Button from './Button';
 
 type SectionTitleProps = {
+    className?: string;
     subtitle?: string;
     title: string;
     description: string;
@@ -12,6 +13,7 @@ type SectionTitleProps = {
 };
 
 const SectionTitle: React.FC<SectionTitleProps> = ({
+    className,
     subtitle,
     title,
     description,
@@ -21,10 +23,11 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
 }) => (
     <div
         className={classNames(
-            'flex flex-col md:max-w-xl md:text-left lg:max-w-[40ch]',
+            'flex flex-col md:max-w-xl md:text-left lg:min-w-[30ch] lg:max-w-[40ch]',
             center
                 ? 'align-center justify-center text-center'
-                : 'align-start max-w-xl justify-start text-left'
+                : 'align-start max-w-xl justify-start text-left',
+            className
         )}
     >
         <h5 className="pb-4">{subtitle}</h5>

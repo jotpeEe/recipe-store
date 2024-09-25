@@ -9,8 +9,8 @@ import {
 import { Controller, useController, useFormContext } from 'react-hook-form';
 
 import Button from '@components/Button';
-import { IconImage } from '@components/icons';
 import { ACCEPTED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@constants';
+import Icon from '@icons';
 import { uploadImage } from '@lib';
 
 import ErrorMessage from './ErrorMessage';
@@ -23,13 +23,7 @@ type ImageInputProps = {
 const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
     const inputFileRef = useRef<HTMLInputElement | null>(null);
 
-    const {
-        register,
-        control,
-        setError,
-        clearErrors,
-        formState: { errors },
-    } = useFormContext();
+    const { register, control, setError, clearErrors } = useFormContext();
 
     const { ref, ...rest } = register(name);
 
@@ -68,7 +62,7 @@ const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
         [field]
     );
 
-    const handleClick = useCallback((e: MouseEvent<HTMLElement>) => {
+    const handleClick = useCallback((e: MouseEvent) => {
         e.preventDefault();
         if (inputFileRef.current) inputFileRef.current.click();
     }, []);
@@ -116,14 +110,14 @@ const ImageInput: FC<ImageInputProps> = ({ name, instantUpload }) => {
                 <Button
                     variant="input"
                     type="button"
-                    icon={<IconImage />}
+                    icon={<Icon name="Image" />}
                     onClick={handleClick}
                     size="sm"
                 >
                     Add image
                 </Button>
             </div>
-            <ErrorMessage error={errors[name]} />
+            <ErrorMessage name={name} />
         </>
     );
 };

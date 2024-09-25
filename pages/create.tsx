@@ -1,46 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { dehydrate } from '@tanstack/react-query';
 import { type GetServerSideProps } from 'next';
 
+import { CreateRecipeContext } from '@contexts';
 import { RecipeForm } from '@features';
 import {
-    type GetCuisinesQuery,
-    type GetTempRecipeQuery,
-    useGetCuisinesQuery,
-    useGetTempRecipeQuery,
+    type GetCreateRecipeDataQuery,
+    useGetCreateRecipeDataQuery,
 } from '@generated/graphql';
 import { queryClient, requestClient } from '@requests';
 
-const CreateRecipe = () => {
-    const [first, setFirst] = useState(true);
-
-    const { data: cuisines } = useGetCuisinesQuery(
-        requestClient,
-        {},
-        {
-            enabled: first,
-            // sort case-insensitive
-            select: useCallback(
-                (res: GetCuisinesQuery) =>
-                    res.getCuisines.cuisines.sort((a, b) =>
-                        a.toLowerCase().localeCompare(b.toLowerCase())
-                    ),
-                []
-            ),
-        }
+const parseData = (res: GetCreateRecipeDataQuery) => {
+    const cuisines = res.getAvailableCategories.category.sort((a, b) =>
+        a.toLowerCase().localeCompare(b.toLowerCase())
     );
 
-    const { data } = useGetTempRecipeQuery(
+    if (!res.getTempRecipe?.recipe) return { cuisines };
+
+    const { id, ...recipe } = res.getTempRecipe.recipe;
+
+    return { recipe, id, cuisines };
+};
+
+const CreateRecipe = () => {
+    const [first, setFirst] = useState(true);
+    const [step, setStep] = useState(0);
+
+    const { data } = useGetCreateRecipeDataQuery(
         requestClient,
-        {},
+        {
+            cat: 'cuisine',
+        },
         {
             enabled: first,
-            select: useCallback((res: GetTempRecipeQuery) => {
-                if (!res.temp?.recipe) return undefined;
-                const { id, ...recipe } = res.temp.recipe;
-                return { recipe, id };
-            }, []),
+            select: res => parseData(res),
         }
     );
 
@@ -48,8 +42,18 @@ const CreateRecipe = () => {
         setFirst(false);
     }, []);
 
+    const context = {
+        id: data?.id,
+        recipe: data?.recipe,
+        step,
+        setStep,
+        cuisines: data?.cuisines,
+    };
+
     return (
-        <RecipeForm cuisines={cuisines} id={data?.id} recipe={data?.recipe} />
+        <CreateRecipeContext.Provider value={context}>
+            <RecipeForm />
+        </CreateRecipeContext.Provider>
     );
 };
 

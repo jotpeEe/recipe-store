@@ -1,5 +1,6 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 
+import { ListResponse } from '@schemas/recipe';
 import {
     LoginInput,
     LoginResponse,
@@ -40,8 +41,18 @@ export default class UserResolver {
         return this.userService.logoutUser(ctx);
     }
 
+    @Query(() => ListResponse)
+    async getAllBookmarkedRecipes(@Ctx() ctx: Context) {
+        return this.userService.getAllBookmarkedRecipes(ctx);
+    }
+
     @Mutation(() => Boolean)
     async deleteUser(@Arg('id') id: string, @Ctx() ctx: Context) {
         return this.userService.deleteUser(id, ctx);
+    }
+
+    @Mutation(() => UserResponse)
+    async addBookmark(@Arg('id') id: string, @Ctx() ctx: Context) {
+        return this.userService.addBookmark(id, ctx);
     }
 }

@@ -10,7 +10,7 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 
 import Button from '@components/Button';
-import { UserInfo } from '@components/user';
+import UserInfo from '@components/user/Info';
 import { type IReview } from '@lib/types';
 
 type ReviewMiniProps = DetailedHTMLProps<
@@ -32,19 +32,17 @@ const ReviewMini: FC<ReviewMiniProps> = ({ className, review, ...props }) => {
     return (
         <div
             {...props}
-            className={cn('mx-1 my-2 rounded-xl border shadow-lg', className)}
+            className={cn('grid overflow-hidden   bg-white', className)}
         >
-            <UserInfo
-                className="px-2 py-2"
-                size="sm"
-                imgSrc={photo}
-                title={name}
-                subtitle={formattedDate}
-            />
-            <div className="h-[1px] w-full bg-gray-50"></div>
-            <p className="max-w-[41ch] break-words px-2  pb-2 text-xs">
-                {text}
-            </p>
+            <div className={'h-fill flex flex-col gap-2'}>
+                <UserInfo
+                    size="sm"
+                    imgSrc={photo}
+                    title={name}
+                    subtitle={formattedDate}
+                />
+                <p className="break-words text-xs">{text}</p>
+            </div>
             {(pos?.length !== 0 || neg?.length !== 0) && (
                 <div className="flex gap-2">
                     <Button disabled size="xs">

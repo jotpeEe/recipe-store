@@ -1,7 +1,0 @@
-query getCuisines {
-    getCuisines {
-        status
-        results
-        cuisines
-    }
-}

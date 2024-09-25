@@ -18,7 +18,7 @@ const Spinner: FC<SpinnerProps> = ({
         data-testid="spinner"
         role="status"
         className={classNames(
-            'h-5 w-5 animate-spin fill-primary dark:text-gray-600',
+            'h-6 w-6 animate-spin fill-yellow-400 text-green-500',
             `w-${width} h-${height} ${color} ${bgColor}`
         )}
         viewBox="0 0 100 101"

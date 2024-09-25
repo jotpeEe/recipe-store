@@ -8,7 +8,7 @@ import { type OptionsType } from 'cookies-next/lib/types';
 
 import { cookies } from '@constants';
 import errorHandler from '@controllers';
-import { type User, UserModel } from '@models';
+import { RecipeModel, type User, UserModel } from '@models';
 import { type LoginInput } from '@schemas/user';
 import { redisClient, signJwt, verifyJwt } from '@utils';
 import { type Context } from 'server/types/context';
@@ -79,7 +79,7 @@ export default class UserService {
             setCookie(LOGGED_IN, 'true', {
                 req,
                 res,
-                ...accessTokenCookieOptions,
+                ...refreshTokenCookieOptions,
                 httpOnly: false,
             });
 
@@ -134,7 +134,7 @@ export default class UserService {
             setCookie(LOGGED_IN, 'true', {
                 req,
                 res,
-                ...accessTokenCookieOptions,
+                ...refreshTokenCookieOptions,
                 httpOnly: false,
             });
 
@@ -220,12 +220,6 @@ export default class UserService {
                 res,
                 ...accessTokenCookieOptions,
             });
-            setCookie(LOGGED_IN, 'true', {
-                req,
-                res,
-                ...accessTokenCookieOptions,
-                httpOnly: false,
-            });
 
             return {
                 status: 'success',
@@ -271,6 +265,86 @@ export default class UserService {
         } catch (error: any) {
             errorHandler(error);
             return false;
+        }
+    };
+
+    addBookmark = async (
+        id: string,
+        { req, res, deserializeUser }: Context
+    ) => {
+        try {
+            const user = await deserializeUser(req, res);
+
+            const recipe = await RecipeModel.findById(id);
+
+            const updatedUser = await UserModel.findByIdAndUpdate(
+                user?._id,
+                {
+                    $addToSet: { bookmarks: recipe?._id },
+                },
+                {
+                    new: true,
+                    runValidators: true,
+                    lean: true,
+                }
+            );
+
+            return { status: 'success', user: updatedUser };
+        } catch (error: any) {
+            errorHandler(error);
+            return {
+                status: 'error',
+                user: {},
+            };
+        }
+    };
+
+    getAllBookmarkedRecipes = async ({
+        req,
+        res,
+        deserializeUser,
+    }: Context) => {
+        try {
+            const checkedUser = await deserializeUser(req, res);
+            const user = await UserModel.findById(checkedUser?._id).populate([
+                {
+                    path: 'bookmarks',
+                    model: 'Recipe',
+                    populate: [
+                        {
+                            path: 'user',
+                            model: 'User',
+                        },
+                        {
+                            path: 'ratings',
+                            model: 'Rating',
+                        },
+                        {
+                            path: 'reviews',
+                            model: 'Review',
+                            populate: [
+                                {
+                                    path: 'user',
+                                    model: 'User',
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ]);
+
+            return {
+                status: 'success',
+                results: user?.bookmarks.length,
+                recipes: user?.bookmarks,
+            };
+        } catch (error: any) {
+            errorHandler(error);
+            return {
+                status: 'error',
+                results: 0,
+                recipes: {},
+            };
         }
     };
 }

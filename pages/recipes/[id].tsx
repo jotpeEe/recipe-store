@@ -1,29 +1,28 @@
-import { useEffect } from 'react';
+import { hasCookie } from 'cookies-next';
+import { type GetServerSideProps, type NextPage } from 'next';
 
-import { type NextPage } from 'next';
-
+import { RecipeView } from '@features';
 import { useGetMeQuery, useGetRecipeByIdQuery } from '@generated/graphql';
-import { useAppSelector } from '@hooks';
 import { requestClient } from '@requests';
-import RecipeView from 'client/features/RecipeView';
 
-const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
+type RecipePageProps = {
+    id?: string | string[];
+};
+
+const RecipeInfo: NextPage<RecipePageProps> = ({ id }) => {
     if (!id) return null;
-    const user = useAppSelector(state => state.auth.user);
+
+    const recipeId = Array.isArray(id) ? id[0] : id;
 
     const { data, isLoading } = useGetRecipeByIdQuery(
         requestClient,
-        { id },
-        {
-            select: res => res.getRecipeById.recipe,
-        }
+        { id: recipeId },
+        { select: res => res.getRecipeById.recipe }
     );
 
-    const query = useGetMeQuery(requestClient, {}, { enabled: false });
+    const loggedUser = hasCookie('logged_in');
 
-    useEffect(() => {
-        if (!user) query.refetch();
-    }, []);
+    useGetMeQuery(requestClient, {}, { enabled: loggedUser });
 
     if (isLoading) return null;
     if (!data) return null;
@@ -35,10 +34,12 @@ const RecipeInfo: NextPage<{ id?: string }> = ({ id }) => {
     );
 };
 
-RecipeInfo.getInitialProps = async ({ query }) => {
-    const { id } = query;
+export const getServerSideProps: GetServerSideProps<
+    RecipePageProps
+> = async context => {
+    const { id } = context.query;
 
-    return { id: id as string };
+    return { props: { id } };
 };
 
 export default RecipeInfo;

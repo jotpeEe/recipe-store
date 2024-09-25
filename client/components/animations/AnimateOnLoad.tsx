@@ -12,10 +12,12 @@ type AnimateOnMountProps<E extends keyof JSX.IntrinsicElements> =
     PropsWithChildren<{
         index: number;
         as?: E;
+        className?: string;
     }>;
 
 const AnimateOnMount = <E extends keyof JSX.IntrinsicElements>({
     index,
+    className,
     children,
     as,
 }: AnimateOnMountProps<E>) => {
@@ -26,7 +28,8 @@ const AnimateOnMount = <E extends keyof JSX.IntrinsicElements>({
         () => ({
             className: classNames(
                 'transition-all',
-                active ? 'opacity-100' : 'translate-y-4 opacity-0'
+                active ? 'opacity-100' : 'translate-y-4 opacity-0',
+                className
             ),
             style: {
                 transitionDelay: `${delay}ms`,

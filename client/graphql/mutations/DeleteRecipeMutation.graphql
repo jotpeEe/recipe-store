@@ -1,0 +1,10 @@
+#import "./BaseRecipeInputFragment.graphql"
+
+mutation DeleteRecipe($id: String!) {
+    deleteRecipe(id: $id) {
+        status
+        recipe {
+            ...BaseRecipeInputFragment
+        }
+    }
+}

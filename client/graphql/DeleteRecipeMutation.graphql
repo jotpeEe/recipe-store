@@ -1,8 +1,0 @@
-mutation DeleteRecipe($id: String!) {
-    deleteRecipe(id: $id) {
-        status
-        recipe {
-            id: _id
-        }
-    }
-}

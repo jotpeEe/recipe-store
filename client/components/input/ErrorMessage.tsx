@@ -1,43 +1,44 @@
-import { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 
 import classNames from 'classnames';
-import {
-    type FieldError,
-    type FieldErrorsImpl,
-    type Merge,
-} from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-import { IconWarning } from '@icons';
+import Icon from '@icons';
 
 type ErrorMessageProps = {
-    error:
-        | FieldError
-        | Merge<FieldError, FieldErrorsImpl<any>>
-        | { message: string }
-        | undefined;
+    name: string;
+    noPadding?: boolean;
 };
 
-const ErrorMessage: FC<ErrorMessageProps> = ({ error }) => {
+const ErrorMessage: FC<ErrorMessageProps> = ({ name, noPadding }) => {
     const [active, setActive] = useState(false);
     const [message, setMessage] = useState<string>('&nbsp');
+    const {
+        formState: { errors },
+    } = useFormContext();
 
     useEffect(() => {
-        if (error?.message) {
+        if (errors?.[name]) {
+            if (Array.isArray(errors?.[name])) {
+                setMessage('No empty fields required');
+            } else {
+                setMessage(errors?.[name]?.message as string);
+            }
             setActive(true);
-            setMessage(error.message as string);
         } else {
             setActive(false);
         }
-    }, [error]);
+    }, [errors?.[name], errors]);
 
     return (
         <div
             className={classNames(
-                'flex w-full items-center gap-1 py-2  transition duration-700',
-                active ? 'opacity-1' : 'opacity-0'
+                'flex w-full items-center gap-1 transition duration-700',
+                active ? 'opacity-1' : 'opacity-0',
+                noPadding ? '' : 'py-2'
             )}
         >
-            <IconWarning />
+            <Icon name="Warning" />
             <span className="max-w-[30ch] break-words text-xs text-red-600">
                 {message}
             </span>

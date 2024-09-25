@@ -37,12 +37,8 @@ export const refreshTokenPublicKey = process.env
 export const cookies = {
     ACCESS_TOKEN: 'access_token',
     REFRESH_TOKEN: 'refresh_token',
-    RECIPE_INFO: 'recipe_info',
     LOGGED_IN: 'logged_in',
 };
-
-// Recipe list settings.
-export const RECIPE_LIMIT = 7;
 
 // Image input settings.
 export const CLDN_API_URL =

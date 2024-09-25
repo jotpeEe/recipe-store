@@ -1,19 +1,26 @@
 import {
-    type GetTempRecipeQuery,
+    type CreateRecipeMutation,
+    type GetCreateRecipeDataQuery,
     type UpdateRecipeMutation,
 } from '@generated/graphql';
 import { queryClient } from '@requests';
 
-const updateTempRecipeData = (data: UpdateRecipeMutation) => {
-    queryClient.setQueryData<GetTempRecipeQuery>(
-        ['GetTempRecipe', {}],
-        old => ({
-            ...old,
-            temp: {
-                status: `${old?.temp?.status}`,
-                recipe: data.updateRecipe.recipe,
-            },
-        })
+const updateTempRecipeData = (
+    data:
+        | UpdateRecipeMutation['updateRecipe']
+        | CreateRecipeMutation['createRecipe']
+) => {
+    queryClient.setQueryData<GetCreateRecipeDataQuery>(
+        ['GetCreateRecipeData', { cat: 'cuisine' }],
+        old => {
+            if (!old) return old;
+            return {
+                ...old,
+                getTempRecipe: {
+                    ...data,
+                },
+            };
+        }
     );
 };
 

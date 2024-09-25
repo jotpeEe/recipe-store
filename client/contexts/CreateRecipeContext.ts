@@ -5,23 +5,22 @@ import {
     useContext,
 } from 'react';
 
+import { type RecipeInfoInput } from '@hooks';
+
 /**
  * This module exports CreateRecipeContext for context provider and useCreateRecipe consumer.
  * @module CreateRecipeContext
  *
  * @param {string | undefined} id recipe id.
  * @param {string[] | undefined} cuisines available cuisines in stored recipes.
- * @param {boolean} isSubmitting form status.
- * @param {() => void} resetForm method to clear recipe edit form.
  *
  * @returns Context
  */
 export const CreateRecipeContext = createContext<
     | {
           id: string | undefined;
+          recipe: RecipeInfoInput | undefined;
           cuisines: string[] | undefined;
-          isSubmitting: boolean;
-          resetForm: () => void;
           step: number;
           setStep: Dispatch<SetStateAction<number>>;
       }

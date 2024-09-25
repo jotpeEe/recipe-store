@@ -1,31 +1,40 @@
-import { type FC, type ReactNode } from 'react';
+import { type FC } from 'react';
 
-import { IconCheck } from '@icons';
+import Icon from '@icons';
 
-import Footer from './Footer';
+import ControlPanel from './ControlPanel';
 
-const CheckListItem: FC<{ children: ReactNode }> = ({ children }) => (
-    <li className="flex gap-2 text-sm">
-        <IconCheck />
-        {children}
-    </li>
-);
+const SignUpInfo: FC = () => {
+    const checkList = [
+        'Create recipes.',
+        'Bookmark recipes from others.',
+        'Check your recipes',
+    ];
 
-const SignUpInfo: FC = () => (
-    <div className="flex max-w-[35ch] flex-col items-start p-8 font-sans [&>*]:pb-4">
-        <h3 className="text-xl">Create an account</h3>
-        <p className="">
-            Let’s help you set up your account, it won’t take long.
-        </p>
-        <p>With account you can:</p>
-        <ul className="[&>li]:pb-2">
-            <CheckListItem>Create recipes.</CheckListItem>
-            <CheckListItem>Bookmark recipes from others.</CheckListItem>
-            <CheckListItem>Check your recipes</CheckListItem>
-        </ul>
-        <p>Let’s help you set up your account, it won’t take long.</p>
-        <Footer type="signup" />
-    </div>
-);
+    return (
+        <div className="flex max-w-[35ch] flex-col items-start gap-4 p-8 font-sans">
+            <h3 className="text-xl">Create an account</h3>
+            <p className="">
+                Let’s help you set up your account, it won’t take long.
+            </p>
+            <p>With account you can:</p>
+            <ul>
+                {checkList.map((msg, index) => (
+                    <li
+                        key={index}
+                        className="flex items-center gap-2 pb-2 text-sm"
+                    >
+                        <div className="rounded-full border border-primary p-1 ">
+                            <Icon name="Check" className="h-2.5 text-primary" />
+                        </div>
+                        {msg}
+                    </li>
+                ))}
+            </ul>
+            <p>Let’s help you set up your account, it won’t take long.</p>
+            <ControlPanel variant="signup" />
+        </div>
+    );
+};
 
 export default SignUpInfo;

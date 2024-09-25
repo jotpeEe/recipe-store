@@ -1,5 +1,6 @@
-import '@styles/globals.css';
+import 'client/styles/global.css';
 import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -17,7 +18,10 @@ const App = ({ Component, pageProps }: AppProps) => (
     <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
             <Provider store={store}>
-                <PageLayout enableAuth={pageProps.enableAuth}>
+                <PageLayout
+                    enableAuth={pageProps.enableAuth}
+                    nav={pageProps.nav}
+                >
                     <Component {...pageProps} />
                 </PageLayout>
             </Provider>

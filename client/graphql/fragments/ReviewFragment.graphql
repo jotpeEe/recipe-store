@@ -1,0 +1,18 @@
+fragment ReviewFragment on ReviewPopulatedData {
+    id: _id
+    text
+    pos
+    neg
+    createdAt
+    recipeAuthor {
+        id: _id
+        name
+        photo
+    }
+    recipe 
+    user {
+        id: _id
+        name
+        photo
+    }
+}

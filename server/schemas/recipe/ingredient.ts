@@ -7,6 +7,9 @@ export class IngredientInput {
 
     @Field()
     amount: string;
+
+    @Field({ nullable: true })
+    edit?: boolean;
 }
 
 @ObjectType()
@@ -16,4 +19,7 @@ export class Ingredient {
 
     @Field()
     amount: string;
+
+    @Field({ nullable: true })
+    edit?: boolean;
 }

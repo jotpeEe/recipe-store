@@ -1,4 +1,4 @@
-export { default as CuisineResponse } from './cuisinesResponse';
+export { default as AvailableCatResponse } from './availableCatResponse';
 export { default as DataObject } from './dataObject';
 export { default as RecipeData } from './data';
 export { Ingredient, IngredientInput } from './ingredient';

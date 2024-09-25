@@ -1,81 +1,102 @@
-import { type FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
 
-import classNames from 'classnames';
+import cn from 'classnames';
 
 import { useSliderContext } from '@contexts';
-import { IconArrow } from '@icons';
+import Icon from '@icons';
 
 import Button from '../Button';
 
 type SliderControllerProps = {
-    inside?: boolean;
     steps: number;
 };
 
 type DotProps = {
     id: number;
-    active?: boolean;
+    clicked: boolean;
+    onClick: (id: number) => void;
 };
 
-const Dot: FC<DotProps> = ({ id }) => {
-    const { step, goTo } = useSliderContext();
+const Dot: FC<DotProps> = ({ id, onClick, clicked }) => {
+    const { step } = useSliderContext();
 
     return (
         <button
-            className={classNames(
-                'rounded-full p-1.5',
-                step === id ? 'bg-black' : 'bg-gray-300'
+            className={cn(
+                'rounded-full border border-gray-300 border-opacity-0 p-1 hover:bg-gray-100',
+                clicked && 'border-opacity-100'
             )}
-            onClick={() => goTo(id)}
-        />
+            onClick={() => onClick(id)}
+            type="button"
+        >
+            <div
+                className={cn(
+                    'rounded-full p-1',
+                    step === id ? 'bg-gray-700' : 'bg-gray-300'
+                )}
+            ></div>
+        </button>
     );
 };
 
-const SliderController: FC<SliderControllerProps> = ({ steps, inside }) => {
-    const { step, next, previous } = useSliderContext();
+const SliderController: FC<SliderControllerProps> = ({ steps }) => {
+    const [clicked, setClicked] = useState<number | undefined>();
+    const { step, goTo, next, previous } = useSliderContext();
     const isFirst = step === 0;
     const isLast = step === steps - 1;
 
+    const handleDotClick = (id: number) => {
+        goTo(id);
+        setClicked(id);
+    };
+
+    useEffect(() => {
+        if (step !== clicked) setClicked(undefined);
+    }, [step]);
+
+    if (steps <= 1) return null;
+
     return (
-        <div
-            className={classNames(
-                inside
-                    ? 'absolute w-full -translate-y-[310%]'
-                    : 'w-fill flex items-center justify-between py-12'
-            )}
-        >
-            {!inside && (
-                <ul className="flex h-fit gap-2">
-                    {[...Array(steps).keys()].map((i, idx) => (
-                        <Dot key={idx} id={idx} />
-                    ))}
-                </ul>
-            )}
-            <div
-                className={classNames(
-                    inside ? 'flex justify-between' : 'flex gap-6'
-                )}
-            >
+        <div className="w-fill flex items-center justify-between">
+            <div className="flex gap-6">
                 <Button
-                    className="border-none bg-transparent"
+                    className="border-gray-300 bg-white"
                     circle
                     variant="outlined"
                     rotate
-                    icon={<IconArrow />}
-                    onClick={previous}
+                    icon={<Icon name="Arrow" width={20} height={20} />}
+                    size="xxs"
+                    onClick={() => {
+                        previous();
+                        setClicked(undefined);
+                    }}
                     disabled={isFirst}
                     hidden={isFirst}
                 />
                 <Button
-                    className="border-none bg-transparent"
+                    className="border-gray-300 bg-white"
                     circle
                     variant="outlined"
-                    icon={<IconArrow />}
-                    onClick={next}
+                    size="xxs"
+                    icon={<Icon name="Arrow" width={20} height={20} />}
+                    onClick={() => {
+                        next();
+                        setClicked(undefined);
+                    }}
                     disabled={isLast}
                     hidden={isLast}
                 />
             </div>
+            <ul className="flex h-fit gap-0.5">
+                {[...Array(steps).keys()].map((i, idx) => (
+                    <Dot
+                        key={idx}
+                        id={idx}
+                        onClick={handleDotClick}
+                        clicked={clicked === idx && step === clicked}
+                    />
+                ))}
+            </ul>
         </div>
     );
 };

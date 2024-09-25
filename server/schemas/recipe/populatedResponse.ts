@@ -8,7 +8,7 @@ class PopulatedResponse {
     status: string;
 
     @Field(() => PopulatedData, { nullable: true })
-    recipe: PopulatedData | null;
+    recipe: PopulatedData;
 }
 
 export default PopulatedResponse;

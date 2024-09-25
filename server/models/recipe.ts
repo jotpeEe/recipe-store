@@ -39,8 +39,7 @@ export class Recipe {
     servings: number;
 
     @prop({
-        default:
-            'https://res.cloudinary.com/dxkgc7cab/image/upload/v1673326140/m7xf1knsrfbyctetp4ln.png',
+        default: '/default-recipe.png',
     })
     image: string;
 

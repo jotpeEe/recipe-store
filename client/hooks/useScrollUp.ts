@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 
-const useScrollUp = () => {
+const useScrollUp = (offset?: number): boolean => {
     const NAV_HEIGHT = 100;
     const [scrollUp, setScrollUp] = useState(true);
 
+    const offsetHight = offset || NAV_HEIGHT;
+
     useEffect(() => {
-        let lastScrollY = window.pageYOffset;
+        let lastScrollY = window.scrollY;
         let ticking = false;
 
         const updateScrollUp = () => {
-            const scrollY = window.pageYOffset;
+            const { scrollY } = window;
 
-            setScrollUp(scrollY <= lastScrollY || scrollY < NAV_HEIGHT);
+            setScrollUp(scrollY <= lastScrollY || scrollY < offsetHight);
             lastScrollY = scrollY;
             ticking = false;
         };

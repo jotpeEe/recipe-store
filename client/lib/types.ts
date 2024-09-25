@@ -20,7 +20,18 @@ export type RecipeProps = Partial<IRecipe> & {
     withEdit?: boolean;
     onSubmit?: SubmitHandler<UpdateInput>;
     isEnterPressed?: boolean;
+    isClickedOutside?: boolean;
     hideMobile?: boolean;
+};
+
+export type RecipeHeaderState = {
+    title?: RecipeProps['title'];
+    image?: RecipeProps['image'];
+    user?: RecipeProps['user'];
+    withEdit?: boolean;
+    prep?: RecipeProps['prep'];
+    ratings?: RecipeProps['ratings'];
+    ref?: React.MutableRefObject<HTMLElement | null>;
 };
 
 export type IReview = GetProfileDataQueryQuery['getMyReviews']['reviews'][0];

@@ -14,7 +14,7 @@ import { queryClient, requestClient } from '@requests';
 const Home: NextPage = () => {
     const { data } = useGetAllRecipesAndLastReviewsQuery(
         requestClient,
-        {},
+        { limit: 9 },
         {
             select: res => ({
                 recipes: res.getAllRecipes.recipes,

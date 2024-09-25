@@ -1,0 +1,17 @@
+query GetAllRecipesAndLastReviews($limit: Float) {
+    getAllRecipes(limit: $limit) {
+        status
+        results
+        recipes {
+            ...BaseRecipeFragment
+        }
+    }
+    
+    getLastReviews(limit: $limit) {
+        status
+        results
+        reviews {
+            ...ReviewFragment
+        }
+    }
+}

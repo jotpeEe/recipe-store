@@ -1,33 +1,32 @@
-import { type FC, useMemo } from 'react';
+import { type FC, useEffect, useMemo } from 'react';
 
 import cn from 'classnames';
+import { hasCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import {
-    IconHome,
-    IconList,
-    IconLogin,
-    IconLogout,
-    IconProfile,
-    IconReviews,
-} from '@components/icons';
-import { useLogout, useScrollUp } from '@hooks';
+import { useAppDispatch, useAuth, useScrollUp } from '@hooks';
+import Icon from '@icons';
+import { setNavState } from 'client/redux/reducers/statusSlice';
 
-const Nav: FC = () => {
-    const scroll = useScrollUp();
-    const { loggedIn, handleClick } = useLogout();
+const Nav: FC<{ type?: 'alwaysActive' | 'withScroll' }> = ({
+    type = 'withScroll',
+}) => {
+    const dispatch = useAppDispatch();
+    const scrollup = useScrollUp();
+    const { handleClick } = useAuth('logout');
+    const loggedIn = hasCookie('logged_in');
 
     const nav = useMemo(
         () => [
             {
                 name: 'Home',
-                icon: <IconHome />,
+                icon: <Icon name="Home" />,
                 href: '/',
             },
             {
                 name: 'Recipes',
-                icon: <IconList />,
+                icon: <Icon name="List" />,
                 href: '/#recipes',
             },
             {
@@ -43,19 +42,19 @@ const Nav: FC = () => {
             },
             {
                 name: 'Profile',
-                icon: <IconProfile />,
+                icon: <Icon name="Profile" />,
                 href: '/profile',
                 auth: true,
             },
             {
                 name: 'Reviews',
-                icon: <IconReviews />,
+                icon: <Icon name="Reviews" />,
                 href: '/#reviews',
                 auth: false,
             },
             {
                 name: 'Log in',
-                icon: <IconLogin />,
+                icon: <Icon name="Login" />,
                 href: '/auth',
                 auth: false,
             },
@@ -63,12 +62,20 @@ const Nav: FC = () => {
         []
     );
 
+    useEffect(() => {
+        if (scrollup) dispatch(setNavState('active'));
+        if (!scrollup) dispatch(setNavState('hidden'));
+    }, [scrollup]);
+
     return (
         <header
             className={cn(
-                'fixed bottom-0 left-0 z-[100] h-14 w-full bg-white shadow-card shadow-gray-400 transition duration-200 ease-in-out',
-                'sm:top-0 sm:bottom-auto sm:h-20 sm:bg-transparent sm:shadow-none',
-                !scroll && 'sm:-translate-y-full'
+                'fixed bottom-0 left-0 z-[100] h-14 w-full shadow-card shadow-gray-400 transition duration-200 ease-in-out',
+                'sm:top-0 sm:bottom-auto sm:h-16  sm:shadow-none',
+                type === 'alwaysActive'
+                    ? 'bg-white'
+                    : 'bg-white  sm:bg-transparent ',
+                !scrollup && type === 'withScroll' && 'sm:-translate-y-full'
             )}
         >
             <div
@@ -91,7 +98,7 @@ const Nav: FC = () => {
                             return (
                                 <Link
                                     className={cn(
-                                        'relative flex flex-col items-center justify-center ',
+                                        'relative flex flex-col items-center justify-center rounded-2xl transition-all duration-300 hover:bg-gray-100 hover:shadow-lg ',
                                         'sm:py-2 sm:px-5 sm:[&>*:first-child]:hidden',
                                         name
                                             ? 'max-w-[100px] flex-auto'
@@ -104,7 +111,7 @@ const Nav: FC = () => {
                                     <span
                                         className={cn(
                                             'whitespace-nowrap text-[10px] font-semibold',
-                                            'sm:text-base'
+                                            'sm:text-sm'
                                         )}
                                     >
                                         {name}
@@ -116,13 +123,13 @@ const Nav: FC = () => {
                     {loggedIn && (
                         <button
                             className={cn(
-                                'flex max-w-[100px] flex-auto flex-col items-center justify-center sm:py-2',
+                                'flex max-w-[100px] flex-auto flex-col items-center justify-center rounded-2xl  transition-all duration-300 hover:bg-gray-100 hover:shadow-lg sm:py-2 ',
                                 'sm:px-5 sm:[&>*:first-child]:hidden'
                             )}
                             onClick={handleClick}
                         >
-                            <IconLogout />
-                            <span className="whitespace-nowrap text-[10px] font-semibold sm:text-base">
+                            <Icon name="Logout" />
+                            <span className="whitespace-nowrap text-[10px] font-semibold sm:text-sm">
                                 Log out
                             </span>
                         </button>

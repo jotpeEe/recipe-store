@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+    .input-range::-webkit-slider-thumb {
+        height: 17px;
+         width: 17px;
+        border-radius: 50%;
+        -webkit-appearance: none;
+        background: #129575;
+    }
+}
+
+:root {
+    --secondary: #D1D5DB;
+  }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary);
+  }
+  
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+    
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--secondary);
+    border-radius: 20px;
+  }
+
+  *::-webkit-scrollbar-thumb:vertical:hover {
+    background-color: #fff;
+}
+
+
+h2,
+h4,
+h5,
+p {
+    line-height: 1.5;
+}
+
+h2 {
+    font-size: clamp(2rem, 0.9rem + 1.8vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: auto;
+}
+
+h4 {
+    font-size: clamp(1rem, 0.3rem + 1.8vw, 1.125rem);
+    font-weight: 400;
+}
+
+h5 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    color: black;
+}
+
+html {
+    --scroll-behavior: smooth !important;
+    scroll-behavior: smooth !important;
+    scrollbar-width: thin;
+    scrollbar-color: black #129575;
+}

@@ -51,7 +51,7 @@ const Checkbox: FC<CheckboxProps> = ({
                     {...register(name)}
                 />
             </div>
-            {!noValidation && <ErrorMessage error={errors[name]} />}
+            {!noValidation && <ErrorMessage name={name} />}
         </>
     );
 };

@@ -20,21 +20,15 @@ const ListItem: FC<ListItemProps> = ({ label, children }) => (
 );
 
 const UserStats: FC<UserStatsProps> = ({
-    recipes = 0,
     followers = 0,
     following = 0,
     className,
 }) => (
     <div className={`flex flex-col gap-11 ${className}`}>
         <ul className="flex gap-2.5">
-            <ListItem label="Recipes">{recipes}</ListItem>
             <ListItem label="Followers">{followers}</ListItem>
             <ListItem label="Following">{following}</ListItem>
         </ul>
-        <p className="text-xs font-normal text-outlined">
-            Private Chef <br />
-            Passionate about food and life 🥘🍲🍝🍱
-        </p>
     </div>
 );
 

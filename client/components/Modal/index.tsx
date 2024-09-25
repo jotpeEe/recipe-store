@@ -1,7 +1,9 @@
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useRef } from 'react';
 
 import cn from 'classnames';
 import ReactDom from 'react-dom';
+
+import { useOnClickOutside } from '@hooks';
 
 type IPostModal = {
     openModal: boolean;
@@ -16,20 +18,21 @@ const Modal: FC<IPostModal> = ({
     children,
     target,
 }) => {
-    const [active, setActive] = useState(false);
+    const modalRef = useRef(null);
 
-    useEffect(() => {
-        if (openModal) setActive(true);
-        if (!openModal) setActive(false);
-    }, [openModal]);
+    const handleClick = () => setOpenModal(!openModal);
+
+    useOnClickOutside(modalRef, handleClick, openModal);
 
     if (!openModal) return null;
+
     return ReactDom.createPortal(
         <>
             <div
+                ref={modalRef}
                 className={cn(
-                    'absolute left-1/2 top-1/2 z-[300] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out',
-                    active ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
+                    'absolute left-1/2 top-1/4 z-[300] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out',
+                    openModal ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
                 )}
             >
                 {children}

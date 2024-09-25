@@ -2,21 +2,38 @@ import { type FC, type MouseEventHandler, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 import { hasCookie } from 'cookies-next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import { useCreateReviewMutation } from '@generated/graphql';
+import {
+    type GetProfileDataQueryQuery,
+    useCreateReviewMutation,
+} from '@generated/graphql';
 import { useAppSelector } from '@hooks';
-import { type IReview } from '@lib/types';
 import { queryClient, requestClient } from '@requests';
 
-import AnimateOnLoad from './animations/AnimateOnLoad';
-import Button from './Button';
-import ReviewMini from './card/ReviewMini';
-import { TextArea } from './input';
+import AddReview from './AddReview';
+
+const ReviewMini = dynamic(() => import('./card/ReviewMini'), {
+    loading: () => (
+        <div className="flex justify-between">
+            <div className="h-fill flex w-full gap-5">
+                <div className="h-10 w-10 animate-pulse rounded-full bg-gray-300"></div>
+                <div className="flex flex-col items-start justify-center gap-1">
+                    <div className="h-4 w-24 animate-pulse rounded-xl bg-gray-300"></div>
+                    <div className="flex gap-1">
+                        <div className="h-4 w-16 animate-pulse rounded-xl bg-gray-300"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    ),
+});
 
 type ReviewListProps = {
-    reviews?: Partial<IReview>[];
+    className?: string;
+    reviews?: GetProfileDataQueryQuery['getMyReviews']['reviews'];
     id?: string;
     addEnable?: boolean;
     recipeAuthor?: {
@@ -24,7 +41,6 @@ type ReviewListProps = {
         name: string;
         photo: string;
     };
-    fullWidth?: boolean;
 };
 
 type ReviewInput = {
@@ -32,13 +48,13 @@ type ReviewInput = {
 };
 
 const ReviewList: FC<ReviewListProps> = ({
+    className,
     reviews,
     id,
     addEnable,
     recipeAuthor,
-    fullWidth,
 }) => {
-    const [clicked, setClicked] = useState(false);
+    if (reviews?.length === 0) return null;
     const [open, setOpen] = useState(false);
     const { user } = useAppSelector(state => state.auth);
     const router = useRouter();
@@ -86,39 +102,21 @@ const ReviewList: FC<ReviewListProps> = ({
 
     return (
         <>
-            {reviews?.length !== 0 && (
-                <div className={cn(fullWidth ? 'w-full' : 'w-fit')}>
-                    <ul className={cn('max-h-[400px] overflow-y-auto')}>
-                        {reviews?.map((review, index) => (
-                            <AnimateOnLoad key={index} index={index} as="li">
-                                <ReviewMini review={review} />
-                            </AnimateOnLoad>
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <ul
+                className={cn(
+                    'grid-rows-auto grid w-full grid-cols-1 gap-3 overflow-hidden sm:grid-cols-2  md:grid-cols-1 md:space-y-8',
+                    className
+                )}
+            >
+                {reviews?.map((review, index) => (
+                    <li key={index}>
+                        <ReviewMini review={review} />
+                    </li>
+                ))}
+            </ul>
             {addEnable && !isTheSameUser && (
-                <div className="w-full">
-                    <button
-                        onClick={onAddCommentClick}
-                        className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary shadow-card shadow-gray-400"
-                    >
-                        <div className="my-1 ml-1 rounded-full bg-white px-2 font-medium text-gray-500">
-                            +
-                        </div>
-                        <h5 className="text-xs text-white">Add comment</h5>
-                    </button>
-                    {open && (
-                        <FormProvider {...methods}>
-                            <TextArea
-                                name="input"
-                                placeholder="Enter comment"
-                            />
-                            <Button onClick={handleSubmitClick} size="sm">
-                                Add
-                            </Button>
-                        </FormProvider>
-                    )}
+                <div className="w-full py-2">
+                    <AddReview id={id} />
                 </div>
             )}
         </>

@@ -12,7 +12,9 @@ export default class RatingService {
     ) => {
         try {
             const user = await deserializeUser(req, res);
-            const recipe = await RecipeModel.findById(id).lean();
+            const recipe = await RecipeModel.findById(id)
+                .populate('ratings')
+                .lean();
 
             if (!recipe)
                 return new ValidationError('No recipe with that id exists');

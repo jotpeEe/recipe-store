@@ -14,9 +14,10 @@ const Nav = dynamic(() => import('../components/Nav'), { ssr: false });
 type PageProps = {
     children: React.ReactNode;
     enableAuth?: boolean;
+    nav?: 'withScroll' | 'alwaysActive';
 };
 
-const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
+const Page: React.FC<PageProps> = ({ children, enableAuth, nav }) => {
     const disabled = useRef(true);
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -63,9 +64,10 @@ const Page: React.FC<PageProps> = ({ children, enableAuth }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="flex min-h-screen flex-col py-2">
-                <Nav />
-
-                <main className="flex w-full flex-1 flex-col">{children}</main>
+                <main className="relative flex w-full flex-1 flex-col">
+                    <Nav type={nav} />
+                    {children}
+                </main>
 
                 {/* <footer className="flex h-24 w-full items-center justify-center border-t">
                     <a

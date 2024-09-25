@@ -1,5 +1,6 @@
 import {
     ModelOptions,
+    type Ref,
     Severity,
     getModelForClass,
     index,
@@ -7,6 +8,8 @@ import {
     prop,
 } from '@typegoose/typegoose';
 import bcrypt from 'bcryptjs';
+
+import { type Recipe } from './recipe';
 
 // eslint-disable-next-line no-use-before-define
 @pre<User>('save', async function (next) {
@@ -53,6 +56,9 @@ export class User {
 
     @prop({ default: true, select: false })
     verified: boolean;
+
+    @prop({ ref: () => User })
+    bookmarks: Ref<Recipe>[];
 
     static async comparePasswords(
         hashedPassword: string,

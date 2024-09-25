@@ -20,10 +20,7 @@ const Select: FC<SelectProps> = ({
     options,
     placeholder,
 }) => {
-    const {
-        register,
-        formState: { errors },
-    } = useFormContext();
+    const { register } = useFormContext();
 
     return (
         <>
@@ -55,7 +52,7 @@ const Select: FC<SelectProps> = ({
                     ))}
                     <option value="Other">Other</option>
                 </select>
-                {!noValidation && <ErrorMessage error={errors[name]} />}
+                {!noValidation && <ErrorMessage name={name} />}
             </div>
         </>
     );

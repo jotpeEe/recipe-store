@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import Button from '@components/Button';
-import { IconImage } from '@icons';
+import Icon from '@icons';
 
 describe('Button component', () => {
     it('renders a button with text', () => {
@@ -14,7 +14,7 @@ describe('Button component', () => {
 
     it('renders a button with an icon', () => {
         const { getByTestId } = render(
-            <Button icon={<IconImage />}>Click me!</Button>
+            <Button icon={<Icon name="Image" />}>Click me!</Button>
         );
         expect(getByTestId('icon')).toBeInTheDocument();
     });

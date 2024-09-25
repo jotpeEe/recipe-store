@@ -43,9 +43,9 @@ export type Scalars = {
     DateTime: any;
 };
 
-export type CuisineResponse = {
-    __typename?: 'CuisineResponse';
-    cuisines: Array<Scalars['String']>;
+export type AvailableCatResponse = {
+    __typename?: 'AvailableCatResponse';
+    category: Array<Scalars['String']>;
     results: Scalars['Float'];
     status: Scalars['String'];
 };
@@ -53,11 +53,13 @@ export type CuisineResponse = {
 export type Ingredient = {
     __typename?: 'Ingredient';
     amount: Scalars['String'];
+    edit?: Maybe<Scalars['Boolean']>;
     name: Scalars['String'];
 };
 
 export type IngredientInput = {
     amount: Scalars['String'];
+    edit?: InputMaybe<Scalars['Boolean']>;
     name: Scalars['String'];
 };
 
@@ -94,6 +96,7 @@ export type LoginResponse = {
 
 export type Mutation = {
     __typename?: 'Mutation';
+    addBookmark: UserResponse;
     createRating: RatingResponse;
     createRecipe: PopulatedResponse;
     createReview: ReviewResponse;
@@ -106,6 +109,10 @@ export type Mutation = {
     updateRating: RatingResponse;
     updateRecipe: PopulatedResponse;
     updateReview: ReviewResponse;
+};
+
+export type MutationAddBookmarkArgs = {
+    id: Scalars['String'];
 };
 
 export type MutationCreateRatingArgs = {
@@ -191,17 +198,30 @@ export type PopulatedResponse = {
 
 export type Query = {
     __typename?: 'Query';
+    getAllBookmarkedRecipes: ListResponse;
     getAllRecipes: ListResponse;
-    getCuisines: CuisineResponse;
+    getAvailableCategories: AvailableCatResponse;
     getLastReviews: ReviewListResponse;
     getMe: UserResponse;
     getMyReviews: ReviewListResponse;
     getRecipeById: PopulatedResponse;
     getRecipes: ListResponse;
     getReviewsBy: ReviewListResponse;
-    getTempRecipe?: Maybe<PopulatedResponse>;
+    getTempRecipe: PopulatedResponse;
     logoutUser: Scalars['Boolean'];
     refreshAccessToken: LoginResponse;
+};
+
+export type QueryGetAllRecipesArgs = {
+    limit?: InputMaybe<Scalars['Float']>;
+};
+
+export type QueryGetAvailableCategoriesArgs = {
+    cat: Scalars['String'];
+};
+
+export type QueryGetLastReviewsArgs = {
+    limit?: InputMaybe<Scalars['Float']>;
 };
 
 export type QueryGetRecipeByIdArgs = {
@@ -276,11 +296,13 @@ export type SignUpInput = {
 
 export type Step = {
     __typename?: 'Step';
+    edit?: Maybe<Scalars['Boolean']>;
     label?: Maybe<Scalars['String']>;
     text: Scalars['String'];
 };
 
 export type StepInput = {
+    edit?: InputMaybe<Scalars['Boolean']>;
     label?: InputMaybe<Scalars['String']>;
     text: Scalars['String'];
 };
@@ -301,6 +323,7 @@ export type UpdateInput = {
 export type UserData = {
     __typename?: 'UserData';
     _id: Scalars['String'];
+    bookmarks?: Maybe<Array<Scalars['String']>>;
     createdAt: Scalars['DateTime'];
     email: Scalars['String'];
     id: Scalars['String'];
@@ -315,6 +338,142 @@ export type UserResponse = {
     __typename?: 'UserResponse';
     status: Scalars['String'];
     user: UserData;
+};
+
+export type BaseRecipeFragmentFragment = {
+    __typename?: 'PopulatedData';
+    title: string;
+    prep: string;
+    image: string;
+    cuisine: string;
+    createdAt: any;
+    id: string;
+    user: { __typename?: 'UserData'; name: string; photo: string; id: string };
+    ratings: Array<{
+        __typename?: 'RatingData';
+        recipe: string;
+        rating: number;
+        user: string;
+        id: string;
+    }>;
+    ingredients: Array<{
+        __typename?: 'Ingredient';
+        name: string;
+        amount: string;
+        edit?: boolean | null;
+    }>;
+};
+
+export type BaseRecipeInputFragmentFragment = {
+    __typename?: 'PopulatedData';
+    cuisine: string;
+    title: string;
+    description: string;
+    prep: string;
+    servings?: number | null;
+    image: string;
+    id: string;
+    ingredients: Array<{
+        __typename?: 'Ingredient';
+        name: string;
+        amount: string;
+        edit?: boolean | null;
+    }>;
+    steps: Array<{
+        __typename?: 'Step';
+        label?: string | null;
+        text: string;
+        edit?: boolean | null;
+    }>;
+};
+
+export type WideRecipeFragmentFragment = {
+    __typename?: 'PopulatedData';
+    cuisine: string;
+    title: string;
+    description: string;
+    prep: string;
+    servings?: number | null;
+    createdAt: any;
+    image: string;
+    id: string;
+    ingredients: Array<{
+        __typename?: 'Ingredient';
+        name: string;
+        amount: string;
+        edit?: boolean | null;
+    }>;
+    steps: Array<{
+        __typename?: 'Step';
+        label?: string | null;
+        text: string;
+        edit?: boolean | null;
+    }>;
+    user: { __typename?: 'UserData'; name: string; photo: string; id: string };
+    reviews: Array<{
+        __typename?: 'ReviewPopulatedData';
+        text: string;
+        pos: Array<string>;
+        neg: Array<string>;
+        createdAt: any;
+        recipe: string;
+        id: string;
+        recipeAuthor: {
+            __typename?: 'UserData';
+            name: string;
+            photo: string;
+            id: string;
+        };
+        user: {
+            __typename?: 'UserData';
+            name: string;
+            photo: string;
+            id: string;
+        };
+    }>;
+    ratings: Array<{
+        __typename?: 'RatingData';
+        recipe: string;
+        rating: number;
+        user: string;
+        id: string;
+    }>;
+};
+
+export type ReviewFragmentFragment = {
+    __typename?: 'ReviewPopulatedData';
+    text: string;
+    pos: Array<string>;
+    neg: Array<string>;
+    createdAt: any;
+    recipe: string;
+    id: string;
+    recipeAuthor: {
+        __typename?: 'UserData';
+        name: string;
+        photo: string;
+        id: string;
+    };
+    user: { __typename?: 'UserData'; name: string; photo: string; id: string };
+};
+
+export type AddBookmarkMutationVariables = Exact<{
+    id: Scalars['String'];
+}>;
+
+export type AddBookmarkMutation = {
+    __typename?: 'Mutation';
+    addBookmark: {
+        __typename?: 'UserResponse';
+        status: string;
+        user: {
+            __typename?: 'UserData';
+            name: string;
+            photo: string;
+            bookmarks?: Array<string> | null;
+            id: string;
+        };
+    };
 };
 
 export type CreateRatingMutationVariables = Exact<{
@@ -348,22 +507,24 @@ export type CreateRecipeMutation = {
         status: string;
         recipe?: {
             __typename?: 'PopulatedData';
+            cuisine: string;
             title: string;
             description: string;
             prep: string;
-            cuisine: string;
             servings?: number | null;
             image: string;
             id: string;
-            steps: Array<{
-                __typename?: 'Step';
-                label?: string | null;
-                text: string;
-            }>;
             ingredients: Array<{
                 __typename?: 'Ingredient';
                 name: string;
                 amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
             }>;
         } | null;
     };
@@ -388,7 +549,28 @@ export type DeleteRecipeMutation = {
     deleteRecipe: {
         __typename?: 'PopulatedResponse';
         status: string;
-        recipe?: { __typename?: 'PopulatedData'; id: string } | null;
+        recipe?: {
+            __typename?: 'PopulatedData';
+            cuisine: string;
+            title: string;
+            description: string;
+            prep: string;
+            servings?: number | null;
+            image: string;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
+            }>;
+        } | null;
     };
 };
 
@@ -401,246 +583,6 @@ export type DeleteUserMutation = {
     deleteUser: boolean;
 };
 
-export type GetAllRecipesAndLastReviewsQueryVariables = Exact<{
-    [key: string]: never;
-}>;
-
-export type GetAllRecipesAndLastReviewsQuery = {
-    __typename?: 'Query';
-    getAllRecipes: {
-        __typename?: 'ListResponse';
-        status: string;
-        results: number;
-        recipes: Array<{
-            __typename?: 'PopulatedData';
-            title: string;
-            description: string;
-            prep: string;
-            cuisine: string;
-            servings?: number | null;
-            image: string;
-            createdAt: any;
-            updatedAt: any;
-            id: string;
-            user: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-                id: string;
-            };
-        }>;
-    };
-    getLastReviews: {
-        __typename?: 'ReviewListResponse';
-        status: string;
-        results: number;
-        reviews: Array<{
-            __typename?: 'ReviewPopulatedData';
-            text: string;
-            pos: Array<string>;
-            neg: Array<string>;
-            createdAt: any;
-            recipe: string;
-            id: string;
-            recipeAuthor: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-                id: string;
-            };
-            user: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-                id: string;
-            };
-        }>;
-    };
-};
-
-export type GetCuisinesQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetCuisinesQuery = {
-    __typename?: 'Query';
-    getCuisines: {
-        __typename?: 'CuisineResponse';
-        status: string;
-        results: number;
-        cuisines: Array<string>;
-    };
-};
-
-export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetMeQuery = {
-    __typename?: 'Query';
-    getMe: {
-        __typename?: 'UserResponse';
-        status: string;
-        user: {
-            __typename?: 'UserData';
-            email: string;
-            name: string;
-            photo: string;
-            _id: string;
-            createdAt: any;
-            role: string;
-            terms: boolean;
-            updatedAt: any;
-            id: string;
-        };
-    };
-};
-
-export type GetProfileDataQueryQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetProfileDataQueryQuery = {
-    __typename?: 'Query';
-    getMyReviews: {
-        __typename?: 'ReviewListResponse';
-        status: string;
-        results: number;
-        reviews: Array<{
-            __typename?: 'ReviewPopulatedData';
-            text: string;
-            recipe: string;
-            pos: Array<string>;
-            neg: Array<string>;
-            createdAt: any;
-            id: string;
-            recipeAuthor: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-            };
-            user: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-                id: string;
-            };
-        }>;
-    };
-    getMe: {
-        __typename?: 'UserResponse';
-        status: string;
-        user: {
-            __typename?: 'UserData';
-            name: string;
-            photo: string;
-            id: string;
-        };
-    };
-    getAllRecipes: {
-        __typename?: 'ListResponse';
-        status: string;
-        results: number;
-        recipes: Array<{
-            __typename?: 'PopulatedData';
-            title: string;
-            prep: string;
-            image: string;
-            cuisine: string;
-            id: string;
-            user: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-                id: string;
-            };
-        }>;
-    };
-};
-
-export type GetRecipeByIdQueryVariables = Exact<{
-    id: Scalars['String'];
-}>;
-
-export type GetRecipeByIdQuery = {
-    __typename?: 'Query';
-    getRecipeById: {
-        __typename?: 'PopulatedResponse';
-        recipe?: {
-            __typename?: 'PopulatedData';
-            cuisine: string;
-            title: string;
-            description: string;
-            prep: string;
-            servings?: number | null;
-            image: string;
-            id: string;
-            ingredients: Array<{
-                __typename?: 'Ingredient';
-                name: string;
-                amount: string;
-            }>;
-            steps: Array<{
-                __typename?: 'Step';
-                label?: string | null;
-                text: string;
-            }>;
-            user: {
-                __typename?: 'UserData';
-                name: string;
-                photo: string;
-                id: string;
-            };
-            reviews: Array<{
-                __typename?: 'ReviewPopulatedData';
-                _id: string;
-                text: string;
-                neg: Array<string>;
-                pos: Array<string>;
-                createdAt: any;
-                id: string;
-                user: {
-                    __typename?: 'UserData';
-                    name: string;
-                    photo: string;
-                    id: string;
-                };
-            }>;
-            ratings: Array<{
-                __typename?: 'RatingData';
-                recipe: string;
-                rating: number;
-                user: string;
-                id: string;
-            }>;
-        } | null;
-    };
-};
-
-export type GetTempRecipeQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetTempRecipeQuery = {
-    __typename?: 'Query';
-    temp?: {
-        __typename?: 'PopulatedResponse';
-        status: string;
-        recipe?: {
-            __typename?: 'PopulatedData';
-            title: string;
-            description: string;
-            prep: string;
-            cuisine: string;
-            servings?: number | null;
-            image: string;
-            id: string;
-            steps: Array<{
-                __typename?: 'Step';
-                label?: string | null;
-                text: string;
-            }>;
-            ingredients: Array<{
-                __typename?: 'Ingredient';
-                name: string;
-                amount: string;
-            }>;
-        } | null;
-    } | null;
-};
-
 export type LoginUserMutationVariables = Exact<{
     input: LoginInput;
 }>;
@@ -648,21 +590,6 @@ export type LoginUserMutationVariables = Exact<{
 export type LoginUserMutation = {
     __typename?: 'Mutation';
     loginUser: {
-        __typename?: 'LoginResponse';
-        status: string;
-        access_token: string;
-    };
-};
-
-export type LogoutUserQueryVariables = Exact<{ [key: string]: never }>;
-
-export type LogoutUserQuery = { __typename?: 'Query'; logoutUser: boolean };
-
-export type RefreshAccessTokenQueryVariables = Exact<{ [key: string]: never }>;
-
-export type RefreshAccessTokenQuery = {
-    __typename?: 'Query';
-    refreshAccessToken: {
         __typename?: 'LoginResponse';
         status: string;
         access_token: string;
@@ -714,27 +641,615 @@ export type UpdateRecipeMutation = {
         status: string;
         recipe?: {
             __typename?: 'PopulatedData';
+            cuisine: string;
             title: string;
             description: string;
             prep: string;
-            cuisine: string;
             servings?: number | null;
+            createdAt: any;
             image: string;
             id: string;
-            steps: Array<{
-                __typename?: 'Step';
-                label?: string | null;
-                text: string;
-            }>;
             ingredients: Array<{
                 __typename?: 'Ingredient';
                 name: string;
                 amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
+            }>;
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            reviews: Array<{
+                __typename?: 'ReviewPopulatedData';
+                text: string;
+                pos: Array<string>;
+                neg: Array<string>;
+                createdAt: any;
+                recipe: string;
+                id: string;
+                recipeAuthor: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+                user: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+            }>;
+            ratings: Array<{
+                __typename?: 'RatingData';
+                recipe: string;
+                rating: number;
+                user: string;
+                id: string;
             }>;
         } | null;
     };
 };
 
+export type GetAllRecipesAndLastReviewsQueryVariables = Exact<{
+    limit?: InputMaybe<Scalars['Float']>;
+}>;
+
+export type GetAllRecipesAndLastReviewsQuery = {
+    __typename?: 'Query';
+    getAllRecipes: {
+        __typename?: 'ListResponse';
+        status: string;
+        results: number;
+        recipes: Array<{
+            __typename?: 'PopulatedData';
+            title: string;
+            prep: string;
+            image: string;
+            cuisine: string;
+            createdAt: any;
+            id: string;
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            ratings: Array<{
+                __typename?: 'RatingData';
+                recipe: string;
+                rating: number;
+                user: string;
+                id: string;
+            }>;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+                edit?: boolean | null;
+            }>;
+        }>;
+    };
+    getLastReviews: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            recipe: string;
+            id: string;
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+        }>;
+    };
+};
+
+export type GetAvailableCategoriesQueryVariables = Exact<{
+    cat: Scalars['String'];
+}>;
+
+export type GetAvailableCategoriesQuery = {
+    __typename?: 'Query';
+    getAvailableCategories: {
+        __typename?: 'AvailableCatResponse';
+        status: string;
+        results: number;
+        category: Array<string>;
+    };
+};
+
+export type GetCreateRecipeDataQueryVariables = Exact<{
+    cat: Scalars['String'];
+}>;
+
+export type GetCreateRecipeDataQuery = {
+    __typename?: 'Query';
+    getAvailableCategories: {
+        __typename?: 'AvailableCatResponse';
+        status: string;
+        results: number;
+        category: Array<string>;
+    };
+    getTempRecipe: {
+        __typename?: 'PopulatedResponse';
+        status: string;
+        recipe?: {
+            __typename?: 'PopulatedData';
+            cuisine: string;
+            title: string;
+            description: string;
+            prep: string;
+            servings?: number | null;
+            image: string;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
+            }>;
+        } | null;
+    };
+};
+
+export type GetMeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetMeQuery = {
+    __typename?: 'Query';
+    getMe: {
+        __typename?: 'UserResponse';
+        status: string;
+        user: {
+            __typename?: 'UserData';
+            email: string;
+            name: string;
+            photo: string;
+            _id: string;
+            createdAt: any;
+            role: string;
+            terms: boolean;
+            updatedAt: any;
+            id: string;
+        };
+    };
+};
+
+export type GetProfileDataQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetProfileDataQueryQuery = {
+    __typename?: 'Query';
+    getMyReviews: {
+        __typename?: 'ReviewListResponse';
+        status: string;
+        results: number;
+        reviews: Array<{
+            __typename?: 'ReviewPopulatedData';
+            text: string;
+            pos: Array<string>;
+            neg: Array<string>;
+            createdAt: any;
+            recipe: string;
+            id: string;
+            recipeAuthor: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+        }>;
+    };
+    getMe: {
+        __typename?: 'UserResponse';
+        status: string;
+        user: {
+            __typename?: 'UserData';
+            name: string;
+            photo: string;
+            id: string;
+        };
+    };
+    getRecipes: {
+        __typename?: 'ListResponse';
+        status: string;
+        results: number;
+        recipes: Array<{
+            __typename?: 'PopulatedData';
+            cuisine: string;
+            title: string;
+            description: string;
+            prep: string;
+            servings?: number | null;
+            createdAt: any;
+            image: string;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
+            }>;
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            reviews: Array<{
+                __typename?: 'ReviewPopulatedData';
+                text: string;
+                pos: Array<string>;
+                neg: Array<string>;
+                createdAt: any;
+                recipe: string;
+                id: string;
+                recipeAuthor: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+                user: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+            }>;
+            ratings: Array<{
+                __typename?: 'RatingData';
+                recipe: string;
+                rating: number;
+                user: string;
+                id: string;
+            }>;
+        }>;
+    };
+    getAllBookmarkedRecipes: {
+        __typename?: 'ListResponse';
+        status: string;
+        results: number;
+        recipes: Array<{
+            __typename?: 'PopulatedData';
+            cuisine: string;
+            title: string;
+            description: string;
+            prep: string;
+            servings?: number | null;
+            createdAt: any;
+            image: string;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
+            }>;
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            reviews: Array<{
+                __typename?: 'ReviewPopulatedData';
+                text: string;
+                pos: Array<string>;
+                neg: Array<string>;
+                createdAt: any;
+                recipe: string;
+                id: string;
+                recipeAuthor: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+                user: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+            }>;
+            ratings: Array<{
+                __typename?: 'RatingData';
+                recipe: string;
+                rating: number;
+                user: string;
+                id: string;
+            }>;
+        }>;
+    };
+};
+
+export type GetRecipeByIdQueryVariables = Exact<{
+    id: Scalars['String'];
+}>;
+
+export type GetRecipeByIdQuery = {
+    __typename?: 'Query';
+    getRecipeById: {
+        __typename?: 'PopulatedResponse';
+        status: string;
+        recipe?: {
+            __typename?: 'PopulatedData';
+            cuisine: string;
+            title: string;
+            description: string;
+            prep: string;
+            servings?: number | null;
+            createdAt: any;
+            image: string;
+            id: string;
+            ingredients: Array<{
+                __typename?: 'Ingredient';
+                name: string;
+                amount: string;
+                edit?: boolean | null;
+            }>;
+            steps: Array<{
+                __typename?: 'Step';
+                label?: string | null;
+                text: string;
+                edit?: boolean | null;
+            }>;
+            user: {
+                __typename?: 'UserData';
+                name: string;
+                photo: string;
+                id: string;
+            };
+            reviews: Array<{
+                __typename?: 'ReviewPopulatedData';
+                text: string;
+                pos: Array<string>;
+                neg: Array<string>;
+                createdAt: any;
+                recipe: string;
+                id: string;
+                recipeAuthor: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+                user: {
+                    __typename?: 'UserData';
+                    name: string;
+                    photo: string;
+                    id: string;
+                };
+            }>;
+            ratings: Array<{
+                __typename?: 'RatingData';
+                recipe: string;
+                rating: number;
+                user: string;
+                id: string;
+            }>;
+        } | null;
+    };
+};
+
+export type LogoutUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LogoutUserQuery = { __typename?: 'Query'; logoutUser: boolean };
+
+export type RefreshAccessTokenQueryVariables = Exact<{ [key: string]: never }>;
+
+export type RefreshAccessTokenQuery = {
+    __typename?: 'Query';
+    refreshAccessToken: {
+        __typename?: 'LoginResponse';
+        status: string;
+        access_token: string;
+    };
+};
+
+export const BaseRecipeFragmentFragmentDoc = `
+    fragment BaseRecipeFragment on PopulatedData {
+  id: _id
+  title
+  prep
+  image
+  cuisine
+  image
+  user {
+    id: _id
+    name
+    photo
+  }
+  ratings {
+    id: _id
+    recipe
+    rating
+    user
+  }
+  ingredients {
+    name
+    amount
+    edit
+  }
+  createdAt
+}
+    `;
+export const BaseRecipeInputFragmentFragmentDoc = `
+    fragment BaseRecipeInputFragment on PopulatedData {
+  id: _id
+  cuisine
+  title
+  description
+  prep
+  servings
+  ingredients {
+    name
+    amount
+    edit
+  }
+  image
+  steps {
+    label
+    text
+    edit
+  }
+}
+    `;
+export const WideRecipeFragmentFragmentDoc = `
+    fragment WideRecipeFragment on PopulatedData {
+  id: _id
+  cuisine
+  title
+  description
+  prep
+  servings
+  createdAt
+  ingredients {
+    name
+    amount
+    edit
+  }
+  image
+  steps {
+    label
+    text
+    edit
+  }
+  user {
+    id: _id
+    name
+    photo
+  }
+  reviews {
+    id: _id
+    text
+    pos
+    neg
+    createdAt
+    recipeAuthor {
+      id: _id
+      name
+      photo
+    }
+    recipe
+    user {
+      id: _id
+      name
+      photo
+    }
+  }
+  ratings {
+    id: _id
+    recipe
+    rating
+    user
+  }
+}
+    `;
+export const ReviewFragmentFragmentDoc = `
+    fragment ReviewFragment on ReviewPopulatedData {
+  id: _id
+  text
+  pos
+  neg
+  createdAt
+  recipeAuthor {
+    id: _id
+    name
+    photo
+  }
+  recipe
+  user {
+    id: _id
+    name
+    photo
+  }
+}
+    `;
+export const AddBookmarkDocument = `
+    mutation AddBookmark($id: String!) {
+  addBookmark(id: $id) {
+    status
+    user {
+      id: _id
+      name
+      photo
+      bookmarks
+    }
+  }
+}
+    `;
+export const useAddBookmarkMutation = <TError = unknown, TContext = unknown>(
+    client: GraphQLClient,
+    options?: UseMutationOptions<
+        AddBookmarkMutation,
+        TError,
+        AddBookmarkMutationVariables,
+        TContext
+    >,
+    headers?: RequestInit['headers']
+) =>
+    useMutation<
+        AddBookmarkMutation,
+        TError,
+        AddBookmarkMutationVariables,
+        TContext
+    >(
+        ['AddBookmark'],
+        (variables?: AddBookmarkMutationVariables) =>
+            fetcher<AddBookmarkMutation, AddBookmarkMutationVariables>(
+                client,
+                AddBookmarkDocument,
+                variables,
+                headers
+            )(),
+        options
+    );
 export const CreateRatingDocument = `
     mutation CreateRating($input: Float!, $id: String!) {
   createRating(input: $input, id: $id) {
@@ -779,25 +1294,11 @@ export const CreateRecipeDocument = `
   createRecipe(input: $input) {
     status
     recipe {
-      id: _id
-      title
-      description
-      prep
-      cuisine
-      servings
-      image
-      steps {
-        label
-        text
-      }
-      ingredients {
-        name
-        amount
-      }
+      ...BaseRecipeInputFragment
     }
   }
 }
-    `;
+    ${BaseRecipeInputFragmentFragmentDoc}`;
 export const useCreateRecipeMutation = <TError = unknown, TContext = unknown>(
     client: GraphQLClient,
     options?: UseMutationOptions<
@@ -862,11 +1363,11 @@ export const DeleteRecipeDocument = `
   deleteRecipe(id: $id) {
     status
     recipe {
-      id: _id
+      ...BaseRecipeInputFragment
     }
   }
 }
-    `;
+    ${BaseRecipeInputFragmentFragmentDoc}`;
 export const useDeleteRecipeMutation = <TError = unknown, TContext = unknown>(
     client: GraphQLClient,
     options?: UseMutationOptions<
@@ -924,311 +1425,6 @@ export const useDeleteUserMutation = <TError = unknown, TContext = unknown>(
             )(),
         options
     );
-export const GetAllRecipesAndLastReviewsDocument = `
-    query GetAllRecipesAndLastReviews {
-  getAllRecipes {
-    status
-    results
-    recipes {
-      id: _id
-      title
-      description
-      prep
-      cuisine
-      servings
-      image
-      createdAt
-      updatedAt
-      user {
-        id: _id
-        name
-        photo
-      }
-    }
-  }
-  getLastReviews {
-    status
-    results
-    reviews {
-      id: _id
-      text
-      pos
-      neg
-      createdAt
-      recipeAuthor {
-        id: _id
-        name
-        photo
-      }
-      recipe
-      user {
-        id: _id
-        name
-        photo
-      }
-    }
-  }
-}
-    `;
-export const useGetAllRecipesAndLastReviewsQuery = <
-    TData = GetAllRecipesAndLastReviewsQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables?: GetAllRecipesAndLastReviewsQueryVariables,
-    options?: UseQueryOptions<GetAllRecipesAndLastReviewsQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetAllRecipesAndLastReviewsQuery, TError, TData>(
-        variables === undefined
-            ? ['GetAllRecipesAndLastReviews']
-            : ['GetAllRecipesAndLastReviews', variables],
-        fetcher<
-            GetAllRecipesAndLastReviewsQuery,
-            GetAllRecipesAndLastReviewsQueryVariables
-        >(client, GetAllRecipesAndLastReviewsDocument, variables, headers),
-        options
-    );
-export const GetCuisinesDocument = `
-    query getCuisines {
-  getCuisines {
-    status
-    results
-    cuisines
-  }
-}
-    `;
-export const useGetCuisinesQuery = <TData = GetCuisinesQuery, TError = unknown>(
-    client: GraphQLClient,
-    variables?: GetCuisinesQueryVariables,
-    options?: UseQueryOptions<GetCuisinesQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetCuisinesQuery, TError, TData>(
-        variables === undefined ? ['getCuisines'] : ['getCuisines', variables],
-        fetcher<GetCuisinesQuery, GetCuisinesQueryVariables>(
-            client,
-            GetCuisinesDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const GetMeDocument = `
-    query GetMe {
-  getMe {
-    status
-    user {
-      id: _id
-      email
-      name
-      photo
-      _id
-      createdAt
-      role
-      terms
-      updatedAt
-    }
-  }
-}
-    `;
-export const useGetMeQuery = <TData = GetMeQuery, TError = unknown>(
-    client: GraphQLClient,
-    variables?: GetMeQueryVariables,
-    options?: UseQueryOptions<GetMeQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetMeQuery, TError, TData>(
-        variables === undefined ? ['GetMe'] : ['GetMe', variables],
-        fetcher<GetMeQuery, GetMeQueryVariables>(
-            client,
-            GetMeDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const GetProfileDataQueryDocument = `
-    query GetProfileDataQuery {
-  getMyReviews {
-    status
-    results
-    reviews {
-      id: _id
-      text
-      recipe
-      recipeAuthor {
-        name
-        photo
-      }
-      user {
-        id: _id
-        name
-        photo
-      }
-      pos
-      neg
-      createdAt
-    }
-  }
-  getMe {
-    status
-    user {
-      id: _id
-      name
-      photo
-    }
-  }
-  getAllRecipes {
-    status
-    results
-    recipes {
-      id: _id
-      title
-      prep
-      image
-      cuisine
-      user {
-        id: _id
-        name
-        photo
-      }
-    }
-  }
-}
-    `;
-export const useGetProfileDataQueryQuery = <
-    TData = GetProfileDataQueryQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables?: GetProfileDataQueryQueryVariables,
-    options?: UseQueryOptions<GetProfileDataQueryQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetProfileDataQueryQuery, TError, TData>(
-        variables === undefined
-            ? ['GetProfileDataQuery']
-            : ['GetProfileDataQuery', variables],
-        fetcher<GetProfileDataQueryQuery, GetProfileDataQueryQueryVariables>(
-            client,
-            GetProfileDataQueryDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const GetRecipeByIdDocument = `
-    query GetRecipeById($id: String!) {
-  getRecipeById(id: $id) {
-    recipe {
-      id: _id
-      cuisine
-      title
-      description
-      prep
-      servings
-      ingredients {
-        name
-        amount
-      }
-      image
-      steps {
-        label
-        text
-      }
-      user {
-        id: _id
-        name
-        photo
-      }
-      reviews {
-        _id
-        id: _id
-        text
-        neg
-        pos
-        user {
-          id: _id
-          name
-          photo
-        }
-        createdAt
-      }
-      ratings {
-        id: _id
-        recipe
-        rating
-        user
-      }
-    }
-  }
-}
-    `;
-export const useGetRecipeByIdQuery = <
-    TData = GetRecipeByIdQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables: GetRecipeByIdQueryVariables,
-    options?: UseQueryOptions<GetRecipeByIdQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetRecipeByIdQuery, TError, TData>(
-        ['GetRecipeById', variables],
-        fetcher<GetRecipeByIdQuery, GetRecipeByIdQueryVariables>(
-            client,
-            GetRecipeByIdDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const GetTempRecipeDocument = `
-    query GetTempRecipe {
-  temp: getTempRecipe {
-    status
-    recipe {
-      id: _id
-      title
-      description
-      prep
-      cuisine
-      servings
-      image
-      steps {
-        label
-        text
-      }
-      ingredients {
-        name
-        amount
-      }
-    }
-  }
-}
-    `;
-export const useGetTempRecipeQuery = <
-    TData = GetTempRecipeQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables?: GetTempRecipeQueryVariables,
-    options?: UseQueryOptions<GetTempRecipeQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<GetTempRecipeQuery, TError, TData>(
-        variables === undefined
-            ? ['GetTempRecipe']
-            : ['GetTempRecipe', variables],
-        fetcher<GetTempRecipeQuery, GetTempRecipeQueryVariables>(
-            client,
-            GetTempRecipeDocument,
-            variables,
-            headers
-        ),
-        options
-    );
 export const LoginUserDocument = `
     mutation LoginUser($input: LoginInput!) {
   loginUser(input: $input) {
@@ -1261,56 +1457,6 @@ export const useLoginUserMutation = <TError = unknown, TContext = unknown>(
                 variables,
                 headers
             )(),
-        options
-    );
-export const LogoutUserDocument = `
-    query LogoutUser {
-  logoutUser
-}
-    `;
-export const useLogoutUserQuery = <TData = LogoutUserQuery, TError = unknown>(
-    client: GraphQLClient,
-    variables?: LogoutUserQueryVariables,
-    options?: UseQueryOptions<LogoutUserQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<LogoutUserQuery, TError, TData>(
-        variables === undefined ? ['LogoutUser'] : ['LogoutUser', variables],
-        fetcher<LogoutUserQuery, LogoutUserQueryVariables>(
-            client,
-            LogoutUserDocument,
-            variables,
-            headers
-        ),
-        options
-    );
-export const RefreshAccessTokenDocument = `
-    query RefreshAccessToken {
-  refreshAccessToken {
-    status
-    access_token
-  }
-}
-    `;
-export const useRefreshAccessTokenQuery = <
-    TData = RefreshAccessTokenQuery,
-    TError = unknown
->(
-    client: GraphQLClient,
-    variables?: RefreshAccessTokenQueryVariables,
-    options?: UseQueryOptions<RefreshAccessTokenQuery, TError, TData>,
-    headers?: RequestInit['headers']
-) =>
-    useQuery<RefreshAccessTokenQuery, TError, TData>(
-        variables === undefined
-            ? ['RefreshAccessToken']
-            : ['RefreshAccessToken', variables],
-        fetcher<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables>(
-            client,
-            RefreshAccessTokenDocument,
-            variables,
-            headers
-        ),
         options
     );
 export const SignUpUserDocument = `
@@ -1394,25 +1540,11 @@ export const UpdateRecipeDocument = `
   updateRecipe(id: $id, input: $input) {
     status
     recipe {
-      id: _id
-      title
-      description
-      prep
-      cuisine
-      servings
-      image
-      steps {
-        label
-        text
-      }
-      ingredients {
-        name
-        amount
-      }
+      ...WideRecipeFragment
     }
   }
 }
-    `;
+    ${WideRecipeFragmentFragmentDoc}`;
 export const useUpdateRecipeMutation = <TError = unknown, TContext = unknown>(
     client: GraphQLClient,
     options?: UseMutationOptions<
@@ -1437,5 +1569,271 @@ export const useUpdateRecipeMutation = <TError = unknown, TContext = unknown>(
                 variables,
                 headers
             )(),
+        options
+    );
+export const GetAllRecipesAndLastReviewsDocument = `
+    query GetAllRecipesAndLastReviews($limit: Float) {
+  getAllRecipes(limit: $limit) {
+    status
+    results
+    recipes {
+      ...BaseRecipeFragment
+    }
+  }
+  getLastReviews(limit: $limit) {
+    status
+    results
+    reviews {
+      ...ReviewFragment
+    }
+  }
+}
+    ${BaseRecipeFragmentFragmentDoc}
+${ReviewFragmentFragmentDoc}`;
+export const useGetAllRecipesAndLastReviewsQuery = <
+    TData = GetAllRecipesAndLastReviewsQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetAllRecipesAndLastReviewsQueryVariables,
+    options?: UseQueryOptions<GetAllRecipesAndLastReviewsQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetAllRecipesAndLastReviewsQuery, TError, TData>(
+        variables === undefined
+            ? ['GetAllRecipesAndLastReviews']
+            : ['GetAllRecipesAndLastReviews', variables],
+        fetcher<
+            GetAllRecipesAndLastReviewsQuery,
+            GetAllRecipesAndLastReviewsQueryVariables
+        >(client, GetAllRecipesAndLastReviewsDocument, variables, headers),
+        options
+    );
+export const GetAvailableCategoriesDocument = `
+    query getAvailableCategories($cat: String!) {
+  getAvailableCategories(cat: $cat) {
+    status
+    results
+    category
+  }
+}
+    `;
+export const useGetAvailableCategoriesQuery = <
+    TData = GetAvailableCategoriesQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetAvailableCategoriesQueryVariables,
+    options?: UseQueryOptions<GetAvailableCategoriesQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetAvailableCategoriesQuery, TError, TData>(
+        ['getAvailableCategories', variables],
+        fetcher<
+            GetAvailableCategoriesQuery,
+            GetAvailableCategoriesQueryVariables
+        >(client, GetAvailableCategoriesDocument, variables, headers),
+        options
+    );
+export const GetCreateRecipeDataDocument = `
+    query GetCreateRecipeData($cat: String!) {
+  getAvailableCategories(cat: $cat) {
+    status
+    results
+    category
+  }
+  getTempRecipe {
+    status
+    recipe {
+      ...BaseRecipeInputFragment
+    }
+  }
+}
+    ${BaseRecipeInputFragmentFragmentDoc}`;
+export const useGetCreateRecipeDataQuery = <
+    TData = GetCreateRecipeDataQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetCreateRecipeDataQueryVariables,
+    options?: UseQueryOptions<GetCreateRecipeDataQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetCreateRecipeDataQuery, TError, TData>(
+        ['GetCreateRecipeData', variables],
+        fetcher<GetCreateRecipeDataQuery, GetCreateRecipeDataQueryVariables>(
+            client,
+            GetCreateRecipeDataDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetMeDocument = `
+    query GetMe {
+  getMe {
+    status
+    user {
+      id: _id
+      email
+      name
+      photo
+      _id
+      createdAt
+      role
+      terms
+      updatedAt
+    }
+  }
+}
+    `;
+export const useGetMeQuery = <TData = GetMeQuery, TError = unknown>(
+    client: GraphQLClient,
+    variables?: GetMeQueryVariables,
+    options?: UseQueryOptions<GetMeQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetMeQuery, TError, TData>(
+        variables === undefined ? ['GetMe'] : ['GetMe', variables],
+        fetcher<GetMeQuery, GetMeQueryVariables>(
+            client,
+            GetMeDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetProfileDataQueryDocument = `
+    query GetProfileDataQuery {
+  getMyReviews {
+    status
+    results
+    reviews {
+      ...ReviewFragment
+    }
+  }
+  getMe {
+    status
+    user {
+      id: _id
+      name
+      photo
+    }
+  }
+  getRecipes {
+    status
+    results
+    recipes {
+      ...WideRecipeFragment
+    }
+  }
+  getAllBookmarkedRecipes {
+    status
+    results
+    recipes {
+      ...WideRecipeFragment
+    }
+  }
+}
+    ${ReviewFragmentFragmentDoc}
+${WideRecipeFragmentFragmentDoc}`;
+export const useGetProfileDataQueryQuery = <
+    TData = GetProfileDataQueryQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: GetProfileDataQueryQueryVariables,
+    options?: UseQueryOptions<GetProfileDataQueryQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetProfileDataQueryQuery, TError, TData>(
+        variables === undefined
+            ? ['GetProfileDataQuery']
+            : ['GetProfileDataQuery', variables],
+        fetcher<GetProfileDataQueryQuery, GetProfileDataQueryQueryVariables>(
+            client,
+            GetProfileDataQueryDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const GetRecipeByIdDocument = `
+    query GetRecipeById($id: String!) {
+  getRecipeById(id: $id) {
+    status
+    recipe {
+      ...WideRecipeFragment
+    }
+  }
+}
+    ${WideRecipeFragmentFragmentDoc}`;
+export const useGetRecipeByIdQuery = <
+    TData = GetRecipeByIdQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables: GetRecipeByIdQueryVariables,
+    options?: UseQueryOptions<GetRecipeByIdQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<GetRecipeByIdQuery, TError, TData>(
+        ['GetRecipeById', variables],
+        fetcher<GetRecipeByIdQuery, GetRecipeByIdQueryVariables>(
+            client,
+            GetRecipeByIdDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const LogoutUserDocument = `
+    query LogoutUser {
+  logoutUser
+}
+    `;
+export const useLogoutUserQuery = <TData = LogoutUserQuery, TError = unknown>(
+    client: GraphQLClient,
+    variables?: LogoutUserQueryVariables,
+    options?: UseQueryOptions<LogoutUserQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<LogoutUserQuery, TError, TData>(
+        variables === undefined ? ['LogoutUser'] : ['LogoutUser', variables],
+        fetcher<LogoutUserQuery, LogoutUserQueryVariables>(
+            client,
+            LogoutUserDocument,
+            variables,
+            headers
+        ),
+        options
+    );
+export const RefreshAccessTokenDocument = `
+    query RefreshAccessToken {
+  refreshAccessToken {
+    status
+    access_token
+  }
+}
+    `;
+export const useRefreshAccessTokenQuery = <
+    TData = RefreshAccessTokenQuery,
+    TError = unknown
+>(
+    client: GraphQLClient,
+    variables?: RefreshAccessTokenQueryVariables,
+    options?: UseQueryOptions<RefreshAccessTokenQuery, TError, TData>,
+    headers?: RequestInit['headers']
+) =>
+    useQuery<RefreshAccessTokenQuery, TError, TData>(
+        variables === undefined
+            ? ['RefreshAccessToken']
+            : ['RefreshAccessToken', variables],
+        fetcher<RefreshAccessTokenQuery, RefreshAccessTokenQueryVariables>(
+            client,
+            RefreshAccessTokenDocument,
+            variables,
+            headers
+        ),
         options
     );

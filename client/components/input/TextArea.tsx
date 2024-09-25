@@ -14,6 +14,7 @@ type TextAreaProps = DetailedHTMLProps<
     label?: string;
     noValidation?: boolean;
     value?: string | number;
+    small?: boolean;
 };
 
 const TextArea: FC<TextAreaProps> = ({
@@ -22,6 +23,8 @@ const TextArea: FC<TextAreaProps> = ({
     name,
     value,
     noValidation,
+    rows,
+    small = false,
     ...props
 }) => {
     const {
@@ -33,22 +36,23 @@ const TextArea: FC<TextAreaProps> = ({
         <>
             <div className="flex w-full flex-col items-start justify-center text-sm">
                 {label && (
-                    <label htmlFor={name} className={'mb-2 text-sm'}>
+                    <label htmlFor={name} className="mb-2 w-full text-sm">
                         {label}
                     </label>
                 )}
                 <textarea
                     defaultValue={value}
-                    rows={4}
+                    rows={rows || 4}
                     className={cn(
-                        'w-full resize-none rounded-lg border p-3 text-xs',
+                        'w-full resize-none rounded-lg border text-xs',
+                        small ? 'p-2' : 'p-3',
                         errors[name] || (error && 'border-red-600')
                     )}
                     {...props}
                     {...register(name)}
                 />
             </div>
-            {!noValidation && <ErrorMessage error={errors[name]} />}
+            {!noValidation && <ErrorMessage name={name} />}
         </>
     );
 };

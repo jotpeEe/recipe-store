@@ -2,7 +2,7 @@ import { type GetProfileDataQueryQuery } from '@generated/graphql';
 
 const useRecipesFilter = (
     input: string,
-    recipes?: GetProfileDataQueryQuery['getAllRecipes']['recipes']
+    recipes?: GetProfileDataQueryQuery['getRecipes']['recipes']
 ) =>
     recipes?.filter(
         recipe =>

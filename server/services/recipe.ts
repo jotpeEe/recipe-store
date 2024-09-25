@@ -1,7 +1,7 @@
 import { ValidationError } from 'apollo-server-micro';
 
 import errorHandler from '@controllers';
-import { type Recipe, RecipeModel, ReviewModel } from '@models';
+import { RecipeModel, ReviewModel } from '@models';
 import { type Input } from '@schemas/recipe';
 import { type Context } from 'server/types/context';
 
@@ -32,14 +32,7 @@ export default class RecipeService {
         }
     };
 
-    getTempRecipe = async ({
-        req,
-        res,
-        deserializeUser,
-    }: Context): Promise<{
-        recipe: Recipe | undefined;
-        status: 'error' | 'success';
-    }> => {
+    getTempRecipe = async ({ req, res, deserializeUser }: Context) => {
         try {
             const user = await deserializeUser(req, res);
 
@@ -66,13 +59,17 @@ export default class RecipeService {
             const recipe = await RecipeModel.findById(id)
                 .populate([
                     'user',
-                    'reviews',
                     'ratings',
                     {
                         path: 'reviews',
+                        model: 'Review',
                         populate: [
                             {
                                 path: 'user',
+                                model: 'User',
+                            },
+                            {
+                                path: 'recipeAuthor',
                                 model: 'User',
                             },
                         ],
@@ -114,7 +111,20 @@ export default class RecipeService {
                     runValidators: true,
                     lean: true,
                 }
-            );
+            ).populate([
+                'user',
+                'reviews',
+                'ratings',
+                {
+                    path: 'reviews',
+                    populate: [
+                        {
+                            path: 'user',
+                            model: 'User',
+                        },
+                    ],
+                },
+            ]);
 
             if (!recipe)
                 return new ValidationError('No recipe with that id exists');
@@ -135,32 +145,34 @@ export default class RecipeService {
         }
     };
 
-    getCuisines = async () => {
+    getAvailableCategories = async (cat: string) => {
         try {
-            const cuisineQuery = RecipeModel.distinct('cuisine');
+            const catQuery = RecipeModel.distinct(cat);
 
-            const cuisines = await cuisineQuery.lean();
+            const category = await catQuery.lean();
 
             return {
                 status: 'success',
-                results: cuisines.length,
-                cuisines,
+                results: category.length,
+                category,
             };
         } catch (error: any) {
             errorHandler(error);
             return {
                 status: 'error',
                 results: 0,
-                cuisines: [],
+                category: [],
             };
         }
     };
 
-    getAllRecipes = async () => {
+    getAllRecipes = async (limit?: number) => {
         try {
             const recipesQuery = RecipeModel.find({
                 temp: false,
-            }).populate('user');
+            })
+                .populate(['user', 'ratings'])
+                .limit(limit || 0);
 
             const recipes = await recipesQuery.sort({ createdAt: -1 }).lean();
 
@@ -186,7 +198,24 @@ export default class RecipeService {
                 user: user?._id,
                 temp: false,
             })
-                .populate('user')
+                .populate([
+                    'user',
+                    'ratings',
+                    {
+                        path: 'reviews',
+                        model: 'Review',
+                        populate: [
+                            {
+                                path: 'user',
+                                model: 'User',
+                            },
+                            {
+                                path: 'recipeAuthor',
+                                model: 'User',
+                            },
+                        ],
+                    },
+                ])
                 .sort({ createdAt: -1 })
                 .lean();
 
@@ -217,10 +246,10 @@ export default class RecipeService {
             if (!recipe)
                 return new ValidationError('No recipe with that id exists');
 
-            return { status: 'success' };
+            return { status: 'success', recipe: undefined };
         } catch (error: any) {
             errorHandler(error);
-            return { status: 'error' };
+            return { status: 'error', recipe: undefined };
         }
     };
 

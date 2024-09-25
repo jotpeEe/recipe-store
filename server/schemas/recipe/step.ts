@@ -7,6 +7,9 @@ export class StepInput {
 
     @Field()
     text: string;
+
+    @Field({ nullable: true })
+    edit?: boolean;
 }
 
 @ObjectType()
@@ -16,4 +19,7 @@ export class Step {
 
     @Field()
     text: string;
+
+    @Field({ nullable: true })
+    edit?: boolean;
 }

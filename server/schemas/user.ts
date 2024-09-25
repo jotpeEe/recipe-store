@@ -29,6 +29,9 @@ export class UserData {
 
     @Field(() => Date)
     updatedAt: Date;
+
+    @Field(() => [String], { nullable: true })
+    bookmarks: string[];
 }
 
 @InputType()
@@ -42,21 +45,20 @@ export class LoginInput {
     @Field(() => String)
     password: string;
 }
-
 @ObjectType()
-export class LoginResponse {
+export class BaseResponse {
     @Field(() => String)
     status: string;
+}
 
+@ObjectType()
+export class LoginResponse extends BaseResponse {
     @Field(() => String)
     access_token: string;
 }
 
 @ObjectType()
-export class UserResponse {
-    @Field(() => String)
-    status: string;
-
+export class UserResponse extends BaseResponse {
     @Field(() => UserData)
     user: UserData;
 }

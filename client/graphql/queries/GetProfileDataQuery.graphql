@@ -1,0 +1,34 @@
+query GetProfileDataQuery {
+    getMyReviews{
+        status
+        results
+        reviews {
+            ...ReviewFragment
+        }
+    }
+
+    getMe {
+        status
+        user {
+            id: _id
+            name
+            photo
+        }
+    }
+
+    getRecipes{
+        status
+        results
+        recipes {
+            ...WideRecipeFragment
+        }
+    }
+
+    getAllBookmarkedRecipes {
+    status
+    results
+    recipes {
+        ...WideRecipeFragment
+    }
+  }
+}
